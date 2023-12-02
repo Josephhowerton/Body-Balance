@@ -1,5 +1,3 @@
-package commons
-
 plugins{
     kotlin("kapt")
     id("kotlin-android")

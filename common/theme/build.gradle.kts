@@ -1,4 +1,8 @@
-apply(from = rootProject.file("gradle/scripts/android-library.gradle.kts"))
+plugins{
+    id("commons.android-library")
+}
+
+//apply(from = rootProject.file("gradle/scripts/android-library.gradle.kts"))
 
 android{
     namespace = "com.fitness.theme"
@@ -12,4 +16,5 @@ android{
 }
 
 dependencies {
+    addJetpackComposeDependencies()
 }

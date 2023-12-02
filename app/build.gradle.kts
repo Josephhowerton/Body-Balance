@@ -53,4 +53,10 @@ android {
 
 dependencies {
 
+    addCoreDependencies()
+    addJetpackComposeDependencies()
+    addTestDependencies()
+    addDebuggingDependencies()
+
+    THEME
 }

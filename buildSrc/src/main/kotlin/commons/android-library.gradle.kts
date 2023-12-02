@@ -1,16 +1,17 @@
+package commons
+
 import config.Configs
 import org.gradle.api.JavaVersion
-import org.gradle.kotlin.dsl.dependencies
+import org.gradle.kotlin.dsl.kotlin
 
 plugins {
     kotlin("kapt")
     kotlin("android")
     id("com.android.library")
-    id("org.jetbrains.kotlin.android")
 }
 
 android {
-    compileSdk(Configs.CompileSdk)
+    compileSdk = Configs.CompileSdk
 
     defaultConfig {
         minSdk = Configs.MinSdk
