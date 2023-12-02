@@ -5,6 +5,7 @@ import config.CoreLibs
 import config.ComposeLibs
 import config.TestingLibs
 import config.DebuggingLibs
+import config.HiltLibs
 
 /**
  * Adds a dependency to the `kapt` configuration.
@@ -77,5 +78,11 @@ fun DependencyHandler.addTestDependencies(){
 fun DependencyHandler.addDebuggingDependencies() {
     implementation(DebuggingLibs.DEBUG_COMPOSE_UI_TOOLING)
     implementation(DebuggingLibs.DEBUG_COMPOSE_UI_MANIFEST)
+}
+
+fun DependencyHandler.addHiltDependencies() {
+    implementation(HiltLibs.HILT)
+    implementation(HiltLibs.HILT_VIEW_MODEL)
+    kapt(HiltLibs.HILT_COMPILER)
 }
 

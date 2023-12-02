@@ -8,6 +8,10 @@ private object Version {
     const val JUNIT = "4.13.2"
     const val JUNIT_EXT = "1.1.5"
     const val ESPRESSO = "3.5.1"
+    const val HILT_VIEW_MODEL = "1.0.0-alpha03"
+    const val HILT = "2.44"
+    const val HILT_COMPILER = "1.0.0-beta01"
+
 }
 
 object CoreLibs{
@@ -34,4 +38,10 @@ object TestingLibs {
 object DebuggingLibs {
     const val DEBUG_COMPOSE_UI_TOOLING = "androidx.compose.ui:ui-tooling"
     const val DEBUG_COMPOSE_UI_MANIFEST = "androidx.compose.ui:ui-test-manifest"
+}
+
+object HiltLibs {
+    const val HILT_VIEW_MODEL = "androidx.hilt:hilt-lifecycle-viewmodel:${Version.HILT_VIEW_MODEL}"
+    const val HILT = "com.google.dagger:hilt-android:${Version.HILT}"
+    const val HILT_COMPILER = "com.google.dagger:hilt-android-compiler:${Version.HILT_COMPILER}"
 }
