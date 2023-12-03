@@ -6,6 +6,8 @@ import config.ComposeLibs
 import config.TestingLibs
 import config.DebuggingLibs
 import config.HiltLibs
+import config.CoroutineLibs
+import config.FirebaseLibs
 
 /**
  * Adds a dependency to the `kapt` configuration.
@@ -86,3 +88,14 @@ fun DependencyHandler.addHiltDependencies() {
     kapt(HiltLibs.HILT_COMPILER)
 }
 
+fun DependencyHandler.addCoroutineDependencies(){
+    implementation(CoroutineLibs.Coroutines)
+    implementation(CoroutineLibs.CoroutinesViewModel)
+}
+
+fun DependencyHandler.addFirebaseDependecies(){
+    implementation(platform(FirebaseLibs.FIREBASE_BOM))
+    implementation(FirebaseLibs.FIREBASE_ANALYTICS)
+    implementation(FirebaseLibs.FIREBASE_CRASHALYTICS)
+    implementation(FirebaseLibs.FIREBASE_FIRESTORE)
+}

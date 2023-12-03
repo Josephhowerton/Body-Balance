@@ -11,6 +11,9 @@ private object Version {
     const val HILT_VIEW_MODEL = "1.0.0-alpha03"
     const val HILT = "2.44"
     const val HILT_COMPILER = "1.0.0-beta01"
+    const val COROUTINES = "1.3.9"
+    const val COROUTINES_VIEWMODEL = "2.4.0"
+    const val FIREBASE_BOM = "32.6.0"
 
 }
 
@@ -44,4 +47,16 @@ object HiltLibs {
     const val HILT_VIEW_MODEL = "androidx.hilt:hilt-lifecycle-viewmodel:${Version.HILT_VIEW_MODEL}"
     const val HILT = "com.google.dagger:hilt-android:${Version.HILT}"
     const val HILT_COMPILER = "com.google.dagger:hilt-android-compiler:${Version.HILT_COMPILER}"
+}
+
+object CoroutineLibs{
+    const val Coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-android:${Version.COROUTINES}"
+    const val CoroutinesViewModel = "androidx.lifecycle:lifecycle-viewmodel-ktx:${Version.COROUTINES_VIEWMODEL}"
+}
+
+object FirebaseLibs{
+    const val FIREBASE_BOM = "com.google.firebase:firebase-bom:${Version.FIREBASE_BOM}"
+    const val FIREBASE_ANALYTICS = "com.google.firebase:firebase-analytics"
+    const val FIREBASE_CRASHALYTICS = "com.google.firebase:firebase-crashlytics"
+    const val FIREBASE_FIRESTORE = "com.google.firebase:firebase-firestore"
 }
