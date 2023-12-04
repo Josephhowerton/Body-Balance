@@ -1,6 +1,8 @@
 package commons
 
+import NAVIGATION
 import config.Configs
+import config.NavigationLibs.NAVIGATION_RUNTIME
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.kotlin
 
@@ -31,4 +33,6 @@ android {
 }
 
 
-dependencies {}
+dependencies {
+    NAVIGATION
+}

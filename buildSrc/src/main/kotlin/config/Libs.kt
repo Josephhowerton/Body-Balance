@@ -5,12 +5,12 @@ private object Version {
     const val LIFECYCLE_RUNTIME = "2.6.2"
     const val ACTIVITY_COMPOSE = "1.8.1"
     const val COMPOSE_BOM = "2023.03.00"
+    const val COMPOSE_NAVIGATION = "2.7.5"
     const val JUNIT = "4.13.2"
     const val JUNIT_EXT = "1.1.5"
     const val ESPRESSO = "3.5.1"
     const val HILT_VIEW_MODEL = "1.0.0-alpha03"
     const val HILT = "2.44"
-    const val HILT_COMPILER = "1.0.0-beta01"
     const val COROUTINES = "1.3.9"
     const val COROUTINES_VIEWMODEL = "2.4.0"
     const val FIREBASE_BOM = "32.6.0"
@@ -29,6 +29,12 @@ object ComposeLibs {
     const val COMPOSE_UI_GRAPHICS = "androidx.compose.ui:ui-graphics"
     const val COMPOSE_TOOLING_PREVIEW  = "androidx.compose.ui:ui-tooling-preview"
     const val COMPOSE_MATERIAL3 = "androidx.compose.material3:material3"
+
+}
+
+object NavigationLibs{
+    const val COMPOSE_NAVIGATION = "androidx.navigation:navigation-compose:${Version.COMPOSE_NAVIGATION}"
+    const val NAVIGATION_RUNTIME = "androidx.navigation:navigation-runtime-ktx:${Version.COMPOSE_NAVIGATION}"
 }
 
 object TestingLibs {
@@ -46,7 +52,7 @@ object DebuggingLibs {
 object HiltLibs {
     const val HILT_VIEW_MODEL = "androidx.hilt:hilt-lifecycle-viewmodel:${Version.HILT_VIEW_MODEL}"
     const val HILT = "com.google.dagger:hilt-android:${Version.HILT}"
-    const val HILT_COMPILER = "com.google.dagger:hilt-android-compiler:${Version.HILT_COMPILER}"
+    const val HILT_COMPILER = "com.google.dagger:hilt-android-compiler:${Version.HILT}"
 }
 
 object CoroutineLibs{

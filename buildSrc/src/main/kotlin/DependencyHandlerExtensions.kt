@@ -8,6 +8,7 @@ import config.DebuggingLibs
 import config.HiltLibs
 import config.CoroutineLibs
 import config.FirebaseLibs
+import config.NavigationLibs
 
 /**
  * Adds a dependency to the `kapt` configuration.
@@ -53,7 +54,18 @@ fun DependencyHandler.testImplementation(dependencyNotation: Any): Dependency? =
     add("testImplementation", dependencyNotation)
 
 //Common
-val DependencyHandler.THEME get() = implementation(project(":common:theme"));
+val DependencyHandler.NAVIGATION get() = implementation(project(":common:navigation"))
+val DependencyHandler.RESOURCES get() = implementation(project(":common:resources"))
+val DependencyHandler.THEME get() = implementation(project(":common:theme"))
+
+//Feature
+val DependencyHandler.AUTHENTICATION get() = implementation(project(":features:authentication:authentication"))
+val DependencyHandler.AUTHENTICATION_API get() = implementation(project(":features:authentication:authentication-api"))
+val DependencyHandler.ONBOARD get() = implementation(project(":features:onboard:onboard"))
+val DependencyHandler.ONBOARD_API get() = implementation(project(":features:onboard:onboard-api"))
+
+//Library
+val DependencyHandler.LIBRARY get() = implementation(project(":library"))
 
 
 fun DependencyHandler.addCoreDependencies() {
@@ -93,9 +105,24 @@ fun DependencyHandler.addCoroutineDependencies(){
     implementation(CoroutineLibs.CoroutinesViewModel)
 }
 
-fun DependencyHandler.addFirebaseDependecies(){
+fun DependencyHandler.addFirebaseDependencies(){
     implementation(platform(FirebaseLibs.FIREBASE_BOM))
     implementation(FirebaseLibs.FIREBASE_ANALYTICS)
     implementation(FirebaseLibs.FIREBASE_CRASHALYTICS)
     implementation(FirebaseLibs.FIREBASE_FIRESTORE)
+}
+
+fun DependencyHandler.addNavigationDependencies(){
+    api(NavigationLibs.COMPOSE_NAVIGATION)
+    api(NavigationLibs.NAVIGATION_RUNTIME)
+}
+
+fun DependencyHandler.addFeatureDependencies(){
+    AUTHENTICATION
+    ONBOARD
+}
+
+fun DependencyHandler.addFeatureAPIDependencies(){
+    AUTHENTICATION_API
+    ONBOARD_API
 }

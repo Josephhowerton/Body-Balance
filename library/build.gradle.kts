@@ -6,7 +6,7 @@ plugins {
 }
 
 android{
-    namespace = "com.fitness.framework"
+    namespace = "com.fitness.library"
 
     buildFeatures {
         compose = true
@@ -17,6 +17,9 @@ android{
 }
 
 dependencies {
+    addNavigationDependencies()
+    addHiltDependencies()
+    addJetpackComposeDependencies()
     addCoroutineDependencies()
-    addFirebaseDependecies()
+    addFirebaseDependencies()
 }

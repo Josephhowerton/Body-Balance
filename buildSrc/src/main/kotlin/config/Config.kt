@@ -20,7 +20,7 @@ object Configs {
     val VersionCode = generateVersionCode()
     val VersionName = generateVersionName()
 
-    const val CompileSdk = 33
+    const val CompileSdk = 34
     const val TargetSdk = CompileSdk
     const val MinSdk = 26
 

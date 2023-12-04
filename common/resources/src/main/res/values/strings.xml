@@ -1,0 +1,64 @@
+<resources>
+    <string name="app_name">Body Balance</string>
+    <string name="activity_home">HomeActivity</string>
+
+    <string name="todays_workout_plan">Today\'s Workout Plan</string>
+    <string name="calories">Calories</string>
+    <string name="carbs">Carbohydrates</string>
+    <string name="fat">Fat</string>
+    <string name="protein">Protein</string>
+    <string name="weight">Weight</string>
+    <string name="activity">Activity</string>
+
+    <string name="no_data_displayed">No Data Displayed</string>
+
+    <string name="calories_consumed_out">%.1f calories consumed out of %.1f</string>
+    <string name="carbs_consumed_out">%.1f carbohydrates consumed out of %.1f</string>
+    <string name="fat_consumed_out">%.1f fat consumed out of %.1f</string>
+    <string name="protein_consumed_out">%.1f protein consumed out of %.1f</string>
+    <string name="from_target_weight">%.1f %s from target weight %.1f</string>
+
+    <string name="calories_compact">%.1f out of %.1f</string>
+    <string name="carbs_compact">%.1f out of %.1f</string>
+    <string name="fat_compact">%.1f out of %.1f</string>
+    <string name="protein_compact">%.1f out of %.1f</string>
+    <string name="weight_compact">%.1f %s from %.1f</string>
+
+    <string name="sleep">Sleep</string>
+    <string name="welcome">Welcome</string>
+    <string name="login">Login</string>
+    <string name="continue_your_journey">Continue Your Journey</string>
+    <string name="create_account">Create Account</string>
+    <string name="start_your_journey">Start Your Journey</string>
+    <string name="forgot_password">Forgot Password</string>
+    <string name="enter_email_password">Enter your email &amp; new password</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="email">Email</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="password">Password</string>
+    <string name="enter_password">Enter Password</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="forgot_password_question">"Forgot password?"</string>
+    <string name="confirm">Confirm</string>
+    <string name="ca_additional_methods">Create account with one of the methods below.</string>
+    <string name="login_additional_methods">Login with one of the methods below.</string>
+    <string name="your_journey_begins_here">Your Journey Begins Here</string>
+    <string name="welcome_screen_quote">Login and Register on Screen. Log In and Sign Up UI UX on Smartphone Screen. Login Application with Password Form.</string>
+    <string name="content_description_home">icon home</string>
+    <string name="content_description_next">icon next</string>
+    <string name="content_description_phone">icon phone</string>
+    <string name="content_description_email">icon email</string>
+    <string name="content_description_google">Google logo</string>
+    <string name="content_description_twitter">Twitter logo</string>
+    <string name="content_description_menu">icon menu</string>
+    <string name="content_description_settings">icon settings</string>
+    <string name="content_description_account">icon account</string>
+    <string name="content_description_logout">icon log out</string>
+    <string name="no_data_found">No suitable data found.</string>
+    <string name="retry">Retry</string>
+    <string name="we_are_sorry_title">We\'re sorry!</string>
+    <string name="default_error_desc">Help us improve your experience by sending an error report</string>
+
+    <string name="target_weight_desc">Target: %.1f</string>
+</resources>

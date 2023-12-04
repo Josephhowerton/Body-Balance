@@ -36,11 +36,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = Configs.SourceCompatibility
+        targetCompatibility = Configs.TargetCompatibility
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = Configs.JvmTarget
     }
     buildFeatures {
         compose = true
@@ -53,18 +53,23 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+    buildToolsVersion = "33.0.1"
 }
 
 dependencies {
-
     addCoreDependencies()
     addJetpackComposeDependencies()
     addTestDependencies()
     addDebuggingDependencies()
     addHiltDependencies()
-    addFirebaseDependecies()
+    addFirebaseDependencies()
+
+    addFeatureAPIDependencies()
 
     THEME
+    LIBRARY
+    NAVIGATION
+    RESOURCES
 }
 
 kapt {
