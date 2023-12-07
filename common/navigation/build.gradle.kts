@@ -2,8 +2,6 @@ plugins{
     id("commons.android-library")
 }
 
-//apply(from = rootProject.file("gradle/scripts/android-library.gradle.kts"))
-
 android{
     namespace = "com.fitness.navigation"
 
@@ -17,7 +15,7 @@ android{
 
 dependencies {
     addJetpackComposeDependencies()
-    addHiltDependencies()
+    addDaggerDependencies()
     addNavigationDependencies()
     RESOURCES
 }

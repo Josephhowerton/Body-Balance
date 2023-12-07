@@ -1,14 +1,12 @@
 package com.fitness.bodybalance.navigation
 
-import SignInEntry
-import SignOutEntry
-import SignUpEntry
-import WelcomeEntry
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
+import com.fitness.authentication.AuthEntry
 import com.fitness.bodybalance.di.LocalAppProvider
-import find
+import com.fitness.navigation.find
+import com.fitness.onboard.WelcomeEntry
 
 @Composable
 fun AuthHub(navController: NavHostController) {
@@ -16,21 +14,15 @@ fun AuthHub(navController: NavHostController) {
 }
 @Composable
 private fun OnboardingNavigation(navController: NavHostController){
-    val destination = LocalAppProvider.current.destinations
+    val destinations = LocalAppProvider.current.destinations
 
-    val signUp = destination.find<SignUpEntry>()
-    val signIn = destination.find<SignInEntry>()
-    val welcome = destination.find<WelcomeEntry>()
+    val welcomeEntry = destinations.find<WelcomeEntry>()
+    val authEntry = destinations.find<AuthEntry>()
 
+    NavHost(navController = navController, startDestination = welcomeEntry.featureRoute) {
 
-    NavHost(navController = navController, startDestination = welcome.featureRoute) {
-
-        with(signIn) {
-            navigation(navController, destination)
-        }
-
-        with(signUp) {
-            navigation(navController, destination)
+        with(authEntry) {
+            navigation(navController, destinations)
         }
     }
 }

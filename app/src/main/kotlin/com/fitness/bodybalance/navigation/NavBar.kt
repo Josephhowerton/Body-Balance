@@ -12,7 +12,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import BottomNavigationUtil
+import com.fitness.navigation.BottomNavigationUtil
 
 @Composable
 fun NavBar(

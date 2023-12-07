@@ -14,16 +14,20 @@
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/buildSrc" />
             <option value="$PROJECT_DIR$/common" />
+            <option value="$PROJECT_DIR$/common/authentication" />
             <option value="$PROJECT_DIR$/common/navigation" />
             <option value="$PROJECT_DIR$/common/resources" />
             <option value="$PROJECT_DIR$/common/theme" />
             <option value="$PROJECT_DIR$/features" />
             <option value="$PROJECT_DIR$/features/authentication" />
-            <option value="$PROJECT_DIR$/features/authentication/authentication" />
-            <option value="$PROJECT_DIR$/features/authentication/authentication-api" />
+            <option value="$PROJECT_DIR$/features/authentication/api" />
+            <option value="$PROJECT_DIR$/features/authentication/impl" />
             <option value="$PROJECT_DIR$/features/onboard" />
-            <option value="$PROJECT_DIR$/features/onboard/onboard" />
-            <option value="$PROJECT_DIR$/features/onboard/onboard-api" />
+            <option value="$PROJECT_DIR$/features/onboard/api" />
+            <option value="$PROJECT_DIR$/features/onboard/impl" />
+            <option value="$PROJECT_DIR$/features/user-profile" />
+            <option value="$PROJECT_DIR$/features/user-profile/api" />
+            <option value="$PROJECT_DIR$/features/user-profile/impl" />
             <option value="$PROJECT_DIR$/library" />
           </set>
         </option>

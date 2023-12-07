@@ -15,15 +15,21 @@ dependencyResolutionManagement {
 
 rootProject.name = "BodyBalance"
 include(":app")
-include(":library")
-include(":common")
 
+
+include(":common")
+include(":common:authentication")
 include(":common:navigation")
 include(":common:resources")
 include(":common:theme")
 
+
 include(":features")
-include(":features:authentication:authentication")
-include(":features:authentication:authentication-api")
-include(":features:onboard:onboard")
-include(":features:onboard:onboard-api")
+include(":features:authentication:impl")
+include(":features:authentication:api")
+include(":features:onboard:impl")
+include(":features:onboard:api")
+include(":features:user-profile:impl")
+include(":features:user-profile:api")
+
+include(":library")

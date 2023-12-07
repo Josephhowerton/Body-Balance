@@ -9,17 +9,20 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
 import com.fitness.bodybalance.di.AppProvider
 import com.fitness.bodybalance.di.LocalAppProvider
-import com.fitness.bodybalance.ui.theme.BodyBalanceTheme
+import com.fitness.bodybalance.ui.theme.com.fitness.theme.ui.BodyBalanceTheme
 
 @Composable
-fun AppContent(appProvider: AppProvider) {
+fun AppContent(
+    appProvider: AppProvider
+) {
+
     BodyBalanceTheme {
         Surface(
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background
         ) {
-            CompositionLocalProvider(LocalAppProvider provides appProvider) {
 
+            CompositionLocalProvider(LocalAppProvider provides appProvider) {
                 val navController = rememberNavController()
             }
         }

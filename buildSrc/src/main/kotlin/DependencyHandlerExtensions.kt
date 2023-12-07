@@ -5,10 +5,11 @@ import config.CoreLibs
 import config.ComposeLibs
 import config.TestingLibs
 import config.DebuggingLibs
-import config.HiltLibs
 import config.CoroutineLibs
 import config.FirebaseLibs
 import config.NavigationLibs
+import config.DaggerLibs
+import config.HiltLibs
 
 /**
  * Adds a dependency to the `kapt` configuration.
@@ -59,10 +60,10 @@ val DependencyHandler.RESOURCES get() = implementation(project(":common:resource
 val DependencyHandler.THEME get() = implementation(project(":common:theme"))
 
 //Feature
-val DependencyHandler.AUTHENTICATION get() = implementation(project(":features:authentication:authentication"))
-val DependencyHandler.AUTHENTICATION_API get() = implementation(project(":features:authentication:authentication-api"))
-val DependencyHandler.ONBOARD get() = implementation(project(":features:onboard:onboard"))
-val DependencyHandler.ONBOARD_API get() = implementation(project(":features:onboard:onboard-api"))
+val DependencyHandler.AUTHENTICATION get() = implementation(project(":features:authentication:impl"))
+val DependencyHandler.AUTHENTICATION_API get() = api(project(":features:authentication:api"))
+val DependencyHandler.ONBOARD get() = implementation(project(":features:onboard:impl"))
+val DependencyHandler.ONBOARD_API get() = api(project(":features:onboard:api"))
 
 //Library
 val DependencyHandler.LIBRARY get() = implementation(project(":library"))
@@ -96,8 +97,12 @@ fun DependencyHandler.addDebuggingDependencies() {
 
 fun DependencyHandler.addHiltDependencies() {
     implementation(HiltLibs.HILT)
-    implementation(HiltLibs.HILT_VIEW_MODEL)
     kapt(HiltLibs.HILT_COMPILER)
+}
+
+fun DependencyHandler.addDaggerDependencies() {
+    implementation(DaggerLibs.Dagger2)
+    kapt(DaggerLibs.Dagger2Compiler)
 }
 
 fun DependencyHandler.addCoroutineDependencies(){

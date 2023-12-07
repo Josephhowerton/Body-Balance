@@ -9,8 +9,8 @@ private object Version {
     const val JUNIT = "4.13.2"
     const val JUNIT_EXT = "1.1.5"
     const val ESPRESSO = "3.5.1"
-    const val HILT_VIEW_MODEL = "1.0.0-alpha03"
     const val HILT = "2.44"
+    const val DAGGER2 = "2.44"
     const val COROUTINES = "1.3.9"
     const val COROUTINES_VIEWMODEL = "2.4.0"
     const val FIREBASE_BOM = "32.6.0"
@@ -50,9 +50,13 @@ object DebuggingLibs {
 }
 
 object HiltLibs {
-    const val HILT_VIEW_MODEL = "androidx.hilt:hilt-lifecycle-viewmodel:${Version.HILT_VIEW_MODEL}"
     const val HILT = "com.google.dagger:hilt-android:${Version.HILT}"
     const val HILT_COMPILER = "com.google.dagger:hilt-android-compiler:${Version.HILT}"
+}
+
+object DaggerLibs{
+    const val Dagger2 = "com.google.dagger:dagger:${Version.DAGGER2}"
+    const val Dagger2Compiler = "com.google.dagger:dagger-compiler:${Version.DAGGER2}"
 }
 
 object CoroutineLibs{

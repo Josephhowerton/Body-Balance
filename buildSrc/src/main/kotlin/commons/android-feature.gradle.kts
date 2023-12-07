@@ -1,5 +1,7 @@
 package commons
 
+import NAVIGATION
+import addDaggerDependencies
 import config.Configs
 import org.gradle.api.JavaVersion
 import org.gradle.kotlin.dsl.kotlin
@@ -34,4 +36,14 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion = Configs.KotlinCompilerExtensionVersion
     }
+}
+
+dependencies {
+    addDaggerDependencies()
+
+    NAVIGATION
+}
+
+kapt {
+    correctErrorTypes = true
 }

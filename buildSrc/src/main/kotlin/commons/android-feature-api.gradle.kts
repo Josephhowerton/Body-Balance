@@ -36,3 +36,7 @@ android {
 dependencies {
     NAVIGATION
 }
+
+kapt {
+    correctErrorTypes = true
+}

@@ -18,7 +18,6 @@ android{
 
 dependencies {
     addNavigationDependencies()
-    addHiltDependencies()
     addJetpackComposeDependencies()
     addCoroutineDependencies()
     addFirebaseDependencies()

@@ -1,0 +1,3 @@
+package com.fitness.userprofile
+
+interface UserProfileEntry

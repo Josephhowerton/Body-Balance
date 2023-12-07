@@ -29,3 +29,7 @@ android {
         jvmTarget = Configs.JvmTarget
     }
 }
+
+kapt {
+    correctErrorTypes = true
+}
