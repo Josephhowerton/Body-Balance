@@ -69,4 +69,5 @@ object FirebaseLibs{
     const val FIREBASE_ANALYTICS = "com.google.firebase:firebase-analytics"
     const val FIREBASE_CRASHALYTICS = "com.google.firebase:firebase-crashlytics"
     const val FIREBASE_FIRESTORE = "com.google.firebase:firebase-firestore"
+    const val FIREBASE_AUTHENTICATION = "com.google.firebase:firebase-auth"
 }

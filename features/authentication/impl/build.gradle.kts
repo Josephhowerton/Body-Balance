@@ -8,4 +8,7 @@ android {
 
 dependencies {
     AUTHENTICATION_API
+    AUTHENTICATION_MANAGER
+
+    addFirebaseDependencies()
 }

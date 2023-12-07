@@ -6,7 +6,7 @@ interface AuthenticationManager {
     val authState: StateFlow<AuthState>
 
     suspend fun signInWithEmail(credentials: SignInEmailCredentials)
-    suspend fun signInWithEmail(credentials: SignUpEmailCredentials)
+    suspend fun signUpWithEmail(credentials: SignUpEmailCredentials)
 
     suspend fun resetPassword(email: String)
     suspend fun signOut()

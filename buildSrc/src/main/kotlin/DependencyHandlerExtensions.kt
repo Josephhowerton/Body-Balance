@@ -55,6 +55,7 @@ fun DependencyHandler.testImplementation(dependencyNotation: Any): Dependency? =
     add("testImplementation", dependencyNotation)
 
 //Common
+val DependencyHandler.AUTHENTICATION_MANAGER get() = api(project(":common:authentication"))
 val DependencyHandler.NAVIGATION get() = implementation(project(":common:navigation"))
 val DependencyHandler.RESOURCES get() = implementation(project(":common:resources"))
 val DependencyHandler.THEME get() = implementation(project(":common:theme"))
@@ -112,6 +113,7 @@ fun DependencyHandler.addCoroutineDependencies(){
 
 fun DependencyHandler.addFirebaseDependencies(){
     implementation(platform(FirebaseLibs.FIREBASE_BOM))
+    implementation(FirebaseLibs.FIREBASE_AUTHENTICATION)
     implementation(FirebaseLibs.FIREBASE_ANALYTICS)
     implementation(FirebaseLibs.FIREBASE_CRASHALYTICS)
     implementation(FirebaseLibs.FIREBASE_FIRESTORE)

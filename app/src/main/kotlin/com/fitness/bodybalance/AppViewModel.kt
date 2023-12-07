@@ -3,18 +3,20 @@ package com.fitness.bodybalance
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.fitness.authentication.AuthState
+import com.fitness.authentication.AuthenticationManager
 import com.fitness.theme.AppTheme
+import com.fitness.theme.ThemeManager
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.StateFlow
 import javax.inject.Inject
 
 @HiltViewModel
-class AppViewModel @Inject constructor() : ViewModel() {
-    // LiveData to hold the current theme
-    private val _currentTheme = MutableLiveData(AppTheme.Hub)
-    val currentTheme: LiveData<AppTheme> = _currentTheme
+class AppViewModel @Inject constructor(
+    private val authManager: AuthenticationManager,
+    private val themeManager: ThemeManager
+) : ViewModel() {
 
-    // Function to switch themes
-    fun setTheme(theme: AppTheme) {
-        _currentTheme.value = theme
-    }
+    val authState: StateFlow<AuthState> = authManager.authState
+    
 }
