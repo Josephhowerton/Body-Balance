@@ -1,4 +1,4 @@
-package com.fitness.authentication
+package com.fitness.authentication.impl
 
 sealed class AuthState {
     object UnAuthenticated: AuthState()
