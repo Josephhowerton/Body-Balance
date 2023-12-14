@@ -1,6 +1,5 @@
-package com.fitness.authentication.impl
+package com.fitness.authentication.manager
 
-import com.fitness.authentication.AuthenticationManager
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import javax.inject.Inject

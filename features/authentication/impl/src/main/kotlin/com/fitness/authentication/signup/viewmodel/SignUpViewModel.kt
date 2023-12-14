@@ -1,32 +1,35 @@
 package com.fitness.authentication.signup.viewmodel
 
-import IntentViewModel
+import viewmodel.IntentViewModel
 import android.util.Patterns
-import com.fitness.domain.usecase.EmailPasswordCreateUseCase
-import com.fitness.domain.usecase.GoogleCreateUseCase
-import com.fitness.domain.usecase.PhoneNumberCreateUseCase
-import com.fitness.domain.usecase.TwitterCreateUseCase
-import com.google.firebase.auth.PhoneAuthOptions
-import com.google.firebase.auth.PhoneAuthProvider
+import com.fitness.authentication.util.passwordVerification
+import com.fitness.domain.model.user.User
+import com.fitness.domain.usecase.auth.EmailPasswordCreateUseCase
+import com.fitness.domain.usecase.auth.GoogleCreateUseCase
+import com.fitness.domain.usecase.auth.PhoneNumberCreateUseCase
+import com.fitness.domain.usecase.auth.TwitterCreateUseCase
+import com.fitness.domain.usecase.cache.CreateUserUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
+import failure.handleAuthFailure
 import state.BaseViewState
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-class CreateAccountViewModel @Inject constructor(
+@HiltViewModel
+class SignUpViewModel @Inject constructor(
     val emailPasswordCreateUseCase: EmailPasswordCreateUseCase,
     val googleCreateUseCase: GoogleCreateUseCase,
     val phoneNumberCreateUseCase: PhoneNumberCreateUseCase,
     val twitterCreateUseCase: TwitterCreateUseCase,
     val createUserUseCase: CreateUserUseCase
-): IntentViewModel<BaseViewState<CreateAccountState>, CreateAccountEvent>() {
+): IntentViewModel<BaseViewState<SignUpState>, SignUpEvent>() {
 
     init {
-        setState(BaseViewState.Data(CreateAccountState()))
+        setState(BaseViewState.Data(SignUpState()))
     }
 
-    override fun onTriggerEvent(event: CreateAccountEvent) {
+    override fun onTriggerEvent(event: SignUpEvent) {
         when(event){
-            is CreateAccountEvent.EmailPasswordAuthData -> {
+            is SignUpEvent.EmailPasswordAuthData -> {
                 onEmailPasswordAuth(
                     firstname = event.firstname,
                     lastname = event.lastname,
@@ -35,14 +38,14 @@ class CreateAccountViewModel @Inject constructor(
                 )
             }
 
-            is CreateAccountEvent.GoogleAuthData -> {
+            is SignUpEvent.GoogleAuthData -> {
                 onGoogleAuth(
                     firstname = event.firstname,
                     lastname = event.lastname
                 )
             }
 
-            is CreateAccountEvent.PhoneAuthData -> {
+            is SignUpEvent.PhoneAuthData -> {
                 onPhoneAuth(
                     firstname = event.firstname,
                     lastname = event.lastname,
@@ -50,14 +53,14 @@ class CreateAccountViewModel @Inject constructor(
                 )
             }
 
-            is CreateAccountEvent.TwitterAuthData -> {
+            is SignUpEvent.TwitterAuthData -> {
                 onTwitterAuth(
                     firstname = event.firstname,
                     lastname = event.lastname
                 )
             }
             else -> {
-                setState(BaseViewState.Data(CreateAccountState()))
+                setState(BaseViewState.Data(SignUpState()))
             }
         }
     }
@@ -66,16 +69,16 @@ class CreateAccountViewModel @Inject constructor(
         super.handleError(exception.handleAuthFailure())
     }
 
-    fun verifyCredentials(event: CreateAccountEvent) {
+    fun verifyCredentials(event: SignUpEvent) {
         when(event) {
-            is CreateAccountEvent.EmailPasswordAuthData -> {
+            is SignUpEvent.EmailPasswordAuthData -> {
                 val firstname = event.firstname
                 val lastname = event.lastname
                 val email = event.email
                 val password = event.password
                 setState(
                     BaseViewState.Data(
-                        CreateAccountState(
+                        SignUpState(
                             !(firstname.isNullOrBlank() && lastname.isNullOrBlank()) &&
                                 passwordVerification(password) &&
                                 Patterns.EMAIL_ADDRESS.matcher(email).matches()
@@ -83,13 +86,13 @@ class CreateAccountViewModel @Inject constructor(
                     )
                 )
             }
-            is CreateAccountEvent.PhoneAuthData -> {
+            is SignUpEvent.PhoneAuthData -> {
                 val firstname = event.firstname
                 val lastname = event.lastname
                 val phone = event.phoneNumber
                 setState(
                     BaseViewState.Data(
-                        CreateAccountState(
+                        SignUpState(
                             !(firstname.isNullOrBlank() && lastname.isNullOrBlank())
                                     && Patterns.PHONE.matcher(phone).matches()
                         )
@@ -98,7 +101,7 @@ class CreateAccountViewModel @Inject constructor(
 
             }
             else -> {
-                setState(BaseViewState.Data(CreateAccountState(false)))
+                setState(BaseViewState.Data(SignUpState(false)))
             }
         }
     }
@@ -131,19 +134,10 @@ class CreateAccountViewModel @Inject constructor(
         }
     }
 
-    private fun onCreateUser(firebaseUser: UserDto) = safeLaunch{
+    private fun onCreateUser(firebaseUser: User) = safeLaunch{
         val params = CreateUserUseCase.Params(firebaseUser)
         call(createUserUseCase(params)) {
             setState(BaseViewState.Complete)
         }
-    }
-
-    private fun verify(phoneNumber: String) {
-        val options = PhoneAuthOptions.newBuilder()
-            .setPhoneNumber(phoneNumber)
-            .setTimeout(60L, TimeUnit.SECONDS)
-            .build()
-
-        PhoneAuthProvider.verifyPhoneNumber(options)
     }
 }

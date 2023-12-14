@@ -59,7 +59,6 @@ dependencies {
     addCoreDependencies()
     addJetpackComposeDependencies()
     addTestDependencies()
-    addDebuggingDependencies()
     addFirebaseDependencies()
     addHiltDependencies()
     addFeatureAPIDependencies()
@@ -71,6 +70,8 @@ dependencies {
 
     AUTHENTICATION
     ONBOARD
+
+    DATA_IMPL
 }
 
 kapt {

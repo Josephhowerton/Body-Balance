@@ -1,7 +1,12 @@
 package commons
 
+import LIBRARY
 import NAVIGATION
+import THEME
+import COMPONENTS
 import addDaggerDependencies
+import addHiltDependencies
+import addJetpackComposeDependencies
 import config.Configs
 import org.gradle.api.JavaVersion
 import org.gradle.kotlin.dsl.kotlin
@@ -39,9 +44,11 @@ android {
 }
 
 dependencies {
-    addDaggerDependencies()
-
+    addHiltDependencies()
+    addJetpackComposeDependencies()
+    THEME
     NAVIGATION
+    COMPONENTS
 }
 
 kapt {

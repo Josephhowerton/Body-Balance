@@ -1,14 +1,14 @@
 package com.fitness.authentication.signin.viewmodel
 
-data class LoginState(
+data class SignInState(
     var isVerified: Boolean = false,
     var isLoginComplete: Boolean = false
 )
 
-sealed class LoginEvent {
-    data class EmailPasswordAuthData(val email:String, val password:String): LoginEvent()
-    data class GoogleAuthData(val token: String): LoginEvent()
-    data class PhoneAuthData(val phoneNumber: String): LoginEvent()
-    data class TwitterAuthData(val token: String): LoginEvent()
-    object Reset: LoginEvent()
+sealed class SignInEvent {
+    data class EmailPasswordAuthData(val email:String, val password:String): SignInEvent()
+    data class GoogleAuthData(val token: String): SignInEvent()
+    data class PhoneAuthData(val phoneNumber: String): SignInEvent()
+    data class TwitterAuthData(val token: String): SignInEvent()
+    object Reset: SignInEvent()
 }

@@ -6,6 +6,7 @@ private object Version {
     const val ACTIVITY_COMPOSE = "1.8.1"
     const val COMPOSE_BOM = "2023.03.00"
     const val COMPOSE_NAVIGATION = "2.7.5"
+    const val COMPOSE_CONSTRAINT_LAYOUT = "1.0.1"
     const val JUNIT = "4.13.2"
     const val JUNIT_EXT = "1.1.5"
     const val ESPRESSO = "3.5.1"
@@ -14,7 +15,7 @@ private object Version {
     const val COROUTINES = "1.3.9"
     const val COROUTINES_VIEWMODEL = "2.4.0"
     const val FIREBASE_BOM = "32.6.0"
-
+    const val EXO_PLAYER = "1.2.0"
 }
 
 object CoreLibs{
@@ -29,6 +30,9 @@ object ComposeLibs {
     const val COMPOSE_UI_GRAPHICS = "androidx.compose.ui:ui-graphics"
     const val COMPOSE_TOOLING_PREVIEW  = "androidx.compose.ui:ui-tooling-preview"
     const val COMPOSE_MATERIAL3 = "androidx.compose.material3:material3"
+    const val DEBUG_COMPOSE_UI_TOOLING = "androidx.compose.ui:ui-tooling"
+    const val DEBUG_COMPOSE_UI_MANIFEST = "androidx.compose.ui:ui-test-manifest"
+    const val COMPOSE_CONSTRAINT_LAYOUT = "androidx.constraintlayout:constraintlayout-compose:${Version.COMPOSE_CONSTRAINT_LAYOUT}"
 
 }
 
@@ -42,11 +46,6 @@ object TestingLibs {
     const val JUNIT_EXT = "androidx.test.ext:junit:${Version.JUNIT_EXT}"
     const val ESPRESSO = "androidx.test.espresso:espresso-core:${Version.ESPRESSO}"
     const val COMPOSE_UI_TEST = "androidx.compose.ui:ui-test-junit4"
-}
-
-object DebuggingLibs {
-    const val DEBUG_COMPOSE_UI_TOOLING = "androidx.compose.ui:ui-tooling"
-    const val DEBUG_COMPOSE_UI_MANIFEST = "androidx.compose.ui:ui-test-manifest"
 }
 
 object HiltLibs {
@@ -70,4 +69,9 @@ object FirebaseLibs{
     const val FIREBASE_CRASHALYTICS = "com.google.firebase:firebase-crashlytics"
     const val FIREBASE_FIRESTORE = "com.google.firebase:firebase-firestore"
     const val FIREBASE_AUTHENTICATION = "com.google.firebase:firebase-auth"
+}
+
+object ExoPlayerLibs{
+    const val EXO_PLAYER = "androidx.media3:media3-exoplayer:${Version.EXO_PLAYER}"
+    const val EXO_PLAYER_UI = "androidx.media3:media3-ui:${Version.EXO_PLAYER}"
 }

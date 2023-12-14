@@ -11,6 +11,7 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import com.fitness.resources.R
+import com.fitness.theme.ui.primaryVariantHub
 
 @Preview(name = "Light", showBackground = true)
 @Preview(name = "Dark", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
@@ -56,7 +57,7 @@ fun SignInAnnotatedText(
 
         // Create a clickable part of the text
         pushStringAnnotation(tag = "signIn", annotation = "signIn")
-        withStyle(style = SpanStyle(color = Color.Blue)) {
+        withStyle(style = SpanStyle(color = primaryVariantHub)) {
             append(stringResource(id = R.string.already_have_an_account_2_2))
         }
         pop()
@@ -88,7 +89,7 @@ fun TermsAndPrivacyAnnotatedText(
 
         // Create a clickable part of the text
         pushStringAnnotation(tag = "terms", annotation = "terms")
-        withStyle(style = SpanStyle(color = Color.Blue)) {
+        withStyle(style = SpanStyle(color = primaryVariantHub)) {
             append(stringResource(id = R.string.terms_and_privacy_2_4))
         }
         pop()
@@ -98,7 +99,7 @@ fun TermsAndPrivacyAnnotatedText(
         append(" ")
 
         pushStringAnnotation(tag = "privacy", annotation = "privacy")
-        withStyle(style = SpanStyle(color = Color.Blue)) {
+        withStyle(style = SpanStyle(color = primaryVariantHub)) {
             append(stringResource(id = R.string.terms_and_privacy_4_4))
         }
         pop()
@@ -131,8 +132,8 @@ fun ForgotPasswordAnnotatedText(
     val annotatedString = buildAnnotatedString {
         // Create a clickable part of the text
         pushStringAnnotation(tag = "forgotPassword", annotation = "forgotPassword")
-        withStyle(style = SpanStyle(color = Color.Blue)) {
-            append(stringResource(id = R.string.do_not_have_an_account_2_2))
+        withStyle(style = SpanStyle(color = primaryVariantHub)) {
+            append(stringResource(id = R.string.forgot_password))
         }
         pop()
     }
@@ -142,6 +143,62 @@ fun ForgotPasswordAnnotatedText(
         modifier = modifier,
         onClick = { offset ->
             annotatedString.getStringAnnotations(tag = "forgotPassword", start = offset, end = offset)
+                .firstOrNull()?.let {
+                    onClick()
+                }
+        }
+    )
+}
+
+@Preview(name = "Light", showBackground = true)
+@Preview(name = "Dark", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+fun NewNumberAnnotatedText(
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit = {}
+) {
+    val annotatedString = buildAnnotatedString {
+        // Create a clickable part of the text
+        pushStringAnnotation(tag = "newNumber", annotation = "newNumber")
+        withStyle(style = SpanStyle(color = primaryVariantHub)) {
+            append(stringResource(id = R.string.new_number))
+        }
+        pop()
+    }
+
+    ClickableText(
+        text = annotatedString,
+        modifier = modifier,
+        onClick = { offset ->
+            annotatedString.getStringAnnotations(tag = "newNumber", start = offset, end = offset)
+                .firstOrNull()?.let {
+                    onClick()
+                }
+        }
+    )
+}
+
+@Preview(name = "Light", showBackground = true)
+@Preview(name = "Dark", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+fun SignUpForFreeAnnotatedText(
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit = {}
+) {
+    val annotatedString = buildAnnotatedString {
+        // Create a clickable part of the text
+        pushStringAnnotation(tag = "signUpForFree", annotation = "signUpForFree")
+        withStyle(style = SpanStyle(color = primaryVariantHub)) {
+            append(stringResource(id = R.string.sign_up_for_free))
+        }
+        pop()
+    }
+
+    ClickableText(
+        text = annotatedString,
+        modifier = modifier,
+        onClick = { offset ->
+            annotatedString.getStringAnnotations(tag = "signUpForFree", start = offset, end = offset)
                 .firstOrNull()?.let {
                     onClick()
                 }

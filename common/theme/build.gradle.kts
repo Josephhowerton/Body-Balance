@@ -17,4 +17,6 @@ android{
 
 dependencies {
     addJetpackComposeDependencies()
+    addHiltDependencies()
+    RESOURCES
 }

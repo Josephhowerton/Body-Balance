@@ -1,40 +1,49 @@
 package com.fitness.authentication.signin.viewmodel
 
-import IntentViewModel
+import viewmodel.IntentViewModel
+import android.util.Patterns
+import com.fitness.authentication.util.passwordVerification
+import com.fitness.domain.usecase.auth.EmailPasswordLoginUseCase
+import com.fitness.domain.usecase.auth.GoogleLoginUseCase
+import com.fitness.domain.usecase.auth.PhoneNumberLoginUseCase
+import com.fitness.domain.usecase.auth.TwitterLoginUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
+import failure.handleAuthFailure
 import state.BaseViewState
 import javax.inject.Inject
 
-class LoginViewModel @Inject constructor(
+@HiltViewModel
+class SignInViewModel @Inject constructor(
     val emailPasswordLoginUseCase: EmailPasswordLoginUseCase,
     val googleLoginUseCase: GoogleLoginUseCase,
     val phoneNumberLoginUseCase: PhoneNumberLoginUseCase,
     val twitterLoginUseCase: TwitterLoginUseCase
-) : IntentViewModel<BaseViewState<LoginState>, LoginEvent>() {
+) : IntentViewModel<BaseViewState<SignInState>, SignInEvent>() {
 
 
     init {
-        setState(BaseViewState.Data(LoginState()))
+        setState(BaseViewState.Data(SignInState()))
     }
 
-    override fun onTriggerEvent(event: LoginEvent) {
+    override fun onTriggerEvent(event: SignInEvent) {
         when(event){
-            is LoginEvent.EmailPasswordAuthData -> {
+            is SignInEvent.EmailPasswordAuthData -> {
                 onEmailPasswordAuth(email = event.email, password = event.password)
             }
 
-            is LoginEvent.GoogleAuthData -> {
+            is SignInEvent.GoogleAuthData -> {
                 onGoogleAuth(token = event.token)
             }
 
-            is LoginEvent.PhoneAuthData -> {
+            is SignInEvent.PhoneAuthData -> {
                 onPhoneAuth(phone = event.phoneNumber)
             }
 
-            is LoginEvent.TwitterAuthData -> {
+            is SignInEvent.TwitterAuthData -> {
                 onTwitterAuth(token = event.token)
             }
-            is LoginEvent.Reset -> {
-                setState(BaseViewState.Data(LoginState()))
+            is SignInEvent.Reset -> {
+                setState(BaseViewState.Data(SignInState()))
             }
         }
     }
@@ -43,27 +52,27 @@ class LoginViewModel @Inject constructor(
         super.handleError(exception.handleAuthFailure())
     }
 
-    fun verifyCredentials(event: LoginEvent) {
+    fun verifyCredentials(event: SignInEvent) {
         when(event) {
-            is LoginEvent.EmailPasswordAuthData -> {
+            is SignInEvent.EmailPasswordAuthData -> {
                 val email = event.email
                 val password = event.password
                 setState(
                     BaseViewState.Data(
-                        LoginState(passwordVerification(password) && Patterns.EMAIL_ADDRESS.matcher(email).matches())
+                        SignInState(passwordVerification(password) && Patterns.EMAIL_ADDRESS.matcher(email).matches())
                     )
                 )
             }
-            is LoginEvent.PhoneAuthData -> {
+            is SignInEvent.PhoneAuthData -> {
                 val phone = event.phoneNumber
                 setState(
                     BaseViewState.Data(
-                        LoginState(Patterns.PHONE.matcher(phone).matches())
+                        SignInState(Patterns.PHONE.matcher(phone).matches())
                     )
                 )
             }
             else -> {
-                setState(BaseViewState.Data(LoginState(false)))
+                setState(BaseViewState.Data(SignInState(false)))
             }
         }
     }

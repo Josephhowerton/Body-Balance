@@ -8,4 +8,7 @@ android {
 
 dependencies {
     ONBOARD_API
+    AUTHENTICATION_API
+    LIBRARY
+    RESOURCES
 }

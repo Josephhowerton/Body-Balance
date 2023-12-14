@@ -1,4 +1,4 @@
-package com.fitness.bodybalance.ui.theme.com.fitness.theme.ui
+ package com.fitness.theme.ui
 
 import androidx.compose.ui.graphics.Color
 

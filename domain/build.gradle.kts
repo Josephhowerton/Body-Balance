@@ -15,6 +15,6 @@ android{
 
 dependencies {
     addHiltDependencies()
-    DATA
+    DATA_API
     LIBRARY
 }

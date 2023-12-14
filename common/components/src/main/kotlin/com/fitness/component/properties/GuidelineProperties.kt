@@ -1,4 +1,14 @@
 package com.fitness.component.properties
 
-class GuidelineProperties {
+import androidx.compose.ui.unit.dp
+
+object GuidelineProperties {
+    val TOP = 75.dp
+    val SECOND_TOP = 175.dp
+    val START = 20.dp
+    val END = 20.dp
+
+
+    val LOGO_TOP = 25.dp
+    val LOGO_BOTTOM = 200.dp
 }

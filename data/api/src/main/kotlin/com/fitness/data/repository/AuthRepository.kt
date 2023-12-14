@@ -1,7 +1,5 @@
 package com.fitness.data.repository
 
-
-
 interface AuthRepository {
     suspend fun signInWithEmail()
     suspend fun signInWithPhone()

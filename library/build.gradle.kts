@@ -21,4 +21,6 @@ dependencies {
     addJetpackComposeDependencies()
     addCoroutineDependencies()
     addFirebaseDependencies()
+    addMedia3Dependencies()
+    RESOURCES
 }

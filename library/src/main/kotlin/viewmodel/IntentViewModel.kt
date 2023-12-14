@@ -1,9 +1,10 @@
+package viewmodel
+
 import com.google.firebase.crashlytics.ktx.crashlytics
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import state.BaseViewState
-import viewmodel.BaseViewModel
 
 abstract class IntentViewModel<STATE: BaseViewState<*>, EVENT> : BaseViewModel() {
     private val _uiState = MutableStateFlow<BaseViewState<*>>(BaseViewState.Empty)

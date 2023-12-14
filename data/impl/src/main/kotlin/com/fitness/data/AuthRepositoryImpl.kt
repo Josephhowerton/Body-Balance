@@ -1,13 +1,11 @@
 package com.fitness.data
 
-import com.fitness.authentication.SignInEmailCredentials
-import com.fitness.authentication.SignUpEmailCredentials
 import com.fitness.data.repository.AuthRepository
 import javax.inject.Inject
 
 class AuthRepositoryImpl @Inject constructor(): AuthRepository {
 
-    override suspend fun signInWithEmail(credentials: SignInEmailCredentials) {
+    override suspend fun signInWithEmail() {
         TODO("Not yet implemented")
     }
 
@@ -27,7 +25,7 @@ class AuthRepositoryImpl @Inject constructor(): AuthRepository {
         TODO("Not yet implemented")
     }
 
-    override suspend fun signUpWithEmail(credentials: SignUpEmailCredentials) {
+    override suspend fun signUpWithEmail() {
         TODO("Not yet implemented")
     }
 

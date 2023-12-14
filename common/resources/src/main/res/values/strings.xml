@@ -1,7 +1,27 @@
 <resources>
     <string name="app_name">Body Balance</string>
     <string name="activity_home">HomeActivity</string>
-
+    <string name="welcome_to_body_balance">Welcome to Balance</string>
+    <string name="reset_your_password">Reset Your Password</string>
+    <string name="reset_your_phone">Reset Your Phone</string>
+    <string name="reset_your_email">Reset Your Email</string>
+    <string name="title_enter_your_email">Enter Your Email</string>
+    <string name="desc_reset_your_password">Ready for a new password? Enter it below and you\'ll be good to go!</string>
+    <string name="desc_reset_your_phone">Got a new phone number? Just enter it here and we\'ll update your account details.</string>
+    <string name="desc_reset_your_email">Updating your email? Enter the new one here, and we\'ll take care of the rest.</string>
+    <string name="desc_title_enter_your_email">Need a password reset? Type in your email and we\'ll send you a link to create a new password.</string>
+    <string name="not_a_member">Not a member?</string>
+    <string name="sign_up_for_free">Sign up for free.</string>
+    <string name="create_account_message">Create an account to get started on your fitness and health journey.</string>
+    <string name="terms_and_privacy_1_4">By continuing you agree to Balance\'s</string>
+    <string name="terms_and_privacy_2_4">Terms and Conditions</string>
+    <string name="terms_and_privacy_3_4">and</string>
+    <string name="terms_and_privacy_4_4">Privacy Policy.</string>
+    <string name="or">or</string>
+    <string name="already_have_an_account_1_2">Already have an account?</string>
+    <string name="already_have_an_account_2_2"> Sign In.</string>
+    <string name="do_not_have_an_account_1_2">Don\'t have an account?</string>
+    <string name="do_not_have_an_account_2_2">Sign Up.</string>
     <string name="todays_workout_plan">Today\'s Workout Plan</string>
     <string name="calories">Calories</string>
     <string name="carbs">Carbohydrates</string>
@@ -9,48 +29,51 @@
     <string name="protein">Protein</string>
     <string name="weight">Weight</string>
     <string name="activity">Activity</string>
-
     <string name="no_data_displayed">No Data Displayed</string>
-
     <string name="calories_consumed_out">%.1f calories consumed out of %.1f</string>
     <string name="carbs_consumed_out">%.1f carbohydrates consumed out of %.1f</string>
     <string name="fat_consumed_out">%.1f fat consumed out of %.1f</string>
     <string name="protein_consumed_out">%.1f protein consumed out of %.1f</string>
     <string name="from_target_weight">%.1f %s from target weight %.1f</string>
-
     <string name="calories_compact">%.1f out of %.1f</string>
     <string name="carbs_compact">%.1f out of %.1f</string>
     <string name="fat_compact">%.1f out of %.1f</string>
     <string name="protein_compact">%.1f out of %.1f</string>
     <string name="weight_compact">%.1f %s from %.1f</string>
-
     <string name="sleep">Sleep</string>
-    <string name="welcome">Welcome</string>
-    <string name="login">Login</string>
-    <string name="continue_your_journey">Continue Your Journey</string>
-    <string name="create_account">Create Account</string>
-    <string name="start_your_journey">Start Your Journey</string>
-    <string name="forgot_password">Forgot Password</string>
-    <string name="enter_email_password">Enter your email &amp; new password</string>
-    <string name="first_name">First Name</string>
-    <string name="last_name">Last Name</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="new_number">New Number?</string>
+    <string name="enter_first_name">Enter your first name</string>
+    <string name="enter_last_name">Enter your last name</string>
     <string name="email">Email</string>
     <string name="phone_number">Phone Number</string>
     <string name="password">Password</string>
-    <string name="enter_password">Enter Password</string>
-    <string name="confirm_password">Confirm Password</string>
+    <string name="enter_email">Enter your email address</string>
+    <string name="enter_phone">Enter your phone number</string>
+    <string name="enter_code">Enter your code</string>
+    <string name="enter_password">Enter your password</string>
+    <string name="confirm_password">Confirm your password</string>
     <string name="forgot_password_question">"Forgot password?"</string>
     <string name="confirm">Confirm</string>
-    <string name="ca_additional_methods">Create account with one of the methods below.</string>
-    <string name="login_additional_methods">Login with one of the methods below.</string>
-    <string name="your_journey_begins_here">Your Journey Begins Here</string>
-    <string name="welcome_screen_quote">Login and Register on Screen. Log In and Sign Up UI UX on Smartphone Screen. Login Application with Password Form.</string>
+    <string name="title_nav_drawer_analysis">Analysis</string>
+    <string name="title_nav_drawer_diet_tracking">Diet Tracking</string>
+    <string name="title_nav_drawer_home">Home</string>
+    <string name="title_nav_drawer_training">Training</string>
+    <string name="title_nav_drawer_well_being">Well Being</string>
+    <string name="content_description_analysis">icon analysis</string>
+    <string name="content_description_diet_tracking">icon diet tracking</string>
     <string name="content_description_home">icon home</string>
+    <string name="content_description_training">icon training</string>
+    <string name="content_description_well_being">icon well being</string>
     <string name="content_description_next">icon next</string>
     <string name="content_description_phone">icon phone</string>
     <string name="content_description_email">icon email</string>
+    <string name="title_google">Google</string>
+    <string name="title_x">X</string>
+    <string name="title_facebook">Facebook</string>
     <string name="content_description_google">Google logo</string>
-    <string name="content_description_twitter">Twitter logo</string>
+    <string name="content_description_x">X logo</string>
+    <string name="content_description_facebook">Facebook logo</string>
     <string name="content_description_menu">icon menu</string>
     <string name="content_description_settings">icon settings</string>
     <string name="content_description_account">icon account</string>
@@ -61,4 +84,28 @@
     <string name="default_error_desc">Help us improve your experience by sending an error report</string>
 
     <string name="target_weight_desc">Target: %.1f</string>
+
+    <string name="auth_button_title_email">Continue with email</string>
+    <string name="auth_button_phone">Continue with phone</string>
+    <string name="auth_button_title_google">Continue with Google</string>
+    <string name="auth_button_title_x">Continue with X</string>
+    <string name="auth_button_title_facebook">Continue with Facebook</string>
+    <string name="title_continue">Continue</string>
+    <string name="in_a_moment_you_receive_a_cod">Got the code we texted you? Pop it in here to get started!</string>
+
+    <string name="label_firstname">First Name</string>
+    <string name="label_lastname">Last Name</string>
+    <string name="label_phone">Phone</string>
+    <string name="label_code">Code</string>
+    <string name="label_email">Email</string>
+    <string name="label_password">Password</string>
+    <string name="we_are_sorry">We\'re sorry!</string>
+    <string name="incorrect_credentials">Incorrect Credentials</string>
+    <string name="invalid_user">Invalid User</string>
+    <string name="user_exist_email">Email In Use</string>
+    <string name="user_exist_phone">Phone In Use</string>
+    <string name="invalid_credentials_desc">Them email or password you entered is incorrect. Try again or click Forgot password to reset it.</string>
+    <string name="invalid_user_desc">There is no user profile corresponding to this email. Please create a new account.</string>
+    <string name="user_collision_email_desc">The email address is already in use by another account. Sign in or create a new account.</string>
+    <string name="user_collision_phone_desc">The phone number is already in use by another account. Sign in or create a new account.</string>
 </resources>

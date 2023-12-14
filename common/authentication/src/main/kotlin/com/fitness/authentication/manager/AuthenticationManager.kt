@@ -1,6 +1,5 @@
-package com.fitness.authentication
+package com.fitness.authentication.manager
 
-import com.fitness.authentication.impl.AuthState
 import kotlinx.coroutines.flow.StateFlow
 
 interface AuthenticationManager {

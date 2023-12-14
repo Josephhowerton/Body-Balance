@@ -19,10 +19,14 @@ include(":app")
 
 include(":common")
 include(":common:authentication")
+include(":common:components")
 include(":common:navigation")
 include(":common:resources")
 include(":common:theme")
 
+include(":data:api")
+include(":data:impl")
+include(":domain")
 
 include(":features")
 include(":features:authentication:impl")
