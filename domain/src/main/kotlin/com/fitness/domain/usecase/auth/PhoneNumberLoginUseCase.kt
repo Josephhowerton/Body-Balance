@@ -9,6 +9,5 @@ class PhoneNumberLoginUseCase: DataStateUseCase<PhoneNumberLoginUseCase.Params, 
     data class Params(val phoneNumber: String)
 
     override suspend fun FlowCollector<DataState<Nothing>>.execute(params: Params) {
-        TODO("implement phone auth use case")
     }
 }

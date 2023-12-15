@@ -97,6 +97,7 @@ fun DependencyHandler.addTestDependencies(){
 
 fun DependencyHandler.addHiltDependencies() {
     implementation(HiltLibs.HILT)
+    implementation(HiltLibs.HILT_NAVIGATION)
     kapt(HiltLibs.HILT_COMPILER)
 }
 

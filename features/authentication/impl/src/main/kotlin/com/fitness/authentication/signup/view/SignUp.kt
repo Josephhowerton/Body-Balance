@@ -14,6 +14,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -22,6 +24,9 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import com.fitness.authentication.signup.viewmodel.SignUpEvent
 import com.fitness.authentication.signup.viewmodel.SignUpState
+import com.fitness.authentication.util.DisplayCheckmark
+import com.fitness.authentication.util.DisplayErrorMessage
+import com.fitness.authentication.util.PasswordTrailingIcon
 import com.fitness.authentication.util.SignInAnnotatedText
 import com.fitness.authentication.util.TermsAndPrivacyAnnotatedText
 import com.fitness.component.components.BodyBalanceImageLogo
@@ -44,6 +49,7 @@ import com.fitness.component.screens.ErrorScreen
 import com.fitness.component.screens.LoadingScreen
 import com.fitness.resources.R
 import com.fitness.theme.ui.BodyBalanceTheme
+import extensions.TextFieldState
 import extensions.cast
 import failure.AuthFailure
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -100,6 +106,7 @@ fun SignUpScreen(
         is BaseViewState.Empty -> {
             EmptyScreen()
         }
+
         is BaseViewState.Data -> {
             SignUpContent(
                 onClickEmail = onClickEmail,
@@ -110,6 +117,7 @@ fun SignUpScreen(
                 onClickAnnotatedText = onClickAnnotatedText
             )
         }
+
         is BaseViewState.Error -> {
             val failure = uiState.cast<BaseViewState.Error>().throwable as AuthFailure
 
@@ -117,6 +125,7 @@ fun SignUpScreen(
                 onErrorEvent.invoke(failure)
             }
         }
+
         is BaseViewState.Loading -> {
             LoadingScreen()
         }
@@ -137,7 +146,8 @@ fun SignUpContent(
     onClickAnnotatedText: () -> Unit = {}
 ) {
     ConstraintLayout(modifier = Modifier.fillMaxSize()) {
-        val (logo,
+        val (
+            logo,
             welcome,
             message,
             email,
@@ -194,7 +204,7 @@ fun SignUpContent(
             modifier = Modifier.constrainAs(email) {
                 start.linkTo(startGuideline)
                 end.linkTo(endGuideline)
-                top.linkTo(message.bottom,  15.dp)
+                top.linkTo(message.bottom, 15.dp)
                 bottom.linkTo(phone.top)
                 width = Dimension.fillToConstraints
             }
@@ -205,7 +215,7 @@ fun SignUpContent(
             desc = R.string.content_description_phone,
             text = R.string.auth_button_phone,
             onClick = onClickPhone,
-            modifier = Modifier.constrainAs(phone){
+            modifier = Modifier.constrainAs(phone) {
                 start.linkTo(startGuideline)
                 end.linkTo(endGuideline)
                 top.linkTo(email.bottom, 10.dp)
@@ -219,7 +229,7 @@ fun SignUpContent(
             desc = R.string.content_description_google,
             text = R.string.auth_button_title_google,
             onClick = onClickGoogle,
-            modifier = Modifier.constrainAs(google){
+            modifier = Modifier.constrainAs(google) {
                 start.linkTo(startGuideline)
                 end.linkTo(endGuideline)
                 top.linkTo(phone.bottom, 10.dp)
@@ -234,7 +244,7 @@ fun SignUpContent(
             text = R.string.auth_button_title_facebook,
             iconSize = 22,
             onClick = onClickFacebook,
-            modifier = Modifier.constrainAs(facebook){
+            modifier = Modifier.constrainAs(facebook) {
                 start.linkTo(startGuideline)
                 end.linkTo(endGuideline)
                 top.linkTo(google.bottom, 10.dp)
@@ -249,7 +259,7 @@ fun SignUpContent(
             text = R.string.auth_button_title_x,
             iconSize = 16,
             onClick = onClickX,
-            modifier = Modifier.constrainAs(twitter){
+            modifier = Modifier.constrainAs(twitter) {
                 start.linkTo(startGuideline)
                 end.linkTo(endGuideline)
                 top.linkTo(facebook.bottom, 10.dp)
@@ -271,16 +281,10 @@ fun SignUpContent(
 
 @Composable
 fun SignUpEmailScreen(
-    state: StateFlow<BaseViewState<SignUpState>> = MutableStateFlow(BaseViewState.Data(SignUpState())),
+    state: StateFlow<BaseViewState<SignUpState>>,
     onErrorEvent: (AuthFailure) -> Unit,
     verifyCredentials: (SignUpEvent) -> Unit,
-    onClickContinue: () -> Unit = {},
-    onClickTerms: () -> Unit = {},
-    onClickPrivacy: () -> Unit = {},
-    onClickPhone :() -> Unit = {},
-    onClickGoogle: () -> Unit = {},
-    onClickFacebook: () -> Unit = {},
-    onClickX: () -> Unit = {}
+    onTriggerEvent: (SignUpEvent) -> Unit = {}
 ) {
     val uiState by state.collectAsState()
 
@@ -288,19 +292,15 @@ fun SignUpEmailScreen(
         is BaseViewState.Empty -> {
             EmptyScreen()
         }
+
         is BaseViewState.Data -> {
             SignUpEmailContent(
                 state = uiState.cast<BaseViewState.Data<SignUpState>>().value,
                 verifyCredentials = verifyCredentials,
-                onClickContinue = onClickContinue,
-                onClickTerms = onClickTerms,
-                onClickPrivacy = onClickPrivacy,
-                onClickPhone = onClickPhone,
-                onClickGoogle = onClickGoogle,
-                onClickFacebook = onClickFacebook,
-                onClickX = onClickX
+                onTriggerEvent = onTriggerEvent
             )
         }
+
         is BaseViewState.Error -> {
             val failure = uiState.cast<BaseViewState.Error>().throwable as AuthFailure
 
@@ -308,6 +308,7 @@ fun SignUpEmailScreen(
                 onErrorEvent.invoke(failure)
             }
         }
+
         is BaseViewState.Loading -> {
             LoadingScreen()
         }
@@ -320,13 +321,7 @@ fun SignUpEmailScreen(
 fun SignUpEmailContent(
     state: SignUpState,
     verifyCredentials: (SignUpEvent) -> Unit = {},
-    onClickContinue: () -> Unit = {},
-    onClickTerms: () -> Unit = {},
-    onClickPrivacy: () -> Unit = {},
-    onClickPhone :() -> Unit = {},
-    onClickGoogle: () -> Unit = {},
-    onClickFacebook: () -> Unit = {},
-    onClickX: () -> Unit = {}
+    onTriggerEvent: (SignUpEvent) -> Unit = {}
 ) {
     ConstraintLayout(modifier = Modifier.fillMaxSize()) {
         val (
@@ -356,8 +351,10 @@ fun SignUpEmailContent(
         var userEmail by remember { mutableStateOf("") }
         var userPassword by remember { mutableStateOf("") }
 
+        var passwordVisibility by remember { mutableStateOf(false) }
+
         SignInAnnotatedText(
-            onClick = onClickTerms,
+            onClick = { onTriggerEvent(SignUpEvent.TermsAndConditions) },
             modifier = Modifier.constrainAs(signIn) {
                 end.linkTo(endGuideline)
                 top.linkTo(topGuideline)
@@ -389,7 +386,20 @@ fun SignUpEmailContent(
             value = userFirstname,
             hint = R.string.enter_first_name,
             label = R.string.label_firstname,
+            isError = state.isFirstnameVerified == TextFieldState.ERROR,
+            trailingIcon = { DisplayCheckmark(state = state.isFirstnameVerified) },
+            supportingText = {
+                DisplayErrorMessage(
+                    state = state.isFirstnameVerified,
+                    errorMessageId = state.firstnameErrorMessage
+                )
+            },
             onValueChanged = { userFirstname = it },
+            onFocusChanged = {
+                if (!it) {
+                    verifyCredentials(SignUpEvent.FirstNameChanged(userFirstname))
+                }
+            },
             modifier = Modifier.constrainAs(firstname) {
                 start.linkTo(startGuideline)
                 end.linkTo(endGuideline)
@@ -402,7 +412,20 @@ fun SignUpEmailContent(
             value = userLastname,
             hint = R.string.enter_last_name,
             label = R.string.label_lastname,
+            isError = state.isLastnameVerified == TextFieldState.ERROR,
+            trailingIcon = { DisplayCheckmark(state = state.isLastnameVerified) },
+            supportingText = {
+                DisplayErrorMessage(
+                    state = state.isLastnameVerified,
+                    errorMessageId = state.lastnameErrorMessage
+                )
+            },
             onValueChanged = { userLastname = it },
+            onFocusChanged = {
+                if (!it) {
+                    verifyCredentials(SignUpEvent.LastNameChanged(userLastname))
+                }
+            },
             modifier = Modifier.constrainAs(lastname) {
                 start.linkTo(startGuideline)
                 end.linkTo(endGuideline)
@@ -415,7 +438,20 @@ fun SignUpEmailContent(
             value = userEmail,
             hint = R.string.enter_email,
             label = R.string.label_email,
+            isError = state.isEmailVerified == TextFieldState.ERROR,
+            trailingIcon = { DisplayCheckmark(state = state.isEmailVerified) },
+            supportingText = {
+                DisplayErrorMessage(
+                    state = state.isEmailVerified,
+                    errorMessageId = state.emailErrorMessage
+                )
+            },
             onValueChanged = { userEmail = it },
+            onFocusChanged = {
+                if (!it) {
+                    verifyCredentials(SignUpEvent.EmailChanged(userEmail))
+                }
+            },
             modifier = Modifier.constrainAs(email) {
                 start.linkTo(startGuideline)
                 end.linkTo(endGuideline)
@@ -428,7 +464,23 @@ fun SignUpEmailContent(
             value = userPassword,
             hint = R.string.enter_password,
             label = R.string.label_password,
+            isError = state.isPasswordVerified == TextFieldState.ERROR,
+            visualTransformation = if (passwordVisibility) PasswordVisualTransformation() else VisualTransformation.None,
+            trailingIcon = {
+                PasswordTrailingIcon(state = state.isPasswordVerified, isVisible = passwordVisibility)
+           },
+            supportingText = {
+                DisplayErrorMessage(
+                    state = state.isPasswordVerified,
+                    errorMessageId = state.passwordErrorMessage
+                )
+            },
             onValueChanged = { userPassword = it },
+            onFocusChanged = {
+                if (!it) {
+                    verifyCredentials(SignUpEvent.PasswordChanged(userPassword))
+                }
+            },
             modifier = Modifier.constrainAs(password) {
                 start.linkTo(startGuideline)
                 end.linkTo(endGuideline)
@@ -451,7 +503,6 @@ fun SignUpEmailContent(
         StandardButton(
             text = R.string.title_continue,
             onClick = onClickContinue,
-            enabled = state.isVerified,
             modifier = Modifier.constrainAs(signUp) {
                 start.linkTo(startGuideline)
                 end.linkTo(endGuideline)
@@ -522,17 +573,13 @@ fun SignUpEmailContent(
                     top.linkTo(or.bottom, 10.dp)
                 }
         )
-
-        LaunchedEffect(userFirstname, userLastname, userEmail, userPassword) {
-            verifyCredentials(SignUpEvent.EmailPasswordAuthData(userFirstname, userLastname, userEmail, userPassword))
-        }
     }
 }
 
 
 @Composable
 fun SignUpPhoneScreen(
-    state: StateFlow<BaseViewState<SignUpState>> = MutableStateFlow(BaseViewState.Data(SignUpState())),
+    state: StateFlow<BaseViewState<SignUpState>>,
     onErrorEvent: (AuthFailure) -> Unit,
     verifyCredentials: (SignUpEvent) -> Unit,
     onClickContinue: () -> Unit = {},
@@ -549,6 +596,7 @@ fun SignUpPhoneScreen(
         is BaseViewState.Empty -> {
             EmptyScreen()
         }
+
         is BaseViewState.Data -> {
             SignUpPhoneContent(
                 state = uiState.cast<BaseViewState.Data<SignUpState>>().value,
@@ -561,6 +609,7 @@ fun SignUpPhoneScreen(
                 onClickX = onClickX
             )
         }
+
         is BaseViewState.Error -> {
             val failure = uiState.cast<BaseViewState.Error>().throwable as AuthFailure
 
@@ -568,6 +617,7 @@ fun SignUpPhoneScreen(
                 onErrorEvent.invoke(failure)
             }
         }
+
         is BaseViewState.Loading -> {
             LoadingScreen()
         }
@@ -647,7 +697,20 @@ fun SignUpPhoneContent(
             value = userFirstname,
             hint = R.string.enter_first_name,
             label = R.string.label_firstname,
-            onValueChanged = {userFirstname = it},
+            isError = state.isFirstnameVerified == TextFieldState.ERROR,
+            trailingIcon = { DisplayCheckmark(state = state.isFirstnameVerified) },
+            supportingText = {
+                DisplayErrorMessage(
+                    state = state.isFirstnameVerified,
+                    errorMessageId = state.firstnameErrorMessage
+                )
+            },
+            onValueChanged = { userFirstname = it },
+            onFocusChanged = {
+                if (!it) {
+                    verifyCredentials(SignUpEvent.FirstNameChanged(userFirstname))
+                }
+            },
             modifier = Modifier.constrainAs(firstname) {
                 start.linkTo(startGuideline)
                 end.linkTo(endGuideline)
@@ -660,7 +723,20 @@ fun SignUpPhoneContent(
             value = userLastname,
             hint = R.string.enter_last_name,
             label = R.string.label_lastname,
-            onValueChanged = {userLastname = it},
+            isError = state.isLastnameVerified == TextFieldState.ERROR,
+            trailingIcon = { DisplayCheckmark(state = state.isLastnameVerified) },
+            supportingText = {
+                DisplayErrorMessage(
+                    state = state.isLastnameVerified,
+                    errorMessageId = state.lastnameErrorMessage
+                )
+            },
+            onValueChanged = { userLastname = it },
+            onFocusChanged = {
+                if (!it) {
+                    verifyCredentials(SignUpEvent.LastNameChanged(userLastname))
+                }
+            },
             modifier = Modifier.constrainAs(lastname) {
                 start.linkTo(startGuideline)
                 end.linkTo(endGuideline)
@@ -673,7 +749,20 @@ fun SignUpPhoneContent(
             value = userPhone,
             hint = R.string.enter_phone,
             label = R.string.label_phone,
-            onValueChanged = {userPhone = it},
+            isError = state.isPhoneVerified == TextFieldState.ERROR,
+            trailingIcon = { DisplayCheckmark(state = state.isPhoneVerified) },
+            supportingText = {
+                DisplayErrorMessage(
+                    state = state.isPhoneVerified,
+                    errorMessageId = state.phoneErrorMessage
+                )
+            },
+            onValueChanged = { userPhone = it },
+            onFocusChanged = {
+                if (!it) {
+                    verifyCredentials(SignUpEvent.PhoneChanged(userPhone))
+                }
+            },
             modifier = Modifier.constrainAs(phone) {
                 start.linkTo(startGuideline)
                 end.linkTo(endGuideline)
@@ -758,7 +847,7 @@ fun SignUpPhoneContent(
         )
 
         LaunchedEffect(userFirstname, userLastname, userPhone) {
-            verifyCredentials(SignUpEvent.PhoneAuthData(userFirstname, userLastname, userPhone))
+            verifyCredentials(SignUpEvent.PhoneAuthentication(userFirstname, userLastname, userPhone))
         }
     }
 }

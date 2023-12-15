@@ -68,6 +68,9 @@
     <string name="content_description_next">icon next</string>
     <string name="content_description_phone">icon phone</string>
     <string name="content_description_email">icon email</string>
+    <string name="content_description_open_eye">icon open eye</string>
+    <string name="content_description_closed_eye">icon closed eye</string>
+    <string name="content_description_checkmark">icon checkmark</string>
     <string name="title_google">Google</string>
     <string name="title_x">X</string>
     <string name="title_facebook">Facebook</string>
@@ -108,4 +111,21 @@
     <string name="invalid_user_desc">There is no user profile corresponding to this email. Please create a new account.</string>
     <string name="user_collision_email_desc">The email address is already in use by another account. Sign in or create a new account.</string>
     <string name="user_collision_phone_desc">The phone number is already in use by another account. Sign in or create a new account.</string>
+
+    <!-- Generic String Verification -->
+    <string name="auth_name_length_error">Name must be at least 2 characters long.</string>
+
+    <!-- Email Verification -->
+    <string name="auth_invalid_email_format">Invalid email format.</string>
+
+    <!-- Phone Verification -->
+    <string name="auth_invalid_phone_format">Invalid phone number format.</string>
+
+    <!-- Password Verification -->
+    <string name="auth_password_lowercase_error">Must contain a lowercase letter.</string>
+    <string name="auth_password_uppercase_error">Must contain an uppercase letter.</string>
+    <string name="auth_password_digit_error">Must contain a digit.</string>
+    <string name="auth_password_special_char_error">Must contain a special character (@$!%*?&amp;).</string>
+    <string name="auth_password_length_error">Must be at least 8 characters long.</string>
+
 </resources>

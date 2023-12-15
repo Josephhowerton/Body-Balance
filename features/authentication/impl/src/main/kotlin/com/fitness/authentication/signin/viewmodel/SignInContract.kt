@@ -1,8 +1,8 @@
 package com.fitness.authentication.signin.viewmodel
 
 data class SignInState(
-    var isVerified: Boolean = false,
-    var isLoginComplete: Boolean = false
+    var isEmailVerified: Boolean = false,
+    var isPasswordVerified: Boolean = false,
 )
 
 sealed class SignInEvent {

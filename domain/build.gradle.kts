@@ -5,12 +5,6 @@ plugins{
 android{
     namespace = "com.fitness.domain"
 
-    buildFeatures {
-        compose = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = config.Configs.KotlinCompilerExtensionVersion
-    }
 }
 
 dependencies {

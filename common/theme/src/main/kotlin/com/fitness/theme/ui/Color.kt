@@ -84,3 +84,6 @@ val surfaceColorSpoke = Color(0xFFF5F5F5) // Light Grey
 val textOnPrimarySpoke = Color(0xFFFFFFFF) // White (for text on Vivid Bright Pink)
 val textOnSecondarySpoke = Color(0xFF212121) // Dark Grey (for text on Mint Green)
 val textOnBackgroundSpoke = Color(0xFF212121) // Dark Grey
+
+ val Green = Color(0xFF32DE84)
+ val Red = Color(0xFFB20710)

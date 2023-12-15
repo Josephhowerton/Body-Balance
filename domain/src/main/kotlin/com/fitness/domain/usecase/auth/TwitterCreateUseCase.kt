@@ -8,9 +8,8 @@ import javax.inject.Inject
 
 class TwitterCreateUseCase @Inject constructor() : DataStateUseCase<TwitterCreateUseCase.Params, User>() {
 
-    data class Params(val firstname: String, val lastname: String)
+    object Params
 
     override suspend fun FlowCollector<DataState<User>>.execute(params: Params) {
-        TODO("implement twitter create use case")
     }
 }

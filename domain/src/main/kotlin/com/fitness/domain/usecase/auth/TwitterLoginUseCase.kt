@@ -9,6 +9,5 @@ class TwitterLoginUseCase : DataStateUseCase<TwitterLoginUseCase.Params, Nothing
     data class Params(val token: String)
 
     override suspend fun FlowCollector<DataState<Nothing>>.execute(params: Params) {
-        TODO("implement twitter auth use case")
     }
 }

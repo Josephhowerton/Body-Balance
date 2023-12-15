@@ -11,6 +11,7 @@ private object Version {
     const val JUNIT_EXT = "1.1.5"
     const val ESPRESSO = "3.5.1"
     const val HILT = "2.44"
+    const val HILT_NAVIGATION = "1.1.0"
     const val DAGGER2 = "2.44"
     const val COROUTINES = "1.3.9"
     const val COROUTINES_VIEWMODEL = "2.4.0"
@@ -51,6 +52,7 @@ object TestingLibs {
 object HiltLibs {
     const val HILT = "com.google.dagger:hilt-android:${Version.HILT}"
     const val HILT_COMPILER = "com.google.dagger:hilt-android-compiler:${Version.HILT}"
+    const val HILT_NAVIGATION = "androidx.hilt:hilt-navigation-compose:${Version.HILT_NAVIGATION}"
 }
 
 object DaggerLibs{

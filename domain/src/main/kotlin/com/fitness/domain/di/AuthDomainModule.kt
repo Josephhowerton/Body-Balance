@@ -1,8 +1,5 @@
 package com.fitness.domain.di
 
-import com.fitness.authentication.di.CommonAuthModule
-import com.fitness.authentication.manager.AuthenticationManager
-import com.fitness.authentication.manager.AuthenticationManagerImpl
 import com.fitness.data.repository.AuthRepository
 import com.fitness.domain.usecase.auth.EmailPasswordCreateUseCase
 import com.fitness.domain.usecase.auth.EmailPasswordLoginUseCase
@@ -19,33 +16,42 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
-@Module(includes = [CommonAuthModule::class])
+@Module
 @InstallIn(SingletonComponent::class)
 class AuthDomainModule {
     @Provides
+    @Singleton
     fun provideEmailPasswordCreateUseCase(authRepository: AuthRepository) = EmailPasswordCreateUseCase(authRepository)
 
     @Provides
+    @Singleton
     fun provideGoogleCreateUseCase() = GoogleCreateUseCase()
 
     @Provides
+    @Singleton
     fun providePhoneNumberCreateUseCase(authRepository: AuthRepository) = PhoneNumberCreateUseCase(authRepository)
 
     @Provides
+    @Singleton
     fun provideTwitterCreateUseCase() = TwitterCreateUseCase()
 
     @Provides
+    @Singleton
     fun provideEmailPasswordLoginUseCase(authRepository: AuthRepository) = EmailPasswordLoginUseCase(authRepository)
 
     @Provides
+    @Singleton
     fun provideGoogleLoginUseCase() = GoogleLoginUseCase()
 
     @Provides
+    @Singleton
     fun providePhoneNumberLoginUseCase() = PhoneNumberLoginUseCase()
 
     @Provides
+    @Singleton
     fun provideTwitterLoginUseCase() = TwitterLoginUseCase()
 
     @Provides
+    @Singleton
     fun provideForgotPasswordUseCase(authRepository: AuthRepository) = ForgotPasswordUseCase(authRepository)
 }

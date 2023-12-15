@@ -20,9 +20,6 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import com.fitness.authentication.signin.viewmodel.SignInEvent
 import com.fitness.authentication.signin.viewmodel.SignInState
-import com.fitness.authentication.signup.view.SignUpEmailContent
-import com.fitness.authentication.signup.viewmodel.SignUpEvent
-import com.fitness.authentication.signup.viewmodel.SignUpState
 import com.fitness.authentication.util.ForgotPasswordAnnotatedText
 import com.fitness.authentication.util.NewNumberAnnotatedText
 import com.fitness.authentication.util.SignUpForFreeAnnotatedText
@@ -170,6 +167,7 @@ fun SignInEmailContent(
             hint = R.string.enter_email,
             label = R.string.label_email,
             onValueChanged = {userEmail = it},
+            trailingIcon = { },
             modifier = Modifier.constrainAs(email) {
                 start.linkTo(startGuideline)
                 end.linkTo(endGuideline)
@@ -204,7 +202,7 @@ fun SignInEmailContent(
         StandardButton(
             text = R.string.title_continue,
             onClick = onClickContinue,
-            enabled = state.isVerified,
+            enabled = state.isEmailVerified,
             modifier = Modifier.constrainAs(signUp) {
                 start.linkTo(startGuideline)
                 end.linkTo(endGuideline)
@@ -407,7 +405,7 @@ fun SignInPhoneContent(
         StandardButton(
             text = R.string.title_continue,
             onClick = onClickContinue,
-            enabled = state.isVerified,
+            enabled = state.isEmailVerified,
             modifier = Modifier.constrainAs(signUp) {
                 start.linkTo(startGuideline)
                 end.linkTo(endGuideline)

@@ -1,6 +1,6 @@
 package com.fitness.authentication.navigation
 
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
@@ -15,6 +15,7 @@ import com.fitness.authentication.signup.view.SignUpPhoneScreen
 import com.fitness.authentication.signup.view.SignUpScreen
 import com.fitness.authentication.signup.viewmodel.SignUpViewModel
 import com.fitness.navigation.Destinations
+import extensions.cast
 import javax.inject.Inject
 
 class AuthEntryImpl @Inject constructor() : AuthEntry() {
@@ -31,14 +32,11 @@ class AuthEntryImpl @Inject constructor() : AuthEntry() {
         navController: NavHostController,
         destinations: Destinations
     ) {
-        val signUpBackAction = { navController.popBackStack(signUp, inclusive = false) }
-        val signInBackAction = { navController.popBackStack(signUp, inclusive = false) }
-
         navigation(startDestination = signUp, route = featureRoute) {
             composable(signUp) {
-                val viewModel: SignUpViewModel = viewModel()
+                val viewModel:SignUpViewModel = hiltViewModel()
                 SignUpScreen(
-                    onErrorEvent = {},
+                    onErrorEvent = { viewModel.handleError(it) },
                     onClickEmail = { navController.navigate(signUpEmail) },
                     onClickPhone = { navController.navigate(signUpPhone) },
                     onClickGoogle = {},
@@ -49,8 +47,9 @@ class AuthEntryImpl @Inject constructor() : AuthEntry() {
             }
 
             composable(signUpEmail) {
-                val viewModel: SignUpViewModel = viewModel()
+                val viewModel:SignUpViewModel = hiltViewModel()
                 SignUpEmailScreen(
+                    state = viewModel.uiState.cast(),
                     onErrorEvent = {},
                     verifyCredentials = { viewModel.verifyCredentials(it) },
                     onClickContinue = {},
@@ -58,17 +57,19 @@ class AuthEntryImpl @Inject constructor() : AuthEntry() {
             }
 
             composable(signUpPhone) {
-                val viewModel: SignUpViewModel = viewModel()
+                val viewModel:SignUpViewModel = hiltViewModel()
                 SignUpPhoneScreen(
+                    state = viewModel.uiState.cast(),
                     onErrorEvent = {},
-                    verifyCredentials = { viewModel.verifyCredentials(it)  },
+                    verifyCredentials = {  viewModel.verifyCredentials(it) },
                     onClickContinue = {},
                 )
             }
 
             composable(signInEmail) {
-                val viewModel: SignInViewModel = viewModel()
+                val viewModel:SignInViewModel = hiltViewModel()
                 SignInEmailScreen(
+                    state = viewModel.uiState.cast(),
                     onErrorEvent = {},
                     verifyCredentials = { viewModel.verifyCredentials(it)  },
                     onClickPhone = { navController.navigate(signInPhone) },
@@ -76,8 +77,9 @@ class AuthEntryImpl @Inject constructor() : AuthEntry() {
             }
 
             composable(signInPhone) {
-                val viewModel: SignInViewModel = viewModel()
+                val viewModel:SignInViewModel = hiltViewModel()
                 SignInPhoneScreen(
+                    state = viewModel.uiState.cast(),
                     onErrorEvent = {},
                     verifyCredentials = { viewModel.verifyCredentials(it) },
                     onClickEmail = { navController.navigate(signInEmail) },

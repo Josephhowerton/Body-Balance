@@ -2,9 +2,11 @@ package viewmodel
 
 import com.google.firebase.crashlytics.ktx.crashlytics
 import com.google.firebase.ktx.Firebase
+import extensions.cast
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import state.BaseViewState
+import kotlin.reflect.KClass
 
 abstract class IntentViewModel<STATE: BaseViewState<*>, EVENT> : BaseViewModel() {
     private val _uiState = MutableStateFlow<BaseViewState<*>>(BaseViewState.Empty)
@@ -16,6 +18,8 @@ abstract class IntentViewModel<STATE: BaseViewState<*>, EVENT> : BaseViewModel()
     protected fun setState(state: STATE) = safeLaunch {
         _uiState.emit(state)
     }
+
+    protected fun <T> currentState() = (_uiState.value.cast<BaseViewState<T>>() as BaseViewState.Data).value
 
     override fun startLoading() {
         super.startLoading()
