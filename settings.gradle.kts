@@ -35,5 +35,7 @@ include(":features:onboard:impl")
 include(":features:onboard:api")
 include(":features:user-profile:impl")
 include(":features:user-profile:api")
+include(":features:welcome:impl")
+include(":features:welcome:api")
 
 include(":library")

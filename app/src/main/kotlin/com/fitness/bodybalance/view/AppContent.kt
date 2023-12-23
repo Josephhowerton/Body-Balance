@@ -37,6 +37,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.fitness.authentication.AuthEntry
@@ -48,7 +49,8 @@ import com.fitness.navigation.Destinations
 import com.fitness.navigation.DrawerItem
 import com.fitness.navigation.DrawerNavigationUtil
 import com.fitness.navigation.find
-import com.fitness.onboard.WelcomeEntry
+import com.fitness.onboard.OnboardEntry
+import com.fitness.welcome.WelcomeEntry
 import com.fitness.resources.R
 import com.fitness.theme.AppTheme
 import kotlinx.coroutines.CoroutineScope
@@ -130,11 +132,8 @@ fun MainHub(
             }
         }
     ) { innerPadding ->
-        NavHost(
-            navController = navController,
-            startDestination = "authenticatedStartDestination",
-            modifier = Modifier.padding(innerPadding)) {
-            // Define composable destinations for authenticated users
+        NavHost(navController = navController, startDestination = "authenticatedStartDestination", modifier = Modifier.padding(innerPadding)) {
+
         }
     }
 }
@@ -145,12 +144,17 @@ fun OnboardingAuthenticationHub(
     navController: NavHostController = rememberNavController(),
 ) {
 
-    val welcomeEntry = destinations.find<WelcomeEntry>()
+    val welcomeEntry = destinations.find<com.fitness.welcome.WelcomeEntry>()
+    val onboardEntry = destinations.find<OnboardEntry>()
     val authEntry = destinations.find<AuthEntry>()
     NavHost(navController, startDestination = welcomeEntry.featureRoute) {
 
         with(welcomeEntry) {
             composable(navController, destinations)
+        }
+
+        with(onboardEntry){
+            navigation(navController, destinations)
         }
 
         with(authEntry) {

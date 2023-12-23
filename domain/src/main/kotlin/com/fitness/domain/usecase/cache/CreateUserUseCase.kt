@@ -1,18 +1,24 @@
 package com.fitness.domain.usecase.cache
 
+import cache.firestore
+import com.fitness.data.extensions.toUserCache
 import com.fitness.data.repository.UserRepository
-import com.fitness.domain.model.user.User
+import com.fitness.data.model.model.user.UserDomain
 import kotlinx.coroutines.flow.FlowCollector
-import usecase.LocalUseCase
+import state.DataState
+import usecase.DataStateUseCase
 import javax.inject.Inject
 
 class CreateUserUseCase @Inject constructor(
     private val userRepository: UserRepository
-) : LocalUseCase<CreateUserUseCase.Params, Unit>() {
+) : DataStateUseCase<CreateUserUseCase.Params, Unit>() {
 
-    data class Params(val userDto: User)
+    data class Params(val userDomainDto: UserDomain)
 
-    override suspend fun FlowCollector<Unit>.execute(params: Params) {
+    override suspend fun FlowCollector<DataState<Unit>>.execute(params: Params) {
+        val firestoreResult = userRepository.createUser(params.userDomainDto.toUserCache())
+        val result = firestore { firestoreResult }
+        emit(result)
     }
 
 }

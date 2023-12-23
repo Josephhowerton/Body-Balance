@@ -1,29 +1,33 @@
 package com.fitness.authentication.signup.viewmodel
 
+import auth.handleAuthFailure
 import com.fitness.authentication.util.verifyEmail
 import com.fitness.authentication.util.verifyName
 import com.fitness.authentication.util.verifyPassword
 import com.fitness.authentication.util.verifyPhone
-import com.fitness.domain.model.user.User
-import viewmodel.IntentViewModel
-import com.fitness.domain.usecase.auth.EmailPasswordCreateUseCase
-import com.fitness.domain.usecase.auth.GoogleCreateUseCase
-import com.fitness.domain.usecase.auth.PhoneNumberCreateUseCase
-import com.fitness.domain.usecase.auth.TwitterCreateUseCase
+import com.fitness.data.model.model.user.UserDomain
+import com.fitness.domain.usecase.auth.EmailPasswordSignUpUseCase
+import com.fitness.domain.usecase.auth.GoogleSignUpUseCase
+import com.fitness.domain.usecase.auth.PhoneNumberSignUpUseCase
+import com.fitness.domain.usecase.auth.XSignUpUseCase
 import com.fitness.domain.usecase.cache.CreateUserUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import failure.handleAuthFailure
+import extensions.TextFieldState
+import com.fitness.authentication.util.isVerified
+import com.fitness.domain.usecase.auth.FacebookSignUpUseCase
 import state.BaseViewState
+import viewmodel.IntentViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class SignUpViewModel @Inject constructor(
-    val emailPasswordCreateUseCase: EmailPasswordCreateUseCase,
-    val googleCreateUseCase: GoogleCreateUseCase,
-    val phoneNumberCreateUseCase: PhoneNumberCreateUseCase,
-    val twitterCreateUseCase: TwitterCreateUseCase,
+    val emailPasswordSignUpUseCase: EmailPasswordSignUpUseCase,
+    val phoneNumberSignUpUseCase: PhoneNumberSignUpUseCase,
+    val facebookSignUpUseCase: FacebookSignUpUseCase,
+    val googleSignUpUseCase: GoogleSignUpUseCase,
+    val xSignUpUseCase: XSignUpUseCase,
     val createUserUseCase: CreateUserUseCase
-): IntentViewModel<BaseViewState<SignUpState>, SignUpEvent>() {
+) : IntentViewModel<BaseViewState<SignUpState>, SignUpEvent>() {
 
     init {
         setState(BaseViewState.Data(SignUpState()))
@@ -32,28 +36,31 @@ class SignUpViewModel @Inject constructor(
     override fun onTriggerEvent(event: SignUpEvent) {
         when (event) {
             is SignUpEvent.EmailPasswordAuthData -> {
-                onEmailPasswordAuth(
-                    firstname = event.firstname,
-                    lastname = event.lastname,
-                    email = event.email,
-                    password = event.password
-                )
-            }
-
-            is SignUpEvent.GoogleAuthentication -> {
-                onGoogleAuth()
+                verifyEmailAuthenticationData(event)
             }
 
             is SignUpEvent.PhoneAuthentication -> {
-                onPhoneAuth(
-                    firstname = event.firstname,
-                    lastname = event.lastname,
-                    phone = event.phoneNumber
-                )
+                verifyPhoneAuthenticationData(event)
             }
 
-            is SignUpEvent.TwitterAuthentication -> {
-                onTwitterAuth()
+            is SignUpEvent.SelectAuthMethod ->{
+                onSelectAuthMethod(event)
+            }
+
+            is SignUpEvent.GoogleAuthentication -> {
+                onGoogleAuthentication()
+            }
+
+            is SignUpEvent.FacebookAuthentication -> {
+                onFacebookAuthentication()
+            }
+
+            is SignUpEvent.XAuthentication -> {
+                onXAuthentication()
+            }
+
+            is SignUpEvent.ThirdPartyAuthError -> {
+                handleError(event.error.handleAuthFailure())
             }
 
             else -> {
@@ -62,133 +69,147 @@ class SignUpViewModel @Inject constructor(
         }
     }
 
-    override fun handleError(exception: Throwable) {
-        super.handleError(exception.handleAuthFailure())
-    }
+    private fun verifyEmailAuthenticationData(event: SignUpEvent.EmailPasswordAuthData) {
+        val (firstnameState, firstnameError) = verifyName(event.firstname)
+        val (lastnameState, lastnameError) = verifyName(event.lastname)
+        val (emailState, emailError) = verifyEmail(event.email)
+        val (passwordState, passwordError) = verifyPassword(event.password)
 
-    fun verifyCredentials(event: SignUpEvent) {
-
-        when (event) {
-
-            is SignUpEvent.EmailPasswordAuthData -> {
-                val (firstnameState, firstnameError) = verifyName(event.firstname)
-                val (lastnameState, lastnameError) = verifyName(event.lastname)
-                val (emailState, emailError) = verifyEmail(event.email)
-                val (passwordState, passwordError) = verifyPassword(event.password)
-                setState(
-                    BaseViewState.Data(
-                        SignUpState(
-                            isFirstnameVerified = firstnameState,
-                            isLastnameVerified = lastnameState,
-                            isEmailVerified = emailState,
-                            isPasswordVerified = passwordState,
-                            firstnameErrorMessage = firstnameError,
-                            lastnameErrorMessage = lastnameError,
-                            emailErrorMessage = emailError,
-                            passwordErrorMessage = passwordError
-                        )
-                    )
-                )
-            }
-            is SignUpEvent.PhoneAuthentication -> {
-                val (firstnameState, firstnameError) = verifyName(event.firstname)
-                val (lastnameState, lastnameError) = verifyName(event.lastname)
-                val (phoneState, phoneError) = verifyPhone(event.phoneNumber)
-
-                setState(
-                    BaseViewState.Data(
-                        SignUpState(
-                            isFirstnameVerified = firstnameState,
-                            isLastnameVerified = lastnameState,
-                            isPhoneVerified = phoneState,
-                            firstnameErrorMessage = firstnameError,
-                            lastnameErrorMessage = lastnameError,
-                            phoneErrorMessage = phoneError
-                        )
-                    )
-                )
-            }
-            is SignUpEvent.FirstNameChanged -> {
-                val (firstnameState, firstnameError) = verifyName(event.firstname)
-                setState(
-                    BaseViewState.Data(
-                        currentState<SignUpState>().copy(
-                            isFirstnameVerified = firstnameState,
-                            firstnameErrorMessage = firstnameError
-                        )
-                    )
-                )
-            }
-            is SignUpEvent.LastNameChanged -> {
-                val (lastnameState, lastnameError) = verifyName(event.lastname)
-                setState(
-                    BaseViewState.Data(
-                        currentState<SignUpState>().copy(
-                            isLastnameVerified = lastnameState,
-                            lastnameErrorMessage = lastnameError
-                        )
-                    )
-                )
-            }
-            is SignUpEvent.EmailChanged -> {
-                val (emailState, emailError) = verifyEmail(event.email)
-                setState(
-                    BaseViewState.Data(
-                        currentState<SignUpState>().copy(
-                            isEmailVerified = emailState,
-                            emailErrorMessage = emailError
-                        )
-                    )
-                )
-            }
-            is SignUpEvent.PasswordChanged -> {
-                val (passwordState, passwordError) = verifyPassword(event.password)
-                setState(
-                    BaseViewState.Data(
-                        currentState<SignUpState>().copy(
-                            isPasswordVerified = passwordState,
-                            passwordErrorMessage = passwordError
-                        )
-                    )
-                )
-            }
-
-            else -> {}
+        if (isVerified(firstnameError, lastnameError, emailError, passwordError)){
+            onEmailPasswordAuthentication(event.firstname, event.lastname, event.email, event.password)
+        }
+        else {
+            onEmailAuthCredentialsError(
+                firstnameState,
+                lastnameState,
+                emailState,
+                passwordState,
+                firstnameError,
+                lastnameError,
+                emailError,
+                passwordError
+            )
         }
     }
 
+    private fun verifyPhoneAuthenticationData(event: SignUpEvent.PhoneAuthentication) {
+        val (firstnameState, firstnameError) = verifyName(event.firstname)
+        val (lastnameState, lastnameError) = verifyName(event.lastname)
+        val (phoneState, phoneError) = verifyPhone(event.phoneNumber)
+        if (isVerified(firstnameError, lastnameError, phoneError)){
+            onPhoneAuthentication(event.firstname, event.lastname, event.phoneNumber)
+        }
+        else {
+            onPhoneAuthCredentialsError(
+                firstnameState,
+                lastnameState,
+                phoneState,
+                firstnameError,
+                lastnameError,
+                phoneError,
+            )
+        }
+    }
 
-    private fun onEmailPasswordAuth(firstname: String, lastname: String, email: String, password:String) = safeLaunch {
-        val params = EmailPasswordCreateUseCase.Params(firstname, lastname, email, password)
-        execute(emailPasswordCreateUseCase(params)) {
+    private fun onEmailAuthCredentialsError(
+        firstnameState: TextFieldState,
+        lastnameState: TextFieldState,
+        emailState: TextFieldState,
+        passwordState: TextFieldState,
+        firstnameError: Int,
+        lastnameError: Int,
+        emailError: Int,
+        passwordError: Int
+    ) {
+        setState(
+            BaseViewState.Data(
+                SignUpState(
+                    firstnameState = firstnameState,
+                    lastnameState = lastnameState,
+                    emailState = emailState,
+                    passwordState = passwordState,
+                    firstnameErrorMessage = firstnameError,
+                    lastnameErrorMessage = lastnameError,
+                    emailErrorMessage = emailError,
+                    passwordErrorMessage = passwordError
+                )
+            )
+        )
+    }
+
+
+    private fun onPhoneAuthCredentialsError(
+        firstnameState: TextFieldState,
+        lastnameState: TextFieldState,
+        phoneState: TextFieldState,
+        firstnameError: Int,
+        lastnameError: Int,
+        phoneError: Int
+    ) {
+        setState(
+            BaseViewState.Data(
+                SignUpState(
+                    firstnameState = firstnameState,
+                    lastnameState = lastnameState,
+                    phoneState = phoneState,
+                    firstnameErrorMessage = firstnameError,
+                    lastnameErrorMessage = lastnameError,
+                    phoneErrorMessage = phoneError
+                )
+            )
+        )
+    }
+
+    private fun onEmailPasswordAuthentication(
+        firstname: String,
+        lastname: String,
+        email: String,
+        password: String
+    ) = safeLaunch {
+        val params = EmailPasswordSignUpUseCase.Params(firstname, lastname, email, password)
+        execute(emailPasswordSignUpUseCase(params)) {
             onCreateUser(it)
         }
     }
 
-    private fun onGoogleAuth() = safeLaunch {
-        val params = GoogleCreateUseCase.Params
-        execute(googleCreateUseCase(params)) {
+    private fun onPhoneAuthentication(firstname: String, lastname: String, phone: String) =
+        safeLaunch {
+            val params = PhoneNumberSignUpUseCase.Params(firstname, lastname, phone)
+            execute(phoneNumberSignUpUseCase(params)) {
+                onCreateUser(it)
+            }
+        }
+
+    private fun onSelectAuthMethod(event: SignUpEvent.SelectAuthMethod) {
+        setState(
+            BaseViewState.Data(
+                SignUpState(authMethod = event.method)
+            )
+        )
+    }
+
+    private fun onGoogleAuthentication() = safeLaunch {
+        execute(googleSignUpUseCase(GoogleSignUpUseCase.Params)) {
             onCreateUser(it)
         }
     }
 
-    private fun onPhoneAuth(firstname: String, lastname: String, phone:String) = safeLaunch {
-        val params = PhoneNumberCreateUseCase.Params(firstname, lastname, phone)
-        execute(phoneNumberCreateUseCase(params)) {
+    private fun onFacebookAuthentication() = safeLaunch {
+        execute(facebookSignUpUseCase(FacebookSignUpUseCase.Params)) {
             onCreateUser(it)
         }
     }
 
-    private fun onTwitterAuth() = safeLaunch {
-        val params = TwitterCreateUseCase.Params
-        execute(twitterCreateUseCase(params)) {
+    private fun onXAuthentication() = safeLaunch {
+        execute(xSignUpUseCase(XSignUpUseCase.Params)) {
             onCreateUser(it)
         }
     }
 
-    private fun onCreateUser(firebaseUser: User) = safeLaunch{
-        val params = CreateUserUseCase.Params(firebaseUser)
+    private fun onCreateUser(firebaseUserDomain: UserDomain) = safeLaunch {
+        val params = CreateUserUseCase.Params(firebaseUserDomain)
         call(createUserUseCase(params)) {
+            setState(BaseViewState.Data(SignUpState(isSignUpCompleted = true)))
         }
     }
 }

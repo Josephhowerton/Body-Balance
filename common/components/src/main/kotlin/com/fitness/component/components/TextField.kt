@@ -1,6 +1,8 @@
 package com.fitness.component.components
 
 import androidx.compose.foundation.border
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -39,14 +41,12 @@ fun StandardTextField(
     modifier: Modifier = Modifier,
     isError: Boolean = false,
     supportingText: @Composable (() -> Unit)? = null,
-    visualTransformation: VisualTransformation = VisualTransformation.None,
     trailingIcon: @Composable (() -> Unit)? = null,
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    keyboardActions: KeyboardActions = KeyboardActions.Default,
+    visualTransformation: VisualTransformation = VisualTransformation.None,
     onValueChanged: (String) -> Unit = {},
-    onFocusChanged: (Boolean) -> Unit = {}
 ) {
-
-    var isFocused by remember { mutableStateOf(false) }
-
     TextField(
         value = value,
         trailingIcon = trailingIcon,
@@ -58,14 +58,9 @@ fun StandardTextField(
         visualTransformation = visualTransformation,
         placeholder = { Text(text = stringResource(id = hint)) },
         label = { Text(text = stringResource(id = label)) },
-        modifier = modifier.border(1.dp, Color.Black, textFieldShape())
-            .onFocusChanged { focusState ->
-            val currentlyFocused = focusState.isFocused
-            if (isFocused && !currentlyFocused) {
-                onFocusChanged(false)
-            }
-            isFocused = currentlyFocused
-        },
+        modifier = modifier.border(1.dp, Color.Black, textFieldShape()),
+        keyboardOptions = keyboardOptions,
+        keyboardActions = keyboardActions,
         colors = TextFieldDefaults.textFieldColors(
             containerColor = Color.Transparent,
             focusedIndicatorColor = Color.Transparent,

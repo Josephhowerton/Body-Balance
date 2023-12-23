@@ -1,69 +1,80 @@
 package com.fitness.authentication.util
 
 import android.content.res.Configuration
+import android.util.Log
 import android.util.Patterns
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.ClickableText
+import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import com.fitness.authentication.signup.viewmodel.SignUpEvent
 import com.fitness.resources.R
 import com.fitness.theme.ui.Green
 import com.fitness.theme.ui.Red
 import com.fitness.theme.ui.primaryVariantHub
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
 import extensions.TextFieldState
+import kotlinx.coroutines.launch
 
-fun verifyName(name: String): Pair<TextFieldState, Int> {
-    if (name.isBlank()) {
-        return TextFieldState.PENDING to 0 // 0 indicates no error message
-    }
+fun isVerified(vararg credentials: Int): Boolean = credentials.all { it == 0 }
 
-    return if (name.length >= 2) {
+fun verifyName(name: String): Pair<TextFieldState, Int> =
+    if (name.length >= 2) {
         TextFieldState.OK to 0
     } else {
         TextFieldState.ERROR to R.string.auth_name_length_error
     }
-}
 
-fun verifyEmail(email: String): Pair<TextFieldState, Int> {
-    if (email.isBlank()) {
-        return TextFieldState.PENDING to 0
-    }
-
-    return if (email.matches(Patterns.EMAIL_ADDRESS.toRegex())) {
+fun verifyEmail(email: String): Pair<TextFieldState, Int> =
+    if (email.matches(Patterns.EMAIL_ADDRESS.toRegex())) {
         TextFieldState.OK to 0
     } else {
         TextFieldState.ERROR to R.string.auth_invalid_email_format
     }
-}
 
-fun verifyPhone(phone: String): Pair<TextFieldState, Int> {
-    if (phone.isBlank()) {
-        return TextFieldState.PENDING to 0
-    }
-
-    return if (Patterns.PHONE.matcher(phone).matches()) {
+fun verifyPhone(phone: String): Pair<TextFieldState, Int> =
+    if (Patterns.PHONE.matcher(phone).matches()) {
         TextFieldState.OK to 0
     } else {
         TextFieldState.ERROR to R.string.auth_invalid_phone_format
     }
-}
 
 fun verifyPassword(password: String): Pair<TextFieldState, Int> {
-    if (password.isBlank()) {
-        return TextFieldState.PENDING to 0
-    }
-
     val errorMessages = mutableListOf<Int>()
 
+    if (password.length < 8) {
+        errorMessages.add(R.string.auth_password_length_error)
+    }
     if (!password.matches(".*[a-z].*".toRegex())) {
         errorMessages.add(R.string.auth_password_lowercase_error)
     }
@@ -76,9 +87,6 @@ fun verifyPassword(password: String): Pair<TextFieldState, Int> {
     if (!password.matches(".*[@$!%*?&].*".toRegex())) {
         errorMessages.add(R.string.auth_password_special_char_error)
     }
-    if (password.length < 8) {
-        errorMessages.add(R.string.auth_password_length_error)
-    }
 
     return if (errorMessages.isEmpty()) {
         TextFieldState.OK to 0
@@ -89,33 +97,46 @@ fun verifyPassword(password: String): Pair<TextFieldState, Int> {
 }
 
 @Composable
-fun PasswordTrailingIcon(state: TextFieldState, isVisible: Boolean){
+fun PasswordTrailingIcon(
+    state: TextFieldState,
+    isVisible: Boolean,
+    onIconClick: () -> Unit = {}
+){
     Row {
-        DisplayPassword(isVisible = isVisible)
-        DisplayCheckmark(state = state)
+        DisplayPassword(isVisible = isVisible, onIconClick = onIconClick)
+        Spacer(modifier = Modifier.size(5.dp))
+        DisplayFieldState(state = state)
+        Spacer(modifier = Modifier.size(5.dp))
     }
 }
 
 @Composable
-fun DisplayPassword(isVisible: Boolean) =
+fun DisplayPassword(
+    isVisible: Boolean,
+    onIconClick: () -> Unit = {}
+) =
     if(isVisible){
         Icon(
             painter = painterResource(id = R.drawable.icon_open_eye),
             contentDescription = stringResource(id = R.string.content_description_open_eye),
-            tint = Green
+            tint = Green,
+            modifier = Modifier.clickable { onIconClick() }
         )
     }else{
         Icon(
             painter = painterResource(id = R.drawable.icon_closed_eye),
             contentDescription = stringResource(id = R.string.content_description_closed_eye),
-            tint = Green
+            tint = Green,
+            modifier = Modifier.clickable { onIconClick() }
         )
     }
 
 @Composable
-fun DisplayCheckmark(state: TextFieldState) =
+fun DisplayFieldState(state: TextFieldState) =
     when (state) {
-        TextFieldState.PENDING -> {}
+        TextFieldState.PENDING -> {
+            Spacer(modifier = Modifier.size(24.dp))
+        }
         TextFieldState.OK -> {
             Icon(
                 painter = painterResource(id = R.drawable.icon_checkmark),
@@ -335,4 +356,7 @@ fun SignUpForFreeAnnotatedText(
                 }
         }
     )
+}
+enum class AuthMethod {
+    NONE, EMAIL, PHONE, GOOGLE, FACEBOOK, X
 }

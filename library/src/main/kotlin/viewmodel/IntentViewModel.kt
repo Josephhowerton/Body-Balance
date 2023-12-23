@@ -6,7 +6,6 @@ import extensions.cast
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import state.BaseViewState
-import kotlin.reflect.KClass
 
 abstract class IntentViewModel<STATE: BaseViewState<*>, EVENT> : BaseViewModel() {
     private val _uiState = MutableStateFlow<BaseViewState<*>>(BaseViewState.Empty)

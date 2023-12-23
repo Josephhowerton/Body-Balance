@@ -136,6 +136,7 @@ fun hideSystemUI(window: Window) {
         WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
     )
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
+        @Suppress("DEPRECATION")
         window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
     } else {
         window.insetsController?.apply {

@@ -7,4 +7,5 @@ android {
 }
 
 dependencies {
+    USER_PROFILE_API
 }

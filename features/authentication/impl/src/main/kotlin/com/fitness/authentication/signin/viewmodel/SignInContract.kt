@@ -1,14 +1,28 @@
 package com.fitness.authentication.signin.viewmodel
 
+import com.fitness.authentication.util.AuthMethod
+import extensions.TextFieldState
+
 data class SignInState(
-    var isEmailVerified: Boolean = false,
-    var isPasswordVerified: Boolean = false,
+    var authMethod: AuthMethod = AuthMethod.NONE,
+    var emailState: TextFieldState = TextFieldState.PENDING,
+    var phoneState: TextFieldState = TextFieldState.PENDING,
+    var passwordState: TextFieldState = TextFieldState.PENDING,
+    var emailErrorMessage: Int? = null,
+    var phoneErrorMessage: Int? = null,
+    var passwordErrorMessage: Int? = null,
+    var isAuthenticated: Boolean = false
 )
 
 sealed class SignInEvent {
-    data class EmailPasswordAuthData(val email:String, val password:String): SignInEvent()
-    data class GoogleAuthData(val token: String): SignInEvent()
-    data class PhoneAuthData(val phoneNumber: String): SignInEvent()
-    data class TwitterAuthData(val token: String): SignInEvent()
-    object Reset: SignInEvent()
+    data class EmailPasswordAuthentication(val email:String, val password:String): SignInEvent()
+    data class PhoneAuthentication(val phoneNumber: String): SignInEvent()
+
+    data class SelectAuthMethod(val method: AuthMethod): SignInEvent()
+    object GoogleAuthentication : SignInEvent()
+    object FacebookAuthentication : SignInEvent()
+    object XAuthentication : SignInEvent()
+
+    object TermsAndConditions : SignInEvent()
+    object PrivacyPolicy : SignInEvent()
 }

@@ -1,3 +1,7 @@
 package com.fitness.userprofile
 
-interface UserProfileEntry
+import com.fitness.navigation.ComposableFeatureEntry
+
+interface UserProfileEntry: ComposableFeatureEntry {
+    override val featureRoute: String get() = "user-profile"
+}

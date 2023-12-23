@@ -13,6 +13,15 @@ android {
     namespace = "com.fitness.bodybalance"
     compileSdk = Configs.CompileSdk
 
+    signingConfigs{
+        create("release") {
+            keyAlias = "Balance"
+            keyPassword = "T@yl0rlh1!"
+            storeFile = rootProject.file("balance-keystore.jks")
+            storePassword = "T@yl0rlh1!"
+        }
+    }
+
     defaultConfig {
         applicationId = "com.fitness.bodybalance"
         minSdk = Configs.MinSdk
@@ -28,6 +37,7 @@ android {
 
     buildTypes {
         release {
+            signingConfig = signingConfigs.getByName("release")
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
@@ -61,16 +71,12 @@ dependencies {
     addTestDependencies()
     addFirebaseDependencies()
     addHiltDependencies()
-    addFeatureAPIDependencies()
+    addFeatureDependencies()
 
     THEME
     LIBRARY
     NAVIGATION
     RESOURCES
-
-    AUTHENTICATION
-    ONBOARD
-
     DATA_IMPL
 }
 

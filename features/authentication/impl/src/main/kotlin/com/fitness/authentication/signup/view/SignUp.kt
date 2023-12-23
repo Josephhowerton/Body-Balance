@@ -1,19 +1,43 @@
 package com.fitness.authentication.signup.view
 
+import android.content.Intent
 import android.content.res.Configuration
+import android.util.Log
+import androidx.activity.compose.ManagedActivityResultLauncher
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
@@ -22,10 +46,15 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ChainStyle
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import auth.AuthFailure
+import com.fitness.authentication.navigation.AuthEntryImpl.Companion.signInEmail
+import com.fitness.authentication.navigation.AuthEntryImpl.Companion.signUpEmail
+import com.fitness.authentication.navigation.AuthEntryImpl.Companion.signUpPhone
 import com.fitness.authentication.signup.viewmodel.SignUpEvent
 import com.fitness.authentication.signup.viewmodel.SignUpState
-import com.fitness.authentication.util.DisplayCheckmark
+import com.fitness.authentication.util.AuthMethod
 import com.fitness.authentication.util.DisplayErrorMessage
+import com.fitness.authentication.util.DisplayFieldState
 import com.fitness.authentication.util.PasswordTrailingIcon
 import com.fitness.authentication.util.SignInAnnotatedText
 import com.fitness.authentication.util.TermsAndPrivacyAnnotatedText
@@ -44,16 +73,27 @@ import com.fitness.component.properties.GuidelineProperties.LOGO_TOP
 import com.fitness.component.properties.GuidelineProperties.SECOND_TOP
 import com.fitness.component.properties.GuidelineProperties.START
 import com.fitness.component.properties.GuidelineProperties.TOP
-import com.fitness.component.screens.EmptyScreen
 import com.fitness.component.screens.ErrorScreen
 import com.fitness.component.screens.LoadingScreen
+import com.fitness.component.screens.MessageScreen
 import com.fitness.resources.R
 import com.fitness.theme.ui.BodyBalanceTheme
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthException
+import com.google.firebase.auth.GoogleAuthCredential
+import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import extensions.TextFieldState
 import extensions.cast
-import failure.AuthFailure
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import state.BaseViewState
 
 
@@ -63,7 +103,7 @@ import state.BaseViewState
 private fun SignUpPreview() {
     BodyBalanceTheme {
         Surface {
-            SignUpContent()
+            SignUpContent(state = SignUpState(), onTriggerEvent = {}, onTriggerNavigation = {})
         }
     }
 }
@@ -91,30 +131,19 @@ private fun SignUpPhonePreview() {
 @Composable
 fun SignUpScreen(
     state: StateFlow<BaseViewState<SignUpState>> = MutableStateFlow(BaseViewState.Data(SignUpState())),
-    onErrorEvent: (AuthFailure) -> Unit,
-    onClickEmail: () -> Unit = {},
-    onClickPhone: () -> Unit = {},
-    onClickGoogle: () -> Unit = {},
-    onClickFacebook: () -> Unit = {},
-    onClickX: () -> Unit = {},
-    onClickAnnotatedText: () -> Unit = {}
+    onPopBack: () -> Unit,
+    onTriggerEvent: (SignUpEvent) -> Unit,
+    onTriggerNavigation: (String) -> Unit
 ) {
 
     val uiState by state.collectAsState()
 
     when (uiState) {
-        is BaseViewState.Empty -> {
-            EmptyScreen()
-        }
-
         is BaseViewState.Data -> {
             SignUpContent(
-                onClickEmail = onClickEmail,
-                onClickPhone = onClickPhone,
-                onClickGoogle = onClickGoogle,
-                onClickFacebook = onClickFacebook,
-                onClickX = onClickX,
-                onClickAnnotatedText = onClickAnnotatedText
+                state = uiState.cast<BaseViewState.Data<SignUpState>>().value,
+                onTriggerEvent = onTriggerEvent,
+                onTriggerNavigation = onTriggerNavigation
             )
         }
 
@@ -122,7 +151,7 @@ fun SignUpScreen(
             val failure = uiState.cast<BaseViewState.Error>().throwable as AuthFailure
 
             ErrorScreen(title = failure.title, description = failure.description) {
-                onErrorEvent.invoke(failure)
+                onPopBack()
             }
         }
 
@@ -131,19 +160,16 @@ fun SignUpScreen(
         }
 
         else -> {
-
+            MessageScreen(message = R.string.unknown, onClick = onPopBack)
         }
     }
 }
 
 @Composable
 fun SignUpContent(
-    onClickEmail: () -> Unit = {},
-    onClickPhone: () -> Unit = {},
-    onClickGoogle: () -> Unit = {},
-    onClickFacebook: () -> Unit = {},
-    onClickX: () -> Unit = {},
-    onClickAnnotatedText: () -> Unit = {}
+    state: SignUpState,
+    onTriggerEvent: (SignUpEvent) -> Unit,
+    onTriggerNavigation: (String) -> Unit
 ) {
     ConstraintLayout(modifier = Modifier.fillMaxSize()) {
         val (
@@ -162,6 +188,8 @@ fun SignUpContent(
         val logoBottomGuideline = createGuidelineFromTop(LOGO_BOTTOM)
         val startGuideline = createGuidelineFromStart(START)
         val endGuideline = createGuidelineFromEnd(END)
+
+        handleAuthMethod(authMethod = state.authMethod, onTriggerEvent = onTriggerEvent)
 
         BodyBalanceImageLogo(
             modifier = Modifier
@@ -200,7 +228,7 @@ fun SignUpContent(
             icon = R.drawable.icon_email,
             desc = R.string.content_description_email,
             text = R.string.auth_button_title_email,
-            onClick = onClickEmail,
+            onClick = { onTriggerNavigation(signUpEmail) },
             modifier = Modifier.constrainAs(email) {
                 start.linkTo(startGuideline)
                 end.linkTo(endGuideline)
@@ -214,7 +242,7 @@ fun SignUpContent(
             icon = R.drawable.icon_phone,
             desc = R.string.content_description_phone,
             text = R.string.auth_button_phone,
-            onClick = onClickPhone,
+            onClick = { onTriggerNavigation(signUpPhone) },
             modifier = Modifier.constrainAs(phone) {
                 start.linkTo(startGuideline)
                 end.linkTo(endGuideline)
@@ -228,7 +256,7 @@ fun SignUpContent(
             icon = R.drawable.icon_google_logo,
             desc = R.string.content_description_google,
             text = R.string.auth_button_title_google,
-            onClick = onClickGoogle,
+            onClick = { onTriggerEvent(SignUpEvent.SelectAuthMethod(AuthMethod.GOOGLE)) },
             modifier = Modifier.constrainAs(google) {
                 start.linkTo(startGuideline)
                 end.linkTo(endGuideline)
@@ -243,7 +271,7 @@ fun SignUpContent(
             desc = R.string.content_description_facebook,
             text = R.string.auth_button_title_facebook,
             iconSize = 22,
-            onClick = onClickFacebook,
+            onClick = { onTriggerEvent(SignUpEvent.SelectAuthMethod(AuthMethod.FACEBOOK)) },
             modifier = Modifier.constrainAs(facebook) {
                 start.linkTo(startGuideline)
                 end.linkTo(endGuideline)
@@ -258,7 +286,7 @@ fun SignUpContent(
             desc = R.string.content_description_x,
             text = R.string.auth_button_title_x,
             iconSize = 16,
-            onClick = onClickX,
+            onClick = { onTriggerEvent(SignUpEvent.SelectAuthMethod(AuthMethod.X)) },
             modifier = Modifier.constrainAs(twitter) {
                 start.linkTo(startGuideline)
                 end.linkTo(endGuideline)
@@ -269,7 +297,7 @@ fun SignUpContent(
         )
 
         SignInAnnotatedText(
-            onClick = onClickAnnotatedText,
+            onClick = { onTriggerNavigation(signInEmail) },
             modifier = Modifier.constrainAs(login) {
                 start.linkTo(startGuideline)
                 end.linkTo(endGuideline)
@@ -282,30 +310,33 @@ fun SignUpContent(
 @Composable
 fun SignUpEmailScreen(
     state: StateFlow<BaseViewState<SignUpState>>,
-    onErrorEvent: (AuthFailure) -> Unit,
-    verifyCredentials: (SignUpEvent) -> Unit,
-    onTriggerEvent: (SignUpEvent) -> Unit = {}
+    onPopBack: () -> Unit,
+    onTriggerEvent: (SignUpEvent) -> Unit = {},
+    onTriggerNavigation: (String) -> Unit,
+    onComplete: () -> Unit = {}
+
 ) {
     val uiState by state.collectAsState()
 
     when (uiState) {
-        is BaseViewState.Empty -> {
-            EmptyScreen()
-        }
-
         is BaseViewState.Data -> {
-            SignUpEmailContent(
-                state = uiState.cast<BaseViewState.Data<SignUpState>>().value,
-                verifyCredentials = verifyCredentials,
-                onTriggerEvent = onTriggerEvent
-            )
+            val currentState = uiState.cast<BaseViewState.Data<SignUpState>>().value
+            if (currentState.isSignUpCompleted) {
+                onComplete()
+            } else {
+                SignUpEmailContent(
+                    state = currentState,
+                    onTriggerEvent = onTriggerEvent,
+                    onTriggerNavigation = onTriggerNavigation
+                )
+            }
         }
 
         is BaseViewState.Error -> {
             val failure = uiState.cast<BaseViewState.Error>().throwable as AuthFailure
 
             ErrorScreen(title = failure.title, description = failure.description) {
-                onErrorEvent.invoke(failure)
+                onPopBack()
             }
         }
 
@@ -313,15 +344,17 @@ fun SignUpEmailScreen(
             LoadingScreen()
         }
 
-        else -> {}
+        else -> {
+            MessageScreen(message = R.string.unknown, onClick = onPopBack)
+        }
     }
 }
 
 @Composable
 fun SignUpEmailContent(
     state: SignUpState,
-    verifyCredentials: (SignUpEvent) -> Unit = {},
-    onTriggerEvent: (SignUpEvent) -> Unit = {}
+    onTriggerEvent: (SignUpEvent) -> Unit = {},
+    onTriggerNavigation: (String) -> Unit = {}
 ) {
     ConstraintLayout(modifier = Modifier.fillMaxSize()) {
         val (
@@ -351,10 +384,16 @@ fun SignUpEmailContent(
         var userEmail by remember { mutableStateOf("") }
         var userPassword by remember { mutableStateOf("") }
 
-        var passwordVisibility by remember { mutableStateOf(false) }
+        var isPasswordVisible by remember { mutableStateOf(false) }
+
+        val lastnameRequester = remember { FocusRequester() }
+        val emailRequester = remember { FocusRequester() }
+        val passwordRequester = remember { FocusRequester() }
+
+        handleAuthMethod(authMethod = state.authMethod, onTriggerEvent = onTriggerEvent)
 
         SignInAnnotatedText(
-            onClick = { onTriggerEvent(SignUpEvent.TermsAndConditions) },
+            onClick = { onTriggerNavigation(signInEmail) },
             modifier = Modifier.constrainAs(signIn) {
                 end.linkTo(endGuideline)
                 top.linkTo(topGuideline)
@@ -386,101 +425,111 @@ fun SignUpEmailContent(
             value = userFirstname,
             hint = R.string.enter_first_name,
             label = R.string.label_firstname,
-            isError = state.isFirstnameVerified == TextFieldState.ERROR,
-            trailingIcon = { DisplayCheckmark(state = state.isFirstnameVerified) },
+            isError = state.firstnameState == TextFieldState.ERROR,
+            trailingIcon = { DisplayFieldState(state = state.firstnameState) },
             supportingText = {
                 DisplayErrorMessage(
-                    state = state.isFirstnameVerified,
+                    state = state.firstnameState,
                     errorMessageId = state.firstnameErrorMessage
                 )
             },
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
             onValueChanged = { userFirstname = it },
-            onFocusChanged = {
-                if (!it) {
-                    verifyCredentials(SignUpEvent.FirstNameChanged(userFirstname))
+            modifier = Modifier
+                .focusRequester(lastnameRequester)
+                .constrainAs(firstname) {
+                    start.linkTo(startGuideline)
+                    end.linkTo(endGuideline)
+                    top.linkTo(message.bottom, 15.dp)
+                    width = Dimension.fillToConstraints
                 }
-            },
-            modifier = Modifier.constrainAs(firstname) {
-                start.linkTo(startGuideline)
-                end.linkTo(endGuideline)
-                top.linkTo(message.bottom, 15.dp)
-                width = Dimension.fillToConstraints
-            }
         )
 
         StandardTextField(
             value = userLastname,
             hint = R.string.enter_last_name,
             label = R.string.label_lastname,
-            isError = state.isLastnameVerified == TextFieldState.ERROR,
-            trailingIcon = { DisplayCheckmark(state = state.isLastnameVerified) },
+            isError = state.lastnameState == TextFieldState.ERROR,
+            trailingIcon = { DisplayFieldState(state = state.lastnameState) },
             supportingText = {
                 DisplayErrorMessage(
-                    state = state.isLastnameVerified,
+                    state = state.lastnameState,
                     errorMessageId = state.lastnameErrorMessage
                 )
             },
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
             onValueChanged = { userLastname = it },
-            onFocusChanged = {
-                if (!it) {
-                    verifyCredentials(SignUpEvent.LastNameChanged(userLastname))
+            modifier = Modifier
+                .focusRequester(emailRequester)
+                .constrainAs(lastname) {
+                    start.linkTo(startGuideline)
+                    end.linkTo(endGuideline)
+                    top.linkTo(firstname.bottom, 15.dp)
+                    width = Dimension.fillToConstraints
                 }
-            },
-            modifier = Modifier.constrainAs(lastname) {
-                start.linkTo(startGuideline)
-                end.linkTo(endGuideline)
-                top.linkTo(firstname.bottom, 15.dp)
-                width = Dimension.fillToConstraints
-            }
         )
 
         StandardTextField(
             value = userEmail,
             hint = R.string.enter_email,
             label = R.string.label_email,
-            isError = state.isEmailVerified == TextFieldState.ERROR,
-            trailingIcon = { DisplayCheckmark(state = state.isEmailVerified) },
+            isError = state.emailState == TextFieldState.ERROR,
+            trailingIcon = { DisplayFieldState(state = state.emailState) },
             supportingText = {
                 DisplayErrorMessage(
-                    state = state.isEmailVerified,
+                    state = state.emailState,
                     errorMessageId = state.emailErrorMessage
                 )
             },
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Email,
+                imeAction = ImeAction.Next
+            ),
             onValueChanged = { userEmail = it },
-            onFocusChanged = {
-                if (!it) {
-                    verifyCredentials(SignUpEvent.EmailChanged(userEmail))
+            modifier = Modifier
+                .focusRequester(passwordRequester)
+                .constrainAs(email) {
+                    start.linkTo(startGuideline)
+                    end.linkTo(endGuideline)
+                    top.linkTo(lastname.bottom, 15.dp)
+                    width = Dimension.fillToConstraints
                 }
-            },
-            modifier = Modifier.constrainAs(email) {
-                start.linkTo(startGuideline)
-                end.linkTo(endGuideline)
-                top.linkTo(lastname.bottom, 15.dp)
-                width = Dimension.fillToConstraints
-            }
         )
 
         StandardTextField(
             value = userPassword,
             hint = R.string.enter_password,
             label = R.string.label_password,
-            isError = state.isPasswordVerified == TextFieldState.ERROR,
-            visualTransformation = if (passwordVisibility) PasswordVisualTransformation() else VisualTransformation.None,
+            isError = state.passwordState == TextFieldState.ERROR,
+            visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
             trailingIcon = {
-                PasswordTrailingIcon(state = state.isPasswordVerified, isVisible = passwordVisibility)
-           },
+                PasswordTrailingIcon(
+                    state = state.passwordState,
+                    isVisible = isPasswordVisible,
+                    onIconClick = { isPasswordVisible = !isPasswordVisible }
+                )
+            },
             supportingText = {
                 DisplayErrorMessage(
-                    state = state.isPasswordVerified,
+                    state = state.passwordState,
                     errorMessageId = state.passwordErrorMessage
                 )
             },
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Password,
+                imeAction = ImeAction.Done
+            ),
+            keyboardActions = KeyboardActions(onDone = {
+                onTriggerEvent(
+                    SignUpEvent.EmailPasswordAuthData(
+                        firstname = userFirstname,
+                        lastname = userLastname,
+                        email = userEmail,
+                        password = userPassword
+                    )
+                )
+            }),
             onValueChanged = { userPassword = it },
-            onFocusChanged = {
-                if (!it) {
-                    verifyCredentials(SignUpEvent.PasswordChanged(userPassword))
-                }
-            },
             modifier = Modifier.constrainAs(password) {
                 start.linkTo(startGuideline)
                 end.linkTo(endGuideline)
@@ -490,8 +539,8 @@ fun SignUpEmailContent(
         )
 
         TermsAndPrivacyAnnotatedText(
-            onClickTerms = onClickTerms,
-            onClickPrivacy = onClickPrivacy,
+            onClickTerms = { onTriggerEvent(SignUpEvent.TermsAndConditions) },
+            onClickPrivacy = { onTriggerEvent(SignUpEvent.PrivacyPolicy) },
             modifier = Modifier.constrainAs(termsService) {
                 start.linkTo(startGuideline)
                 end.linkTo(endGuideline)
@@ -502,7 +551,16 @@ fun SignUpEmailContent(
 
         StandardButton(
             text = R.string.title_continue,
-            onClick = onClickContinue,
+            onClick = {
+                onTriggerEvent(
+                    SignUpEvent.EmailPasswordAuthData(
+                        firstname = userFirstname,
+                        lastname = userLastname,
+                        email = userEmail,
+                        password = userPassword
+                    )
+                )
+            },
             modifier = Modifier.constrainAs(signUp) {
                 start.linkTo(startGuideline)
                 end.linkTo(endGuideline)
@@ -513,7 +571,7 @@ fun SignUpEmailContent(
 
         StandardButton(
             text = R.string.auth_button_phone,
-            onClick = onClickPhone,
+            onClick = { onTriggerNavigation(signUpPhone) },
             modifier = Modifier.constrainAs(phone) {
                 start.linkTo(startGuideline)
                 end.linkTo(endGuideline)
@@ -538,7 +596,7 @@ fun SignUpEmailContent(
         StandardIconButton(
             icon = R.drawable.icon_google_logo,
             desc = R.string.content_description_google,
-            onClick = onClickGoogle,
+            onClick = { onTriggerEvent(SignUpEvent.SelectAuthMethod(AuthMethod.GOOGLE)) },
             modifier = Modifier
                 .padding(8.dp)
                 .constrainAs(google) {
@@ -551,7 +609,7 @@ fun SignUpEmailContent(
         StandardIconButton(
             icon = R.drawable.icon_facebook_logo,
             desc = R.string.content_description_facebook,
-            onClick = onClickFacebook,
+            onClick = { onTriggerEvent(SignUpEvent.SelectAuthMethod(AuthMethod.FACEBOOK)) },
             modifier = Modifier
                 .padding(8.dp)
                 .constrainAs(facebook) {
@@ -564,7 +622,7 @@ fun SignUpEmailContent(
         StandardIconButton(
             icon = R.drawable.icon_x_logo,
             desc = R.string.content_description_x,
-            onClick = onClickX,
+            onClick = { onTriggerEvent(SignUpEvent.SelectAuthMethod(AuthMethod.X)) },
             modifier = Modifier
                 .padding(8.dp)
                 .constrainAs(x) {
@@ -580,41 +638,33 @@ fun SignUpEmailContent(
 @Composable
 fun SignUpPhoneScreen(
     state: StateFlow<BaseViewState<SignUpState>>,
-    onErrorEvent: (AuthFailure) -> Unit,
-    verifyCredentials: (SignUpEvent) -> Unit,
-    onClickContinue: () -> Unit = {},
-    onClickTerms: () -> Unit = {},
-    onClickPrivacy: () -> Unit = {},
-    onClickGoogle: () -> Unit = {},
-    onClickFacebook: () -> Unit = {},
-    onClickX: () -> Unit = {}
+    onPopBack: () -> Unit,
+    onTriggerEvent: (SignUpEvent) -> Unit = {},
+    onTriggerNavigation: (String) -> Unit,
+    onComplete: () -> Unit = {}
 ) {
 
     val uiState by state.collectAsState()
 
     when (uiState) {
-        is BaseViewState.Empty -> {
-            EmptyScreen()
-        }
-
         is BaseViewState.Data -> {
-            SignUpPhoneContent(
-                state = uiState.cast<BaseViewState.Data<SignUpState>>().value,
-                verifyCredentials = verifyCredentials,
-                onClickContinue = onClickContinue,
-                onClickTerms = onClickTerms,
-                onClickPrivacy = onClickPrivacy,
-                onClickGoogle = onClickGoogle,
-                onClickFacebook = onClickFacebook,
-                onClickX = onClickX
-            )
+            val currentState = uiState.cast<BaseViewState.Data<SignUpState>>().value
+            if (currentState.isSignUpCompleted) {
+                onComplete()
+            } else {
+                SignUpPhoneContent(
+                    state = uiState.cast<BaseViewState.Data<SignUpState>>().value,
+                    onTriggerEvent = onTriggerEvent,
+                    onTriggerNavigation = onTriggerNavigation
+                )
+            }
         }
 
         is BaseViewState.Error -> {
             val failure = uiState.cast<BaseViewState.Error>().throwable as AuthFailure
 
             ErrorScreen(title = failure.title, description = failure.description) {
-                onErrorEvent.invoke(failure)
+                onPopBack()
             }
         }
 
@@ -622,7 +672,9 @@ fun SignUpPhoneScreen(
             LoadingScreen()
         }
 
-        else -> {}
+        else -> {
+            MessageScreen(message = R.string.unknown, onClick = onPopBack)
+        }
     }
 
 }
@@ -630,13 +682,8 @@ fun SignUpPhoneScreen(
 @Composable
 fun SignUpPhoneContent(
     state: SignUpState,
-    verifyCredentials: (SignUpEvent) -> Unit = {},
-    onClickContinue: () -> Unit = {},
-    onClickTerms: () -> Unit = {},
-    onClickPrivacy: () -> Unit = {},
-    onClickGoogle: () -> Unit = {},
-    onClickFacebook: () -> Unit = {},
-    onClickX: () -> Unit = {}
+    onTriggerEvent: (SignUpEvent) -> Unit = {},
+    onTriggerNavigation: (String) -> Unit = {}
 ) {
     ConstraintLayout(modifier = Modifier.fillMaxSize()) {
         val (
@@ -663,9 +710,13 @@ fun SignUpPhoneContent(
         var userLastname by remember { mutableStateOf("") }
         var userPhone by remember { mutableStateOf("") }
 
+        val lastnameRequester = remember { FocusRequester() }
+        val phoneRequester = remember { FocusRequester() }
+
+        handleAuthMethod(authMethod = state.authMethod, onTriggerEvent = onTriggerEvent)
 
         SignInAnnotatedText(
-            onClick = onClickTerms,
+            onClick = { onTriggerNavigation(signInEmail) },
             modifier = Modifier.constrainAs(signIn) {
                 end.linkTo(endGuideline)
                 top.linkTo(topGuideline)
@@ -697,72 +748,76 @@ fun SignUpPhoneContent(
             value = userFirstname,
             hint = R.string.enter_first_name,
             label = R.string.label_firstname,
-            isError = state.isFirstnameVerified == TextFieldState.ERROR,
-            trailingIcon = { DisplayCheckmark(state = state.isFirstnameVerified) },
+            isError = state.firstnameState == TextFieldState.ERROR,
+            trailingIcon = { DisplayFieldState(state = state.firstnameState) },
             supportingText = {
                 DisplayErrorMessage(
-                    state = state.isFirstnameVerified,
+                    state = state.firstnameState,
                     errorMessageId = state.firstnameErrorMessage
                 )
             },
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
             onValueChanged = { userFirstname = it },
-            onFocusChanged = {
-                if (!it) {
-                    verifyCredentials(SignUpEvent.FirstNameChanged(userFirstname))
+            modifier = Modifier
+                .focusRequester(lastnameRequester)
+                .constrainAs(firstname) {
+                    start.linkTo(startGuideline)
+                    end.linkTo(endGuideline)
+                    top.linkTo(message.bottom, 15.dp)
+                    width = Dimension.fillToConstraints
                 }
-            },
-            modifier = Modifier.constrainAs(firstname) {
-                start.linkTo(startGuideline)
-                end.linkTo(endGuideline)
-                top.linkTo(message.bottom, 15.dp)
-                width = Dimension.fillToConstraints
-            }
         )
 
         StandardTextField(
             value = userLastname,
             hint = R.string.enter_last_name,
             label = R.string.label_lastname,
-            isError = state.isLastnameVerified == TextFieldState.ERROR,
-            trailingIcon = { DisplayCheckmark(state = state.isLastnameVerified) },
+            isError = state.lastnameState == TextFieldState.ERROR,
+            trailingIcon = { DisplayFieldState(state = state.lastnameState) },
             supportingText = {
                 DisplayErrorMessage(
-                    state = state.isLastnameVerified,
+                    state = state.lastnameState,
                     errorMessageId = state.lastnameErrorMessage
                 )
             },
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
             onValueChanged = { userLastname = it },
-            onFocusChanged = {
-                if (!it) {
-                    verifyCredentials(SignUpEvent.LastNameChanged(userLastname))
+            modifier = Modifier
+                .focusRequester(phoneRequester)
+                .constrainAs(lastname) {
+                    start.linkTo(startGuideline)
+                    end.linkTo(endGuideline)
+                    top.linkTo(firstname.bottom, 15.dp)
+                    width = Dimension.fillToConstraints
                 }
-            },
-            modifier = Modifier.constrainAs(lastname) {
-                start.linkTo(startGuideline)
-                end.linkTo(endGuideline)
-                top.linkTo(firstname.bottom, 15.dp)
-                width = Dimension.fillToConstraints
-            }
         )
 
         StandardTextField(
             value = userPhone,
             hint = R.string.enter_phone,
             label = R.string.label_phone,
-            isError = state.isPhoneVerified == TextFieldState.ERROR,
-            trailingIcon = { DisplayCheckmark(state = state.isPhoneVerified) },
+            isError = state.phoneState == TextFieldState.ERROR,
+            trailingIcon = { DisplayFieldState(state = state.phoneState) },
             supportingText = {
                 DisplayErrorMessage(
-                    state = state.isPhoneVerified,
+                    state = state.phoneState,
                     errorMessageId = state.phoneErrorMessage
                 )
             },
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Phone,
+                imeAction = ImeAction.Done
+            ),
+            keyboardActions = KeyboardActions(onDone = {
+                onTriggerEvent(
+                    SignUpEvent.PhoneAuthentication(
+                        firstname = userFirstname,
+                        lastname = userLastname,
+                        phoneNumber = userPhone
+                    )
+                )
+            }),
             onValueChanged = { userPhone = it },
-            onFocusChanged = {
-                if (!it) {
-                    verifyCredentials(SignUpEvent.PhoneChanged(userPhone))
-                }
-            },
             modifier = Modifier.constrainAs(phone) {
                 start.linkTo(startGuideline)
                 end.linkTo(endGuideline)
@@ -772,8 +827,8 @@ fun SignUpPhoneContent(
         )
 
         TermsAndPrivacyAnnotatedText(
-            onClickTerms = onClickTerms,
-            onClickPrivacy = onClickPrivacy,
+            onClickTerms = { onTriggerEvent(SignUpEvent.TermsAndConditions) },
+            onClickPrivacy = { onTriggerEvent(SignUpEvent.PrivacyPolicy) },
             modifier = Modifier.constrainAs(termsService) {
                 start.linkTo(startGuideline)
                 end.linkTo(endGuideline)
@@ -784,8 +839,15 @@ fun SignUpPhoneContent(
 
         StandardButton(
             text = R.string.title_continue,
-            onClick = onClickContinue,
-            enabled = state.isVerified,
+            onClick = {
+                onTriggerEvent(
+                    SignUpEvent.PhoneAuthentication(
+                        firstname = userFirstname,
+                        lastname = userLastname,
+                        phoneNumber = userPhone
+                    )
+                )
+            },
             modifier = Modifier.constrainAs(signUp) {
                 start.linkTo(startGuideline)
                 end.linkTo(endGuideline)
@@ -810,7 +872,7 @@ fun SignUpPhoneContent(
         StandardIconButton(
             icon = R.drawable.icon_google_logo,
             desc = R.string.content_description_google,
-            onClick = onClickGoogle,
+            onClick = { onTriggerEvent(SignUpEvent.SelectAuthMethod(AuthMethod.GOOGLE)) },
             modifier = Modifier
                 .padding(8.dp)
                 .constrainAs(google) {
@@ -823,7 +885,7 @@ fun SignUpPhoneContent(
         StandardIconButton(
             icon = R.drawable.icon_facebook_logo,
             desc = R.string.content_description_facebook,
-            onClick = onClickFacebook,
+            onClick = { onTriggerEvent(SignUpEvent.SelectAuthMethod(AuthMethod.FACEBOOK)) },
             modifier = Modifier
                 .padding(8.dp)
                 .constrainAs(facebook) {
@@ -836,7 +898,7 @@ fun SignUpPhoneContent(
         StandardIconButton(
             icon = R.drawable.icon_x_logo,
             desc = R.string.content_description_x,
-            onClick = onClickX,
+            onClick = { onTriggerEvent(SignUpEvent.SelectAuthMethod(AuthMethod.X)) },
             modifier = Modifier
                 .padding(8.dp)
                 .constrainAs(x) {
@@ -845,9 +907,182 @@ fun SignUpPhoneContent(
                     top.linkTo(or.bottom, 10.dp)
                 }
         )
+    }
+}
 
-        LaunchedEffect(userFirstname, userLastname, userPhone) {
-            verifyCredentials(SignUpEvent.PhoneAuthentication(userFirstname, userLastname, userPhone))
+@Composable
+fun handleAuthMethod(authMethod: AuthMethod, onTriggerEvent: (SignUpEvent) -> Unit) =
+    when (authMethod) {
+        AuthMethod.GOOGLE -> {
+            GoogleBottomAuthSheet(
+                onSignInResult = {
+                                 if (it == null){
+                                     Log.e("GoogleSignProcess", "Failed")
+                                     onTriggerEvent(SignUpEvent.ThirdPartyAuthError(Throwable("Handle Auth Method")))
+                                 }else{
+                                     Log.e("GoogleSignProcess", "Success ${it.displayName}")
+                                     onTriggerEvent(SignUpEvent.GoogleAuthentication)
+                                 }
+                },
+                onTriggerEvent = onTriggerEvent
+            )
+        }
+
+        AuthMethod.FACEBOOK -> {
+            FacebookBottomAuthSheet(
+                onTriggerEvent = onTriggerEvent
+            )
+        }
+
+        AuthMethod.X -> {
+            XBottomAuthSheet(
+                onTriggerEvent = onTriggerEvent
+            )
+        }
+
+        else -> {}
+    }
+
+
+@Composable
+@OptIn(ExperimentalMaterial3Api::class)
+fun GoogleBottomAuthSheet(
+    onSignInResult: (GoogleSignInAccount?) -> Unit,
+    onTriggerEvent: (SignUpEvent) -> Unit
+) {
+    val sheetState = rememberModalBottomSheetState()
+    val coroutineScope = rememberCoroutineScope()
+
+    val context = LocalContext.current
+
+    val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+        .requestIdToken("909661259181-gf0ah1pg3s6u8fnd58825flknrpm03ha.apps.googleusercontent.com")
+        .requestEmail()
+        .build()
+
+    val googleSignInClient = GoogleSignIn.getClient(context, gso)
+
+
+    val launcher = rememberLauncherForActivityResult(contract = ActivityResultContracts.StartActivityForResult()) { result ->
+        val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
+        try {
+            val account = task.getResult(ApiException::class.java)
+            val credential = GoogleAuthProvider.getCredential(account?.idToken, null)
+            coroutineScope.launch {
+                try {
+                    val authResult = Firebase.auth.signInWithCredential(credential).await()
+                    onSignInResult(account)
+                    // Handle Firebase auth success
+                } catch (firebaseEx: FirebaseAuthException) {
+                    // Handle Firebase auth error
+                }
+            }
+        } catch (e: ApiException) {
+            Log.e("GoogleSignIn", "Failed to sign in with Google", e)
+            // Handle Google Sign-In error
         }
     }
+
+    ModalBottomSheet(
+        onDismissRequest = { onTriggerEvent(SignUpEvent.SelectAuthMethod(AuthMethod.NONE)) },
+        sheetState = sheetState,
+        content = {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+                modifier = Modifier
+                    .padding(16.dp)
+                    .fillMaxWidth()
+            ) {
+                Text(
+                    text = stringResource(id = R.string.auth_button_title_google),
+                    style = MaterialTheme.typography.headlineMedium
+                )
+                Button(
+                    onClick = {
+                        coroutineScope.launch {
+                            sheetState.hide()
+                            onTriggerEvent(SignUpEvent.SelectAuthMethod(AuthMethod.NONE))
+                            launcher.launch(googleSignInClient.signInIntent)
+                        }
+                    }
+                ) {
+                    Text(stringResource(id = R.string.title_continue))
+                }
+            }
+        }
+    )
+}
+
+@Composable
+@OptIn(ExperimentalMaterial3Api::class)
+fun FacebookBottomAuthSheet(onTriggerEvent: (SignUpEvent) -> Unit) {
+    val sheetState = rememberModalBottomSheetState()
+    val coroutineScope = rememberCoroutineScope()
+
+    val context = LocalContext.current
+
+    ModalBottomSheet(
+        onDismissRequest = { onTriggerEvent(SignUpEvent.SelectAuthMethod(AuthMethod.NONE)) },
+        sheetState = sheetState,
+        content = {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+                modifier = Modifier
+                    .padding(16.dp)
+                    .fillMaxWidth()
+            ) {
+                Text(text = stringResource(id = R.string.auth_button_title_facebook))
+                Button(
+                    onClick = {
+                        coroutineScope.launch { sheetState.hide() }.invokeOnCompletion {
+                            if (!sheetState.isVisible) {
+                                onTriggerEvent(SignUpEvent.SelectAuthMethod(AuthMethod.NONE))
+                            }
+                        }
+                    }
+                ) {
+                    Text(stringResource(id = R.string.title_continue))
+                }
+            }
+        }
+    )
+}
+
+@Composable
+@OptIn(ExperimentalMaterial3Api::class)
+fun XBottomAuthSheet(
+    onTriggerEvent: (SignUpEvent) -> Unit
+) {
+    val sheetState = rememberModalBottomSheetState()
+    val coroutineScope = rememberCoroutineScope()
+
+    ModalBottomSheet(
+        onDismissRequest = { onTriggerEvent(SignUpEvent.SelectAuthMethod(AuthMethod.NONE)) },
+        sheetState = sheetState,
+        content = {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+                modifier = Modifier
+                    .padding(16.dp)
+                    .fillMaxWidth()
+            ) {
+                Text(text = stringResource(id = R.string.auth_button_title_x))
+                Button(
+                    onClick = {
+                        coroutineScope.launch { sheetState.hide() }.invokeOnCompletion {
+                            if (!sheetState.isVisible) {
+                                onTriggerEvent(SignUpEvent.SelectAuthMethod(AuthMethod.NONE))
+                                FirebaseAuth.getInstance().signOut()
+                            }
+                        }
+                    }
+                ) {
+                    Text(stringResource(id = R.string.title_continue))
+                }
+            }
+        }
+    )
 }

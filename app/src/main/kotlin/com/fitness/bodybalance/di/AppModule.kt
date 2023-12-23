@@ -2,19 +2,25 @@ package com.fitness.bodybalance.di
 
 import android.app.Application
 import android.content.Context
-import com.fitness.authentication.di.CommonAuthModule
 import com.fitness.navigation.Destinations
-import com.fitness.theme.di.ThemeModule
-import com.google.android.datatransport.runtime.dagger.Provides
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import dagger.Module
+import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
 
-@Module(includes = [CommonAuthModule::class, ThemeModule::class])
+@Module
 @InstallIn(SingletonComponent::class)
 class AppModule {
+
+    @Provides
+    fun provideFirebaseAuth(): FirebaseAuth = FirebaseAuth.getInstance()
+
+    @Provides
+    fun provideFirebaseFirestore(): FirebaseFirestore = FirebaseFirestore.getInstance()
 
     @Provides
     @Singleton

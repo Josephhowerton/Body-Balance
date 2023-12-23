@@ -9,6 +9,8 @@ android{
 
 dependencies {
     addHiltDependencies()
+    addCoroutineDependencies()
+    addFirebaseDependencies()
     DATA_API
     LIBRARY
 }

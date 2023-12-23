@@ -1,78 +1,33 @@
 {
   "project_info": {
-    "project_number": "442236870595",
-    "project_id": "shapify-d7cce",
-    "storage_bucket": "shapify-d7cce.appspot.com"
+    "project_number": "909661259181",
+    "project_id": "balance-e9152",
+    "storage_bucket": "balance-e9152.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:442236870595:android:f79be7d79f6bbae277e776",
+        "mobilesdk_app_id": "1:909661259181:android:674a8c7070a5e4c83d8d24",
         "android_client_info": {
           "package_name": "com.fitness.bodybalance"
         }
       },
       "oauth_client": [
         {
-          "client_id": "442236870595-gvvfd6oiatgialj06rfpg9qkjfqof580.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.fitness.bodybalance",
-            "certificate_hash": "9b608410f229f5d9433230d9318465c1ec051e95"
-          }
-        },
-        {
-          "client_id": "442236870595-opv98sfj7qc6fchuqgd8adrd012qtmes.apps.googleusercontent.com",
+          "client_id": "909661259181-gf0ah1pg3s6u8fnd58825flknrpm03ha.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCqQqc8Lvs6-rG-PICvgQLoRgYGgXDxzcs"
+          "current_key": "AIzaSyCPW5CVzUhnHqw2p2YnqP_qbxR-utliUlI"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "442236870595-2lr0bm7sip6rng2qgf02v3i5l6t8n1gv.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:442236870595:android:96e7c35112fd152677e776",
-        "android_client_info": {
-          "package_name": "com.shapify.mobileapp"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "442236870595-njq1v7if11sg4lm89rr5a6vjejcqf9sc.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.shapify.mobileapp",
-            "certificate_hash": "33d3b0a5b03fbc3d2de77c69587190e7cc17c466"
-          }
-        },
-        {
-          "client_id": "442236870595-opv98sfj7qc6fchuqgd8adrd012qtmes.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyCqQqc8Lvs6-rG-PICvgQLoRgYGgXDxzcs"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "442236870595-2lr0bm7sip6rng2qgf02v3i5l6t8n1gv.apps.googleusercontent.com",
+              "client_id": "909661259181-gf0ah1pg3s6u8fnd58825flknrpm03ha.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
