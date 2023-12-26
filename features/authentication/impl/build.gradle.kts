@@ -3,12 +3,13 @@ plugins {
 }
 
 android {
-    namespace = "com.fitness.onboard"
+    namespace = "com.fitness.authentication"
 }
 
 dependencies {
     addFirebaseDependencies()
     ONBOARD_API
+    DASHBOARD_API
     AUTHENTICATION_API
     LIBRARY
     RESOURCES

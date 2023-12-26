@@ -1,6 +1,5 @@
 package com.fitness.authentication.reset.viewmodel
 
-import auth.handleAuthFailure
 import com.fitness.authentication.util.isVerified
 import com.fitness.authentication.util.verifyPhone
 import extensions.TextFieldState

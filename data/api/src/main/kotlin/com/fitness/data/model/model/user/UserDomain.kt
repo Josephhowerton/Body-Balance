@@ -2,8 +2,9 @@ package com.fitness.data.model.model.user
 
 data class UserDomain(
     val id: String,
-    val displayName: String?,
-    val email: String?,
-    val phoneNumber: String?,
-    val profilePictureUrl: String?
+    var displayName: String?,
+    var email: String?,
+    var phoneNumber: String?,
+    var isTermAndPrivacyAccepted: Boolean,
+    var profilePictureUrl: String?
 )

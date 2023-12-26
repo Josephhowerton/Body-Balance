@@ -10,11 +10,21 @@ import com.fitness.welcome.WelcomeEntry
 import com.fitness.welcome.view.WelcomeScreen
 import javax.inject.Inject
 
-class WelcomeEntryImpl @Inject constructor(): WelcomeEntry() {
+class WelcomeEntryImpl @Inject constructor() : WelcomeEntry() {
     @Composable
-    override fun Composable(navController: NavHostController, destinations: Destinations, backStackEntry: NavBackStackEntry) {
+    override fun Composable(
+        navController: NavHostController,
+        destinations: Destinations,
+        backStackEntry: NavBackStackEntry
+    ) {
         WelcomeScreen(
-            onComplete = { navController.navigate(destinations.find<AuthEntry>().featureRoute) }
+            onComplete = {
+                navController.navigate(destinations.find<AuthEntry>().featureRoute) {
+                    popUpTo(featureRoute){
+                        inclusive = true
+                    }
+                }
+            }
         )
     }
 }

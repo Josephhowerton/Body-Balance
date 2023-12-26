@@ -7,9 +7,9 @@ import com.fitness.domain.usecase.auth.FacebookSignUpUseCase
 import com.fitness.domain.usecase.auth.FacebookSignInUseCase
 import com.fitness.domain.usecase.auth.GoogleSignUpUseCase
 import com.fitness.domain.usecase.auth.GoogleSignInUseCase
-import com.fitness.domain.usecase.auth.PhoneNumberSignUpUseCase
-import com.fitness.domain.usecase.auth.PhoneNumberSignInUseCase
 import com.fitness.domain.usecase.auth.SendPasswordResetEmailUseCase
+import com.fitness.domain.usecase.auth.SendVerificationCodeUseCase
+import com.fitness.domain.usecase.auth.VerifyPhoneNumberUseCase
 import com.fitness.domain.usecase.auth.XSignUpUseCase
 import com.fitness.domain.usecase.auth.XLoginUseCase
 import com.google.firebase.auth.FirebaseAuth
@@ -32,7 +32,11 @@ class AuthDomainModule {
 
     @Provides
     @Singleton
-    fun providePhoneNumberCreateUseCase(authRepository: AuthRepository) = PhoneNumberSignUpUseCase(authRepository)
+    fun provideSendVerificationCodeUseCase(authRepository: AuthRepository) = SendVerificationCodeUseCase(authRepository)
+
+    @Provides
+    @Singleton
+    fun provideVerifyPhoneNumberUseCase(authRepository: AuthRepository) = VerifyPhoneNumberUseCase(authRepository)
 
     @Provides
     @Singleton
@@ -50,9 +54,6 @@ class AuthDomainModule {
     @Singleton
     fun provideGoogleLoginUseCase(firebaseAuth: FirebaseAuth) = GoogleSignInUseCase(firebaseAuth)
 
-    @Provides
-    @Singleton
-    fun providePhoneNumberLoginUseCase() = PhoneNumberSignInUseCase()
 
     @Provides
     @Singleton

@@ -1,32 +1,17 @@
 package com.fitness.authentication.util
 
 import android.content.res.Configuration
-import android.util.Log
 import android.util.Patterns
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.ClickableText
-import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
@@ -34,17 +19,11 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.fitness.authentication.signup.viewmodel.SignUpEvent
 import com.fitness.resources.R
 import com.fitness.theme.ui.Green
 import com.fitness.theme.ui.Red
 import com.fitness.theme.ui.primaryVariantHub
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.gms.common.api.ApiException
 import extensions.TextFieldState
-import kotlinx.coroutines.launch
 
 fun isVerified(vararg credentials: Int): Boolean = credentials.all { it == 0 }
 
@@ -179,7 +158,7 @@ fun SignUpAnnotatedText(
         // Create a clickable part of the text
         pushStringAnnotation(tag = "signUp", annotation = "signUp")
         withStyle(style = SpanStyle(color = Color.Blue)) {
-            append(stringResource(id = R.string.do_not_have_an_account_2_2))
+            append(stringResource(id = R.string.sign_up))
         }
         pop()
     }
@@ -210,7 +189,7 @@ fun SignInAnnotatedText(
         // Create a clickable part of the text
         pushStringAnnotation(tag = "signIn", annotation = "signIn")
         withStyle(style = SpanStyle(color = primaryVariantHub)) {
-            append(stringResource(id = R.string.already_have_an_account_2_2))
+            append(stringResource(id = R.string.sign_in))
         }
         pop()
     }
@@ -282,7 +261,6 @@ fun ForgotPasswordAnnotatedText(
     onClick: () -> Unit = {}
 ) {
     val annotatedString = buildAnnotatedString {
-        // Create a clickable part of the text
         pushStringAnnotation(tag = "forgotPassword", annotation = "forgotPassword")
         withStyle(style = SpanStyle(color = primaryVariantHub)) {
             append(stringResource(id = R.string.forgot_password))
@@ -338,7 +316,6 @@ fun SignUpForFreeAnnotatedText(
     onClick: () -> Unit = {}
 ) {
     val annotatedString = buildAnnotatedString {
-        // Create a clickable part of the text
         pushStringAnnotation(tag = "signUpForFree", annotation = "signUpForFree")
         withStyle(style = SpanStyle(color = primaryVariantHub)) {
             append(stringResource(id = R.string.sign_up_for_free))

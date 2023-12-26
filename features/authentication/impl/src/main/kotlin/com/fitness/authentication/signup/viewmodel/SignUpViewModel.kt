@@ -1,28 +1,34 @@
 package com.fitness.authentication.signup.viewmodel
 
-import auth.handleAuthFailure
+
+import auth.PhoneVerificationError
+import auth.formatPhoneNumberToE164
+import auth.toAuthFailure
+import com.fitness.authentication.util.isVerified
 import com.fitness.authentication.util.verifyEmail
 import com.fitness.authentication.util.verifyName
 import com.fitness.authentication.util.verifyPassword
 import com.fitness.authentication.util.verifyPhone
 import com.fitness.data.model.model.user.UserDomain
 import com.fitness.domain.usecase.auth.EmailPasswordSignUpUseCase
+import com.fitness.domain.usecase.auth.FacebookSignUpUseCase
 import com.fitness.domain.usecase.auth.GoogleSignUpUseCase
-import com.fitness.domain.usecase.auth.PhoneNumberSignUpUseCase
+import com.fitness.domain.usecase.auth.SendVerificationCodeUseCase
+import com.fitness.domain.usecase.auth.VerifyPhoneNumberUseCase
 import com.fitness.domain.usecase.auth.XSignUpUseCase
 import com.fitness.domain.usecase.cache.CreateUserUseCase
+import com.fitness.resources.R
 import dagger.hilt.android.lifecycle.HiltViewModel
 import extensions.TextFieldState
-import com.fitness.authentication.util.isVerified
-import com.fitness.domain.usecase.auth.FacebookSignUpUseCase
 import state.BaseViewState
 import viewmodel.IntentViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class SignUpViewModel @Inject constructor(
+    val sendVerificationCodeUseCase: SendVerificationCodeUseCase,
+    val verificationCodeUseCase: VerifyPhoneNumberUseCase,
     val emailPasswordSignUpUseCase: EmailPasswordSignUpUseCase,
-    val phoneNumberSignUpUseCase: PhoneNumberSignUpUseCase,
     val facebookSignUpUseCase: FacebookSignUpUseCase,
     val googleSignUpUseCase: GoogleSignUpUseCase,
     val xSignUpUseCase: XSignUpUseCase,
@@ -43,7 +49,11 @@ class SignUpViewModel @Inject constructor(
                 verifyPhoneAuthenticationData(event)
             }
 
-            is SignUpEvent.SelectAuthMethod ->{
+            is SignUpEvent.VerifyPhoneAuthentication -> {
+                onVerifyPhoneNumber(event)
+            }
+
+            is SignUpEvent.SelectAuthMethod -> {
                 onSelectAuthMethod(event)
             }
 
@@ -60,12 +70,20 @@ class SignUpViewModel @Inject constructor(
             }
 
             is SignUpEvent.ThirdPartyAuthError -> {
-                handleError(event.error.handleAuthFailure())
+                handleError(event.error)
             }
 
             else -> {
                 setState(BaseViewState.Data(SignUpState()))
             }
+        }
+    }
+
+    override fun handleError(exception: Throwable) {
+        if (exception is PhoneVerificationError) {
+            onResetVerifyPhoneNumber()
+        } else {
+            super.handleError(exception.toAuthFailure())
         }
     }
 
@@ -75,10 +93,14 @@ class SignUpViewModel @Inject constructor(
         val (emailState, emailError) = verifyEmail(event.email)
         val (passwordState, passwordError) = verifyPassword(event.password)
 
-        if (isVerified(firstnameError, lastnameError, emailError, passwordError)){
-            onEmailPasswordAuthentication(event.firstname, event.lastname, event.email, event.password)
-        }
-        else {
+        if (isVerified(firstnameError, lastnameError, emailError, passwordError)) {
+            onEmailPasswordAuthentication(
+                event.firstname,
+                event.lastname,
+                event.email,
+                event.password
+            )
+        } else {
             onEmailAuthCredentialsError(
                 firstnameState,
                 lastnameState,
@@ -92,24 +114,32 @@ class SignUpViewModel @Inject constructor(
         }
     }
 
+
     private fun verifyPhoneAuthenticationData(event: SignUpEvent.PhoneAuthentication) {
         val (firstnameState, firstnameError) = verifyName(event.firstname)
         val (lastnameState, lastnameError) = verifyName(event.lastname)
         val (phoneState, phoneError) = verifyPhone(event.phoneNumber)
-        if (isVerified(firstnameError, lastnameError, phoneError)){
-            onPhoneAuthentication(event.firstname, event.lastname, event.phoneNumber)
-        }
-        else {
+        val formattedPhoneNumber = formatPhoneNumberToE164(event.phoneNumber, "US")
+
+        if (formattedPhoneNumber != null && isVerified(firstnameError, lastnameError, phoneError)) {
+            onPhoneAuthentication(event.firstname, event.lastname, formattedPhoneNumber)
+        } else {
+            val phoneStateError =
+                if (formattedPhoneNumber == null) TextFieldState.ERROR else phoneState
+            val phoneErrorMsg =
+                if (formattedPhoneNumber == null) R.string.invalid_phone_number_format else phoneError
+
             onPhoneAuthCredentialsError(
                 firstnameState,
                 lastnameState,
-                phoneState,
+                phoneStateError,
                 firstnameError,
                 lastnameError,
-                phoneError,
+                phoneErrorMsg
             )
         }
     }
+
 
     private fun onEmailAuthCredentialsError(
         firstnameState: TextFieldState,
@@ -174,11 +204,42 @@ class SignUpViewModel @Inject constructor(
 
     private fun onPhoneAuthentication(firstname: String, lastname: String, phone: String) =
         safeLaunch {
-            val params = PhoneNumberSignUpUseCase.Params(firstname, lastname, phone)
-            execute(phoneNumberSignUpUseCase(params)) {
-                onCreateUser(it)
+            execute(sendVerificationCodeUseCase(SendVerificationCodeUseCase.Params(phone))) {
+                setState(
+                    BaseViewState.Data(
+                        SignUpState(
+                            firstname = firstname,
+                            lastname = lastname,
+                            phoneNumber = phone,
+                            phoneAuthState = it
+                        )
+                    )
+                )
             }
         }
+
+    private fun onVerifyPhoneNumber(event: SignUpEvent.VerifyPhoneAuthentication) = safeLaunch {
+        execute(
+            verificationCodeUseCase(
+                VerifyPhoneNumberUseCase.Params(
+                    verificationId = event.verificationId,
+                    code = event.code
+                )
+            )
+        ) {
+            onCreateUser(it)
+        }
+    }
+
+    private fun onResetVerifyPhoneNumber(verificationId: String) = safeLaunch {
+        setState(
+            BaseViewState.Data(
+                currentState<SignUpState>().copy(
+
+                )
+            )
+        )
+    }
 
     private fun onSelectAuthMethod(event: SignUpEvent.SelectAuthMethod) {
         setState(

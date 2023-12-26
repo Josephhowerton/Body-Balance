@@ -11,6 +11,7 @@ fun FirebaseUser.toUserDomain(): UserDomain {
         displayName = this.displayName,
         email = this.email,
         phoneNumber = this.phoneNumber,
+        isTermAndPrivacyAccepted = false,
         profilePictureUrl = this.photoUrl?.toString()
     )
 }
@@ -22,6 +23,7 @@ fun UserCache.toUserDomain(): UserDomain {
         displayName = this.displayName,
         email = this.email,
         phoneNumber = this.phoneNumber,
+        isTermAndPrivacyAccepted = this.isTermAndPrivacyAccepted,
         profilePictureUrl = this.profilePictureUrl
     )
 }
@@ -34,6 +36,7 @@ fun UserDomain.toUserCache(lastUpdated: Long = System.currentTimeMillis()): User
         email = this.email,
         phoneNumber = this.phoneNumber,
         profilePictureUrl = this.profilePictureUrl,
+        isTermAndPrivacyAccepted = this.isTermAndPrivacyAccepted,
         lastUpdated = lastUpdated
     )
 }

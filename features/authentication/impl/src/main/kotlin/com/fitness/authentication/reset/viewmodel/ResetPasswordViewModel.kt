@@ -1,6 +1,6 @@
 package com.fitness.authentication.reset.viewmodel
 
-import auth.handleAuthFailure
+import auth.toAuthFailure
 import com.fitness.authentication.util.isVerified
 import com.fitness.authentication.util.verifyEmail
 import com.fitness.domain.usecase.auth.SendPasswordResetEmailUseCase
@@ -28,7 +28,7 @@ class ResetPasswordViewModel @Inject constructor(
     }
 
     override fun handleError(exception: Throwable) {
-        super.handleError(exception.handleAuthFailure())
+        super.handleError(exception.toAuthFailure())
     }
 
     private fun verifyEmailCredentials(event: ResetPasswordEvent.SendPasswordResetEmail){

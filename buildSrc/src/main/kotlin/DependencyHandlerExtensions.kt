@@ -76,6 +76,8 @@ val DependencyHandler.DOMAIN get() = api(project(":domain"))
 //Feature
 val DependencyHandler.AUTHENTICATION get() = implementation(project(":features:authentication:impl"))
 val DependencyHandler.AUTHENTICATION_API get() = api(project(":features:authentication:api"))
+val DependencyHandler.DASHBOARD get() = implementation(project(":features:dashboard:impl"))
+val DependencyHandler.DASHBOARD_API get() = api(project(":features:dashboard:api"))
 val DependencyHandler.ONBOARD get() = implementation(project(":features:onboard:impl"))
 val DependencyHandler.ONBOARD_API get() = api(project(":features:onboard:api"))
 val DependencyHandler.USER_PROFILE get() = implementation(project(":features:user-profile:impl"))
@@ -138,6 +140,7 @@ fun DependencyHandler.addFirebaseDependencies(){
     implementation(FirebaseLibs.FIREBASE_CRASHALYTICS)
     implementation(FirebaseLibs.FIREBASE_FIRESTORE)
     implementation(FirebaseLibs.GOOGLE_PLAY_AUTH)
+    implementation(FirebaseLibs.LIB_PHONE_NUMBER)
 }
 
 fun DependencyHandler.addNavigationDependencies(){
@@ -147,6 +150,7 @@ fun DependencyHandler.addNavigationDependencies(){
 
 fun DependencyHandler.addFeatureDependencies(){
     AUTHENTICATION
+    DASHBOARD
     ONBOARD
     USER_PROFILE
     WELCOME
@@ -154,6 +158,7 @@ fun DependencyHandler.addFeatureDependencies(){
 
 fun DependencyHandler.addFeatureAPIDependencies(){
     AUTHENTICATION_API
+    DASHBOARD_API
     ONBOARD_API
     USER_PROFILE_API
     WELCOME_API

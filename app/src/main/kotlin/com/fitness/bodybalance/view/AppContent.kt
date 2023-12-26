@@ -36,6 +36,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import androidx.navigation.Navigation
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -43,6 +44,7 @@ import androidx.navigation.compose.rememberNavController
 import com.fitness.authentication.AuthEntry
 import com.fitness.authentication.manager.AuthState
 import com.fitness.bodybalance.di.AppProvider
+import com.fitness.dashboard.DashboardEntry
 import com.fitness.theme.ui.BodyBalanceTheme
 import com.fitness.navigation.BottomNavigationUtil
 import com.fitness.navigation.Destinations
@@ -56,7 +58,6 @@ import com.fitness.theme.AppTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AppContent(
     authState: State<AuthState>,
@@ -73,7 +74,6 @@ fun AppContent(
 
 
 @Composable
-@OptIn(ExperimentalMaterial3Api::class)
 fun AppHub(
     authState: State<AuthState>,
     appProvider: AppProvider,
@@ -114,26 +114,24 @@ fun AppHub(
 
 
 @Composable
-@OptIn(ExperimentalMaterial3Api::class)
 fun MainHub(
     bottomNavState: Boolean,
     destinations: Destinations,
     navController: NavHostController = rememberNavController(),
 ) {
     Scaffold(
-        topBar = {
-            AnimatedVisibility(visible = bottomNavState) {
-                NavBar(navController = navController)
-            }
-        },
+        topBar = {},
         bottomBar = {
             AnimatedVisibility(visible = bottomNavState) {
                 NavBar(navController = navController)
             }
         }
     ) { innerPadding ->
-        NavHost(navController = navController, startDestination = "authenticatedStartDestination", modifier = Modifier.padding(innerPadding)) {
-
+        val dashboard = destinations.find<DashboardEntry>()
+        NavHost(navController = navController, startDestination = dashboard.featureRoute, modifier = Modifier.padding(innerPadding)) {
+            with(dashboard){
+                composable(navController, destinations)
+            }
         }
     }
 }
@@ -144,7 +142,7 @@ fun OnboardingAuthenticationHub(
     navController: NavHostController = rememberNavController(),
 ) {
 
-    val welcomeEntry = destinations.find<com.fitness.welcome.WelcomeEntry>()
+    val welcomeEntry = destinations.find<WelcomeEntry>()
     val onboardEntry = destinations.find<OnboardEntry>()
     val authEntry = destinations.find<AuthEntry>()
     NavHost(navController, startDestination = welcomeEntry.featureRoute) {
@@ -154,17 +152,17 @@ fun OnboardingAuthenticationHub(
         }
 
         with(onboardEntry){
+            navController.popBackStack(authEntry.featureRoute, false)
             navigation(navController, destinations)
         }
 
         with(authEntry) {
+            navController.popBackStack(welcomeEntry.featureRoute, false)
             navigation(navController, destinations)
         }
     }
 }
 
-
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ModularDrawSheet(
     items: List<DrawerItem>,
@@ -203,7 +201,6 @@ fun ModularDrawSheet(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NavDrawerIcon(
     scope: CoroutineScope,

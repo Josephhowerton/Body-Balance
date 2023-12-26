@@ -22,9 +22,9 @@
     <string name="terms_and_privacy_4_4">Privacy Policy.</string>
     <string name="or">or</string>
     <string name="already_have_an_account_1_2">Already have an account?</string>
-    <string name="already_have_an_account_2_2"> Sign In.</string>
+    <string name="sign_in"> Sign In</string>
     <string name="do_not_have_an_account_1_2">Don\'t have an account?</string>
-    <string name="do_not_have_an_account_2_2">Sign Up.</string>
+    <string name="sign_up">Sign Up</string>
     <string name="todays_workout_plan">Today\'s Workout Plan</string>
     <string name="calories">Calories</string>
     <string name="carbs">Carbohydrates</string>
@@ -89,9 +89,7 @@
     <string name="retry">Retry</string>
     <string name="we_are_sorry_title">We\'re sorry!</string>
     <string name="default_error_desc">Help us improve your experience by sending an error report</string>
-
     <string name="target_weight_desc">Target: %.1f</string>
-
     <string name="auth_button_title_email">Continue with email</string>
     <string name="auth_button_phone">Continue with phone</string>
     <string name="auth_button_title_google">Continue with Google</string>
@@ -99,7 +97,6 @@
     <string name="auth_button_title_facebook">Continue with Facebook</string>
     <string name="title_continue">Continue</string>
     <string name="in_a_moment_you_receive_a_cod">Got the code we texted you? Pop it in here to get started!</string>
-
     <string name="label_firstname">First Name</string>
     <string name="label_lastname">Last Name</string>
     <string name="label_phone">Phone</string>
@@ -115,23 +112,21 @@
     <string name="invalid_user_desc">There is no user profile corresponding to this email. Please create a new account.</string>
     <string name="user_collision_email_desc">The email address is already in use by another account. Sign in or create a new account.</string>
     <string name="user_collision_phone_desc">The phone number is already in use by another account. Sign in or create a new account.</string>
-
-    <!-- Generic String Verification -->
+    <string name="title_verification_error">Code Misstep</string>
+    <string name="desc_verification_error">Looks like you\'ve entered the wrong code. Flex those digits and try again.</string>
     <string name="auth_name_length_error">Name must be at least 2 characters long.</string>
-
-    <!-- Email Verification -->
     <string name="auth_invalid_email_format">Invalid email format.</string>
-
-    <!-- Phone Verification -->
     <string name="auth_invalid_phone_format">Invalid phone number format.</string>
-
-    <!-- Password Verification -->
     <string name="auth_password_lowercase_error">Must contain a lowercase letter.</string>
     <string name="auth_password_uppercase_error">Must contain an uppercase letter.</string>
     <string name="auth_password_digit_error">Must contain a digit.</string>
     <string name="auth_password_special_char_error">Must contain a special character (@$!%*?&amp;).</string>
     <string name="auth_password_length_error">Must be at least 8 characters long.</string>
-
     <string name="unknown">Unknown</string>
+    <string name="verify">Verify</string>
     <string name="desc_reset_password_email_confirmation">If your email address is associated with an account you will receive and email to reset your password. If you don\'t, please try a different email.</string>
+    <string name="invalid_phone_number_format">Invalid phone number format</string>
+    <string name="code_verification_title">Let\'s Get You Going!</string>
+    <string name="code_verification_description">Just a quick step before we start. Enter the code we sent to your phone to jump right into your fitness journey.</string>
+    <string name="error_invalid_code">The code you entered is invalid. Please try again.</string>
 </resources>

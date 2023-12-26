@@ -6,6 +6,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.fitness.authentication.AuthEntry
+import com.fitness.authentication.home.view.`AcceptTermsAndPrivacy`
+import com.fitness.authentication.home.viewmodel.HomeViewModel
 import com.fitness.authentication.reset.view.SendPasswordResetScreen
 import com.fitness.authentication.reset.viewmodel.ResetPasswordViewModel
 import com.fitness.authentication.signin.view.SignInEmailScreen
@@ -15,7 +17,9 @@ import com.fitness.authentication.signup.view.SignUpEmailScreen
 import com.fitness.authentication.signup.view.SignUpPhoneScreen
 import com.fitness.authentication.signup.view.SignUpScreen
 import com.fitness.authentication.signup.viewmodel.SignUpViewModel
+
 import com.fitness.component.screens.MessageScreen
+import com.fitness.dashboard.DashboardEntry
 import com.fitness.navigation.Destinations
 import com.fitness.navigation.find
 import com.fitness.onboard.OnboardEntry
@@ -26,6 +30,7 @@ import javax.inject.Inject
 class AuthEntryImpl @Inject constructor() : AuthEntry() {
 
     companion object {
+        const val termsAndPrivacy = "home"
         const val signInEmail = "sign_In_email"
         const val signInPhone = "sign_In_phone"
         const val signUp = "sign_up"
@@ -40,7 +45,21 @@ class AuthEntryImpl @Inject constructor() : AuthEntry() {
         navController: NavHostController,
         destinations: Destinations
     ) {
-        navigation(startDestination = signUp, route = featureRoute) {
+        navigation(startDestination = termsAndPrivacy, route = featureRoute) {
+            composable(termsAndPrivacy) {
+                val viewModel: HomeViewModel = hiltViewModel()
+                AcceptTermsAndPrivacy(
+                    state = viewModel.uiState.cast(),
+                    onTriggerEvent = { viewModel.onTriggerEvent(it) },
+                    onTriggerNavigation = {
+                        navController.navigate(it) {
+                            popUpTo(termsAndPrivacy) {
+                                inclusive = true
+                            }
+                        }
+                    }
+                )
+            }
 
             composable(signUp) {
                 val viewModel: SignUpViewModel = hiltViewModel()
@@ -57,13 +76,15 @@ class AuthEntryImpl @Inject constructor() : AuthEntry() {
                 SignUpEmailScreen(
                     state = viewModel.uiState.cast(),
                     onPopBack = { navController.popBackStack() },
-                    onComplete = { navController.navigate(destinations.find<OnboardEntry>().featureRoute) },
-                    onTriggerEvent = { viewModel.onTriggerEvent(it) },
-                    onTriggerNavigation = {
-                        navController.navigate(it) {
-                            popUpTo(signUp) { inclusive = false }
+                    onComplete = {
+                        navController.navigate(destinations.find<OnboardEntry>().featureRoute) {
+                            popUpTo(
+                                signUp
+                            ) { inclusive = true }
                         }
-                    }
+                    },
+                    onTriggerEvent = { viewModel.onTriggerEvent(it) },
+                    onTriggerNavigation = { navController.navigate(it) { popUpTo(signUp) } }
                 )
             }
 
@@ -72,11 +93,17 @@ class AuthEntryImpl @Inject constructor() : AuthEntry() {
                 SignUpPhoneScreen(
                     state = viewModel.uiState.cast(),
                     onPopBack = { navController.popBackStack() },
-                    onComplete = { navController.navigate(destinations.find<OnboardEntry>().featureRoute) },
+                    onComplete = {
+                        navController.navigate(destinations.find<OnboardEntry>().featureRoute) {
+                            popUpTo(
+                                signUp
+                            ) { inclusive = true }
+                        }
+                    },
                     onTriggerEvent = { viewModel.onTriggerEvent(it) },
                     onTriggerNavigation = {
                         navController.navigate(it) {
-                            popUpTo(signUp) { inclusive = false }
+                            popUpTo(signUpPhone)
                         }
                     }
                 )
@@ -87,13 +114,15 @@ class AuthEntryImpl @Inject constructor() : AuthEntry() {
                 SignInEmailScreen(
                     state = viewModel.uiState.cast(),
                     onPopBack = { navController.popBackStack() },
-                    onComplete = { navController.navigate(destinations.find<OnboardEntry>().featureRoute) },
-                    onTriggerEvent = { viewModel.onTriggerEvent(it) },
-                    onTriggerNavigation = {
-                        navController.navigate(it) {
-                            popUpTo(signUp) { inclusive = false }
+                    onComplete = {
+                        navController.navigate(destinations.find<DashboardEntry>().featureRoute) {
+                            popUpTo(
+                                signUp
+                            ) { inclusive = true }
                         }
-                    }
+                    },
+                    onTriggerEvent = { viewModel.onTriggerEvent(it) },
+                    onTriggerNavigation = { navController.navigate(it) { popUpTo(signUp) } }
                 )
             }
 
@@ -102,13 +131,15 @@ class AuthEntryImpl @Inject constructor() : AuthEntry() {
                 SignInPhoneScreen(
                     state = viewModel.uiState.cast(),
                     onPopBack = { navController.popBackStack() },
-                    onComplete = { navController.navigate(destinations.find<OnboardEntry>().featureRoute) },
-                    onTriggerEvent = { viewModel.onTriggerEvent(it) },
-                    onTriggerNavigation = {
-                        navController.navigate(it) {
-                            popUpTo(signInEmail) { inclusive = false }
+                    onComplete = {
+                        navController.navigate(destinations.find<DashboardEntry>().featureRoute) {
+                            popUpTo(
+                                signUp
+                            ) { inclusive = true }
                         }
-                    }
+                    },
+                    onTriggerEvent = { viewModel.onTriggerEvent(it) },
+                    onTriggerNavigation = { navController.navigate(it) { popUpTo(signInPhone) } }
                 )
             }
 
@@ -117,7 +148,7 @@ class AuthEntryImpl @Inject constructor() : AuthEntry() {
                 SendPasswordResetScreen(
                     state = viewModel.uiState.cast(),
                     onPopBack = { navController.popBackStack() },
-                    onComplete = { navController.navigate(resetConfirmation) },
+                    onComplete = { navController.navigate(resetConfirmation) { popUpTo(signInEmail) } },
                     onTriggerEvent = { viewModel.onTriggerEvent(it) },
                 )
             }
@@ -125,11 +156,7 @@ class AuthEntryImpl @Inject constructor() : AuthEntry() {
             composable(resetConfirmation) {
                 MessageScreen(
                     message = R.string.desc_reset_password_email_confirmation,
-                    onClick = {
-                        navController.navigate(signInEmail) {
-                            popUpTo(resetPassword) { inclusive = true }
-                        }
-                    }
+                    onClick = { navController.navigate(signInEmail) }
                 )
             }
         }

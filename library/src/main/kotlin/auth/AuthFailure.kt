@@ -23,6 +23,8 @@ sealed class AuthFailure : Failure() {
     data class UnknownError(override val description: Int, override val title: Int): AuthFailure()
 }
 
+data class PhoneVerificationError(val verificationId: String, val p0: String, val p1: String): FirebaseAuthInvalidCredentialsException(p0, p1)
+
 /**
  * @see FirebaseAuthActionCodeException Represents the exception which is a result of an expired or an invalid out of band code.
  * @see FirebaseAuthEmailException Represents the exception which is a result of an attempt to send an email via Firebase Auth (e.g. a password reset email)
@@ -35,7 +37,7 @@ sealed class AuthFailure : Failure() {
  * @see FirebaseAuthWeakPasswordException Thrown when using a weak password (less than 6 chars) to create a new account or to update an existing account's password.
  * @see FirebaseAuthWebException Thrown when a web operation couldn't be completed.
  */
-fun Throwable.handleAuthFailure(): AuthFailure =
+fun Throwable.toAuthFailure(): AuthFailure =
     when (this) {
         is FirebaseAuthInvalidCredentialsException -> {
             AuthFailure.UserError(

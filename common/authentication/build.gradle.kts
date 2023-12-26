@@ -13,4 +13,5 @@ android{
 dependencies {
     addHiltDependencies()
     addCoroutineDependencies()
+    addFirebaseDependencies()
 }

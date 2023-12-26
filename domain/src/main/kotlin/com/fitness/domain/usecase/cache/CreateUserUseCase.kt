@@ -16,6 +16,7 @@ class CreateUserUseCase @Inject constructor(
     data class Params(val userDomainDto: UserDomain)
 
     override suspend fun FlowCollector<DataState<Unit>>.execute(params: Params) {
+        params.userDomainDto.isTermAndPrivacyAccepted = true
         val firestoreResult = userRepository.createUser(params.userDomainDto.toUserCache())
         val result = firestore { firestoreResult }
         emit(result)

@@ -1,19 +1,15 @@
 package com.fitness.data.repository
 
+import com.fitness.data.PhoneAuthState
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
+import kotlinx.coroutines.flow.Flow
 
 interface AuthRepository {
     suspend fun signInWithEmail(email: String, password: String): Task<AuthResult>
-    suspend fun signInWithPhone(): Task<AuthResult>
-    suspend fun signInWithFacebook(): Task<AuthResult>
-    suspend fun signInWithX(): Task<AuthResult>
-
+    suspend fun sendVerificationCode(phoneNumber: String): Flow<PhoneAuthState>
+    suspend fun verifyPhoneNumberWithCode(verificationId: String, code: String): Task<AuthResult>
     suspend fun signUpWithEmail(firstname:String, lastname:String, email: String, password: String): Task<AuthResult>
-    suspend fun signUpWithPhone(): Task<AuthResult>
-    suspend fun signUpWithFacebook(): Task<AuthResult>
-    suspend fun signUpWithX(): Task<AuthResult>
-
     suspend fun sendPasswordResetEmail(email: String): Task<Unit>
     suspend fun signOut(): Task<Unit>
 }

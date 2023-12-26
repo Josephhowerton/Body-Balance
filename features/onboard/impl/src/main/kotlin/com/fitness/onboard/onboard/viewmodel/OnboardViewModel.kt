@@ -1,7 +1,6 @@
 package com.fitness.onboard.onboard.viewmodel
 
 import dagger.hilt.android.lifecycle.HiltViewModel
-import auth.handleAuthFailure
 import state.BaseViewState
 import viewmodel.IntentViewModel
 import javax.inject.Inject

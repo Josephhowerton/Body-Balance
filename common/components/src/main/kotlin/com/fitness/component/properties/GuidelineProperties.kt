@@ -4,6 +4,7 @@ import androidx.compose.ui.unit.dp
 
 object GuidelineProperties {
     val TOP = 75.dp
+    val BOTTOM_100 = 100.dp
     val SECOND_TOP = 175.dp
     val START = 20.dp
     val END = 20.dp

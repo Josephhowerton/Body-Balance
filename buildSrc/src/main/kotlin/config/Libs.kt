@@ -19,6 +19,7 @@ private object Version {
     const val EXO_PLAYER = "1.2.0"
     const val GOOGLE_PLAY_AUTH = "20.7.0"
     const val MATERIAL = "1.4.0"
+    const val LIB_PHONE_NUMBER = "8.12.39"
 }
 
 object CoreLibs{
@@ -78,6 +79,7 @@ object FirebaseLibs{
     const val FIREBASE_FIRESTORE = "com.google.firebase:firebase-firestore"
     const val FIREBASE_AUTHENTICATION = "com.google.firebase:firebase-auth"
     const val GOOGLE_PLAY_AUTH = "com.google.android.gms:play-services-auth:${Version.GOOGLE_PLAY_AUTH}"
+    const val LIB_PHONE_NUMBER = "com.googlecode.libphonenumber:libphonenumber:${Version.LIB_PHONE_NUMBER}"
 }
 
 object ExoPlayerLibs{

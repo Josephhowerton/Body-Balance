@@ -33,7 +33,7 @@ import com.fitness.resources.R
 private fun ErrorScreenPreview() {
     BodyBalanceTheme {
         Surface {
-            ErrorScreen(com.fitness.resources.R.string.calories, com.fitness.resources.R.string.calories_compact)
+            ErrorScreen(R.string.calories, R.string.calories_compact)
         }
     }
 }
