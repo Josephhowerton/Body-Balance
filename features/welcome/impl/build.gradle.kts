@@ -8,6 +8,9 @@ android {
 
 dependencies {
     LIBRARY
+    RESOURCES
     WELCOME_API
+    DASHBOARD_API
     AUTHENTICATION_API
+    AUTHENTICATION_MANAGER
 }

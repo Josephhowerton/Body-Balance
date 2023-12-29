@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Body Balance</string>
+    <string name="app_name">Balance</string>
     <string name="activity_home">HomeActivity</string>
     <string name="welcome_to_body_balance">Welcome to Balance</string>
     <string name="reset_your_password">Reset Your Password</string>
@@ -75,6 +75,8 @@
     <string name="content_description_open_eye">icon open eye</string>
     <string name="content_description_closed_eye">icon closed eye</string>
     <string name="content_description_checkmark">icon checkmark</string>
+    <string name="content_description_sex_female">biological sex female</string>
+    <string name="content_description_sex_male">biological sex male</string>
     <string name="title_google">Google</string>
     <string name="title_x">X</string>
     <string name="title_facebook">Facebook</string>
@@ -129,4 +131,9 @@
     <string name="code_verification_title">Let\'s Get You Going!</string>
     <string name="code_verification_description">Just a quick step before we start. Enter the code we sent to your phone to jump right into your fitness journey.</string>
     <string name="error_invalid_code">The code you entered is invalid. Please try again.</string>
+    <string name="onboarding_welcome_description">Join our fitness journey with engaging challenges and community support, tracking your progress effortlessly. Let\'s get fit, the fun way!</string>
+    <string name="feature_planning">Diet &amp; Fitness Planning</string>
+    <string name="feature_tracking">Diet &amp; Fitness Tracking</string>
+    <string name="feature_deep_analysis">Deep Analysis</string>
+
 </resources>

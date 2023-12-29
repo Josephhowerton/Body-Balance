@@ -4,12 +4,16 @@ package com.fitness.authentication.signup.viewmodel
 import auth.PhoneVerificationError
 import auth.formatPhoneNumberToE164
 import auth.toAuthFailure
+import com.fitness.authentication.manager.AuthenticationManager
+import com.fitness.authentication.util.AuthStateHolder
 import com.fitness.authentication.util.isVerified
+import com.fitness.authentication.util.updatePhoneState
 import com.fitness.authentication.util.verifyEmail
 import com.fitness.authentication.util.verifyName
 import com.fitness.authentication.util.verifyPassword
 import com.fitness.authentication.util.verifyPhone
-import com.fitness.data.model.model.user.UserDomain
+import com.fitness.data.PhoneAuthState
+import com.fitness.data.model.model.user.UserAccountDomain
 import com.fitness.domain.usecase.auth.EmailPasswordSignUpUseCase
 import com.fitness.domain.usecase.auth.FacebookSignUpUseCase
 import com.fitness.domain.usecase.auth.GoogleSignUpUseCase
@@ -32,7 +36,8 @@ class SignUpViewModel @Inject constructor(
     val facebookSignUpUseCase: FacebookSignUpUseCase,
     val googleSignUpUseCase: GoogleSignUpUseCase,
     val xSignUpUseCase: XSignUpUseCase,
-    val createUserUseCase: CreateUserUseCase
+    val createUserUseCase: CreateUserUseCase,
+    val authManager: AuthenticationManager
 ) : IntentViewModel<BaseViewState<SignUpState>, SignUpEvent>() {
 
     init {
@@ -71,10 +76,6 @@ class SignUpViewModel @Inject constructor(
 
             is SignUpEvent.ThirdPartyAuthError -> {
                 handleError(event.error)
-            }
-
-            else -> {
-                setState(BaseViewState.Data(SignUpState()))
             }
         }
     }
@@ -202,23 +203,21 @@ class SignUpViewModel @Inject constructor(
         }
     }
 
-    private fun onPhoneAuthentication(firstname: String, lastname: String, phone: String) =
+    private fun onPhoneAuthentication(firstname: String, lastname: String, phone: String) {
+        updatePhoneState(firstname = firstname, lastname = lastname, phoneNumber = phone)
         safeLaunch {
             execute(sendVerificationCodeUseCase(SendVerificationCodeUseCase.Params(phone))) {
                 setState(
                     BaseViewState.Data(
-                        SignUpState(
-                            firstname = firstname,
-                            lastname = lastname,
-                            phoneNumber = phone,
-                            phoneAuthState = it
-                        )
+                        SignUpState(phoneAuthState = it)
                     )
                 )
             }
         }
+    }
 
     private fun onVerifyPhoneNumber(event: SignUpEvent.VerifyPhoneAuthentication) = safeLaunch {
+        updatePhoneState(verificationId = event.verificationId)
         execute(
             verificationCodeUseCase(
                 VerifyPhoneNumberUseCase.Params(
@@ -227,15 +226,18 @@ class SignUpViewModel @Inject constructor(
                 )
             )
         ) {
+
             onCreateUser(it)
         }
     }
 
-    private fun onResetVerifyPhoneNumber(verificationId: String) = safeLaunch {
+    private fun onResetVerifyPhoneNumber() = safeLaunch {
         setState(
             BaseViewState.Data(
-                currentState<SignUpState>().copy(
-
+                SignUpState(
+                    phoneAuthState = PhoneAuthState.CodeSent(
+                        AuthStateHolder.getState().verificationId
+                    )
                 )
             )
         )
@@ -267,10 +269,10 @@ class SignUpViewModel @Inject constructor(
         }
     }
 
-    private fun onCreateUser(firebaseUserDomain: UserDomain) = safeLaunch {
-        val params = CreateUserUseCase.Params(firebaseUserDomain)
+    private fun onCreateUser(userAccountDomain: UserAccountDomain) = safeLaunch {
+        val params = CreateUserUseCase.Params(userAccountDomain)
         call(createUserUseCase(params)) {
-            setState(BaseViewState.Data(SignUpState(isSignUpCompleted = true)))
+            authManager.update(com.fitness.authentication.manager.AuthenticationState.Authenticated)
         }
     }
 }

@@ -1,30 +1,24 @@
 package com.fitness.authentication.manager
 
-import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseAuth.AuthStateListener
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import javax.inject.Inject
 
-class AuthenticationManagerImpl @Inject constructor(private val firebaseAuth: FirebaseAuth): AuthenticationManager, AuthStateListener  {
-    init { firebaseAuth.addAuthStateListener(this) }
-    override val authState: StateFlow<AuthState> get() =
-        MutableStateFlow(
-            if(firebaseAuth.currentUser != null){
-                AuthState.Authenticated
-            }
-            else{
-                AuthState.UnAuthenticated
-            }
-        )
+class AuthenticationManagerImpl @Inject constructor(firebaseAuth: FirebaseAuth): AuthenticationManager{
 
-    override fun onAuthStateChanged(auth: FirebaseAuth) {
-        if(authState.value == AuthState.Authenticated){
-            Log.e("AuthenticationManagerImpl", "Authenticated")
-        }else{
-            Log.e("AuthenticationManagerImpl", "UnAuthenticated")
+    private var _authState: MutableStateFlow<AuthenticationState> = MutableStateFlow(
+        if(firebaseAuth.currentUser != null){
+            AuthenticationState.Authenticated
         }
-    }
+        else{
+            AuthenticationState.UnAuthenticated
+        }
+    )
 
+    override val authState: StateFlow<AuthenticationState> get() = _authState
+
+    override fun update(authState: AuthenticationState) {
+        _authState.value = authState
+    }
 }

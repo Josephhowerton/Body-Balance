@@ -1,12 +1,12 @@
 package com.fitness.data.extensions
 
 import com.fitness.data.model.cache.UserCache
-import com.fitness.data.model.model.user.UserDomain
+import com.fitness.data.model.model.user.UserAccountDomain
 import com.google.firebase.auth.FirebaseUser
 
 // Extension function to convert FirebaseUser to UserDomain
-fun FirebaseUser.toUserDomain(): UserDomain {
-    return UserDomain(
+fun FirebaseUser.toUserDomain(): UserAccountDomain {
+    return UserAccountDomain(
         id = this.uid,
         displayName = this.displayName,
         email = this.email,
@@ -17,8 +17,8 @@ fun FirebaseUser.toUserDomain(): UserDomain {
 }
 
 // Extension function to convert UserCache to UserDomain
-fun UserCache.toUserDomain(): UserDomain {
-    return UserDomain(
+fun UserCache.toUserDomain(): UserAccountDomain {
+    return UserAccountDomain(
         id = this.id,
         displayName = this.displayName,
         email = this.email,
@@ -29,7 +29,7 @@ fun UserCache.toUserDomain(): UserDomain {
 }
 
 // Extension function to convert UserDomain to UserCache
-fun UserDomain.toUserCache(lastUpdated: Long = System.currentTimeMillis()): UserCache {
+fun UserAccountDomain.toUserCache(lastUpdated: Long = System.currentTimeMillis()): UserCache {
     return UserCache(
         id = this.id,
         displayName = this.displayName,

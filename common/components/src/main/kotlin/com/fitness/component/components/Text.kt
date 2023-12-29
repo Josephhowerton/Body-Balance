@@ -7,6 +7,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.TextUnit
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.fitness.resources.R
 import com.fitness.component.properties.HEADLINE_TEXT_SIZE
 import com.fitness.component.properties.STANDARD_TEXT_SIZE
@@ -43,12 +46,13 @@ private fun StandardTextSmallPreview() = Surface {
 @Composable
 fun StandardTitleText(
     modifier: Modifier = Modifier,
+    fontSize: TextUnit = TITLE_TEXT_SIZE,
     text: Int = R.string.create_account_message
 ){
     Text(
         text = stringResource(text),
         textAlign = TextAlign.Center,
-        fontSize = TITLE_TEXT_SIZE,
+        fontSize = fontSize,
         fontWeight = FontWeight.SemiBold,
         modifier = modifier
     )
@@ -58,11 +62,12 @@ fun StandardTitleText(
 @Composable
 fun StandardHeadlineText(
     modifier: Modifier = Modifier,
+    textAlign: TextAlign = TextAlign.Center,
     text: Int = R.string.create_account_message
 ){
     Text(
         text = stringResource(text),
-        textAlign = TextAlign.Center,
+        textAlign = textAlign,
         fontSize = HEADLINE_TEXT_SIZE,
         fontWeight = FontWeight.Normal,
         modifier = modifier

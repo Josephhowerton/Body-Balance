@@ -11,4 +11,5 @@ dependencies {
     LIBRARY
     RESOURCES
     DOMAIN
+    addFirebaseDependencies()
 }

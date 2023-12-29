@@ -22,6 +22,7 @@ import androidx.compose.material3.NavigationDrawerItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
@@ -36,13 +37,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import androidx.navigation.Navigation
 import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.fitness.authentication.AuthEntry
-import com.fitness.authentication.manager.AuthState
+import com.fitness.authentication.manager.AuthenticationState
 import com.fitness.bodybalance.di.AppProvider
 import com.fitness.dashboard.DashboardEntry
 import com.fitness.theme.ui.BodyBalanceTheme
@@ -60,14 +59,15 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun AppContent(
-    authState: State<AuthState>,
+    authState: State<AuthenticationState>,
     appTheme: State<AppTheme>,
+    showMainHubAnimation: Boolean,
     appProvider: AppProvider
 ) {
 
     BodyBalanceTheme(appTheme = appTheme) {
         Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.surface) {
-            AppHub(authState, appProvider)
+            AppHub(authState, appProvider, showMainHubAnimation)
         }
     }
 }
@@ -75,8 +75,9 @@ fun AppContent(
 
 @Composable
 fun AppHub(
-    authState: State<AuthState>,
+    authState: State<AuthenticationState>,
     appProvider: AppProvider,
+    showMainHubAnimation: Boolean,
     items: List<DrawerItem> = DrawerNavigationUtil.drawerNavItems,
     scope: CoroutineScope = rememberCoroutineScope(),
     drawerState: DrawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
@@ -86,7 +87,7 @@ fun AppHub(
         mutableStateOf(true)
     }
 
-    if (authState.value == AuthState.Authenticated) {
+    if (authState.value == AuthenticationState.Authenticated) {
 
         ModalNavigationDrawer(
             drawerState = drawerState,
@@ -102,7 +103,10 @@ fun AppHub(
             }) {
             MainHub(
                 bottomNavState = bottomNavState,
-                destinations = appProvider.destinations
+                showMainHubAnimation = showMainHubAnimation,
+                destinations = appProvider.destinations,
+                scope = scope,
+                drawerState = drawerState
             )
         }
     } else {
@@ -113,22 +117,34 @@ fun AppHub(
 }
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainHub(
     bottomNavState: Boolean,
+    showMainHubAnimation: Boolean,
     destinations: Destinations,
+    scope: CoroutineScope,
+    drawerState: DrawerState,
     navController: NavHostController = rememberNavController(),
 ) {
     Scaffold(
-        topBar = {},
+        topBar = { TopAppBar(title = {}, navigationIcon = { NavDrawerIcon(scope, drawerState) }) },
         bottomBar = {
             AnimatedVisibility(visible = bottomNavState) {
                 NavBar(navController = navController)
             }
         }
     ) { innerPadding ->
+
+        val welcome = destinations.find<WelcomeEntry>()
         val dashboard = destinations.find<DashboardEntry>()
-        NavHost(navController = navController, startDestination = dashboard.featureRoute, modifier = Modifier.padding(innerPadding)) {
+
+        val startDestination = if(showMainHubAnimation) welcome else dashboard
+        NavHost(navController = navController, startDestination = startDestination.featureRoute, modifier = Modifier.padding(innerPadding)) {
+            with(welcome){
+                composable(navController, destinations)
+            }
+
             with(dashboard){
                 composable(navController, destinations)
             }
@@ -145,7 +161,8 @@ fun OnboardingAuthenticationHub(
     val welcomeEntry = destinations.find<WelcomeEntry>()
     val onboardEntry = destinations.find<OnboardEntry>()
     val authEntry = destinations.find<AuthEntry>()
-    NavHost(navController, startDestination = welcomeEntry.featureRoute) {
+
+    NavHost(navController, startDestination = onboardEntry.featureRoute) {
 
         with(welcomeEntry) {
             composable(navController, destinations)

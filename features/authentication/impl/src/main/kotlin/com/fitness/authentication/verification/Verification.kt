@@ -13,8 +13,10 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.FocusManager
@@ -57,6 +59,7 @@ fun PhoneVerification(
     onVerify: (String, String) -> Unit = { _, _ -> }
 ) {
     ConstraintLayout(modifier = Modifier.fillMaxSize()) {
+        var resetFields by remember { mutableStateOf(codeState) }
         val digits = remember { Array(6) { mutableStateOf("") } }
 
         val (title, message, code, error, verify) = createRefs()
@@ -68,7 +71,10 @@ fun PhoneVerification(
         val endGuideline = createGuidelineFromEnd(GuidelineProperties.END)
 
         digits.forEach {
-            if (isCodeInvalid(codeState)) it.value = ""
+            if (isCodeInvalid(resetFields)) {
+                it.value = ""
+                resetFields = TextFieldState.OK
+            }
         }
         StandardText(
             text = R.string.code_verification,

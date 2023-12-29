@@ -37,6 +37,7 @@ class MainActivity : ComponentActivity() {
                 AppContent(
                     authState = viewModel.authState.collectAsState(),
                     appTheme = viewModel.appTheme.collectAsState(),
+                    showMainHubAnimation = viewModel.showMainHubAnimation,
                     appProvider = (application as BodyBalanceApplication).appProvider
                 )
             }

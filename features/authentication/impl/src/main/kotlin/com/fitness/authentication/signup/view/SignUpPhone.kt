@@ -111,6 +111,8 @@ private fun SignUpPhoneState(
     if(authState is PhoneAuthState.CodeSent){
         PhoneVerification(
             authState = authState.cast(),
+            codeState = state.codeState,
+            errorMessage = state.codeErrorMessage,
             onVerify = { id, code -> onTriggerEvent(SignUpEvent.VerifyPhoneAuthentication(id, code)) },
         )
     }

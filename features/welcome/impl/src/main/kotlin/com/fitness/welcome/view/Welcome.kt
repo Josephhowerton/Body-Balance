@@ -16,6 +16,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -27,11 +28,21 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
+import auth.AuthFailure
 import com.fitness.component.components.BodyBalanceImageLogo
+import com.fitness.component.screens.ErrorScreen
+import com.fitness.component.screens.LoadingScreen
+import com.fitness.component.screens.MessageScreen
+import com.fitness.resources.R
 import com.fitness.theme.ui.BodyBalanceTheme
+import com.fitness.welcome.viewmodel.WelcomeState
 import extensions.Dark
 import extensions.Light
+import extensions.cast
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import state.BaseViewState
 
 
 @Light
@@ -40,14 +51,52 @@ import kotlinx.coroutines.delay
 private fun WelcomePreview() {
     BodyBalanceTheme {
         Surface {
-            WelcomeScreen()
+            WelcomeScreen(MutableStateFlow(BaseViewState.Data(WelcomeState())), {})
         }
     }
 }
 
+@Composable
+fun WelcomeScreen(
+    state: StateFlow<BaseViewState<WelcomeState>>,
+    onComplete: (Boolean) -> Unit,
+) {
+    val uiState by state.collectAsState()
+
+    when (uiState) {
+        is BaseViewState.Data -> {
+            WelcomeScreenContent(
+                state = uiState.cast<BaseViewState.Data<WelcomeState>>().value,
+                onComplete = onComplete
+            )
+        }
+
+        is BaseViewState.Error -> {
+            val failure = uiState.cast<BaseViewState.Error>().throwable as AuthFailure
+
+            ErrorScreen(title = failure.title, description = failure.description) {
+                onComplete(false)
+            }
+        }
+
+        is BaseViewState.Loading -> {
+            LoadingScreen()
+        }
+
+        else -> {
+            MessageScreen(
+                message = R.string.unknown,
+                onClick = { onComplete(false) }
+            )
+        }
+    }
+}
 
 @Composable
-fun WelcomeScreen(onComplete: () -> Unit = {}) {
+fun WelcomeScreenContent(
+    state: WelcomeState,
+    onComplete: (Boolean) -> Unit
+) {
     var showTopText by remember { mutableStateOf(true) }
     var showBottomText by remember { mutableStateOf(false) }
     var currentPhase by remember { mutableIntStateOf(0) }
@@ -56,7 +105,7 @@ fun WelcomeScreen(onComplete: () -> Unit = {}) {
         delay(900) // Delay for each phase
         currentPhase++
         if (currentPhase > 2) {
-            onComplete()
+            onComplete(state.isAuthenticated)
         } else {
             showTopText = currentPhase % 2 == 0
             showBottomText = !showTopText

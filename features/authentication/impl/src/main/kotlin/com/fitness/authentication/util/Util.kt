@@ -41,8 +41,8 @@ fun verifyEmail(email: String): Pair<TextFieldState, Int> =
         TextFieldState.ERROR to R.string.auth_invalid_email_format
     }
 
-fun verifyPhone(phone: String): Pair<TextFieldState, Int> =
-    if (Patterns.PHONE.matcher(phone).matches()) {
+fun verifyPhone(phone: String?): Pair<TextFieldState, Int> =
+    if (phone!= null && Patterns.PHONE.matcher(phone).matches()) {
         TextFieldState.OK to 0
     } else {
         TextFieldState.ERROR to R.string.auth_invalid_phone_format
@@ -336,4 +336,43 @@ fun SignUpForFreeAnnotatedText(
 }
 enum class AuthMethod {
     NONE, EMAIL, PHONE, GOOGLE, FACEBOOK, X
+}
+
+fun updatePhoneState(
+    firstname: String? = null,
+    lastname: String? = null,
+    phoneNumber: String? = null,
+    verificationId: String? = null
+) {
+    firstname?.let {
+        if(firstname.isNotEmpty()){
+            AuthStateHolder.updateState(
+                AuthStateHolder.getState().copy(firstName = firstname)
+            )
+        }
+    }
+
+    lastname?.let {
+        if (lastname.isNotEmpty()){
+            AuthStateHolder.updateState(
+                AuthStateHolder.getState().copy(lastName = lastname)
+            )
+        }
+    }
+
+    phoneNumber?.let {
+        if(phoneNumber.isNotEmpty()){
+            AuthStateHolder.updateState(
+                AuthStateHolder.getState().copy(phoneNumber = phoneNumber)
+            )
+        }
+    }
+
+    verificationId?.let {
+        if(verificationId.isNotEmpty()){
+            AuthStateHolder.updateState(
+                AuthStateHolder.getState().copy(verificationId = verificationId)
+            )
+        }
+    }
 }

@@ -3,12 +3,16 @@ package com.fitness.authentication.signin.viewmodel
 import auth.PhoneVerificationError
 import auth.formatPhoneNumberToE164
 import auth.toAuthFailure
-import com.fitness.authentication.signup.viewmodel.SignUpState
+import com.fitness.authentication.manager.AuthenticationManager
+import com.fitness.authentication.manager.AuthenticationState
+import com.fitness.authentication.util.AuthStateHolder
 import com.fitness.resources.R
 import com.fitness.authentication.util.isVerified
+import com.fitness.authentication.util.updatePhoneState
 import com.fitness.authentication.util.verifyEmail
 import com.fitness.authentication.util.verifyPassword
 import com.fitness.authentication.util.verifyPhone
+import com.fitness.data.PhoneAuthState
 import com.fitness.domain.usecase.auth.EmailPasswordSignInUseCase
 import com.fitness.domain.usecase.auth.FacebookSignInUseCase
 import com.fitness.domain.usecase.auth.GoogleSignInUseCase
@@ -23,12 +27,13 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SignInViewModel @Inject constructor(
-    val sendVerificationCodeUseCase: SendVerificationCodeUseCase,
-    val verificationCodeUseCase: VerifyPhoneNumberUseCase,
-    val emailPasswordSignInUseCase: EmailPasswordSignInUseCase,
-    val facebookSignInUseCase: FacebookSignInUseCase,
-    val googleSignInUseCase: GoogleSignInUseCase,
-    val xLoginUseCase: XLoginUseCase
+    private val sendVerificationCodeUseCase: SendVerificationCodeUseCase,
+    private val verificationCodeUseCase: VerifyPhoneNumberUseCase,
+    private val emailPasswordSignInUseCase: EmailPasswordSignInUseCase,
+    private val facebookSignInUseCase: FacebookSignInUseCase,
+    private val googleSignInUseCase: GoogleSignInUseCase,
+    private val xLoginUseCase: XLoginUseCase,
+    private val authManager: AuthenticationManager
 ) : IntentViewModel<BaseViewState<SignInState>, SignInEvent>() {
 
 
@@ -95,8 +100,8 @@ class SignInViewModel @Inject constructor(
     }
 
     private fun verifyPhoneAuthenticationData(event: SignInEvent.PhoneAuthentication) {
-        val (phoneState, phoneError) = verifyPhone(event.phoneNumber)
         val formattedPhoneNumber = formatPhoneNumberToE164(event.phoneNumber, "US")
+        val (phoneState, phoneError) = verifyPhone(formattedPhoneNumber)
         if (formattedPhoneNumber != null && isVerified(phoneError)){
             onPhoneAuthentication(phone=formattedPhoneNumber)
         }
@@ -155,21 +160,24 @@ class SignInViewModel @Inject constructor(
     }
 
     private fun onPhoneAuthentication(phone: String) = safeLaunch {
+        updatePhoneState(phoneNumber = phone)
         execute(sendVerificationCodeUseCase(SendVerificationCodeUseCase.Params(phone))) {
             setState(BaseViewState.Data(SignInState(phoneAuthState = it)))
         }
     }
 
     private fun onVerifyPhoneNumber(event: SignInEvent.VerifyPhoneAuthentication) = safeLaunch {
-        execute(verificationCodeUseCase(VerifyPhoneNumberUseCase.Params(verificationId=event.verificationId, code=event.code))){
-            setState(BaseViewState.Data(SignInState(isAuthenticated = true)))
+        updatePhoneState(verificationId = event.verificationId)
+        execute(verificationCodeUseCase(VerifyPhoneNumberUseCase.Params(verificationId=AuthStateHolder.getState().verificationId, code=event.code))){
+            authManager.update(AuthenticationState.Authenticated)
         }
     }
 
     private fun onResetVerifyPhoneNumber() = safeLaunch {
         setState(
             BaseViewState.Data(
-                currentState<SignInState>().copy(
+                SignInState(
+                    phoneAuthState = PhoneAuthState.CodeSent(AuthStateHolder.getState().verificationId),
                     codeState = TextFieldState.ERROR,
                     codeErrorMessage = R.string.error_invalid_code
                 )
@@ -190,7 +198,7 @@ class SignInViewModel @Inject constructor(
 
     private fun onXAuthentication() = safeLaunch {
         execute(xLoginUseCase(XLoginUseCase.Params)) {
-            setState(BaseViewState.Data(SignInState(isAuthenticated = true)))
+            authManager.update(AuthenticationState.Authenticated)
         }
     }
 }
