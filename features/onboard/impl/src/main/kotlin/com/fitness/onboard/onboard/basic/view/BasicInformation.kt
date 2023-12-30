@@ -1,14 +1,11 @@
 package com.fitness.onboard.onboard.basic.view
 
 import android.content.res.Configuration
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.constraintlayout.compose.ConstraintLayout
 import com.fitness.component.screens.ErrorScreen
 import com.fitness.component.screens.LoadingScreen
 import com.fitness.component.screens.MessageScreen
@@ -81,7 +78,7 @@ private fun BasicInformationContent(
             GenderAge(state = state, onTriggerEvent)
         }
         BasicInformationStep.HEIGHT_WEIGHT -> {
-            HeightWeight(state = state, onTriggerEvent)
+            WeightMeasurementContent(state = state, onTriggerEvent)
         }
         BasicInformationStep.HEALTH_CONCERNS -> {
             HealthConcerns(state = state, onTriggerEvent)

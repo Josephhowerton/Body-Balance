@@ -4,6 +4,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -95,11 +96,13 @@ fun StandardTextSmall(
     modifier: Modifier = Modifier,
     textAlign: TextAlign = TextAlign.Center,
     fontWeight: FontWeight = FontWeight.Normal,
+    color: Color = Color.Unspecified,
     text: Int = R.string.create_account_message
 ){
     Text(
         text = stringResource(text),
         textAlign = textAlign,
+        color = color,
         fontSize = STANDARD_TEXT_SIZE_SMALL,
         fontWeight = fontWeight,
         modifier = modifier

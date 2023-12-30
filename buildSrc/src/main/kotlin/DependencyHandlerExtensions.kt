@@ -88,6 +88,8 @@ val DependencyHandler.WELCOME_API get() = api(project(":features:welcome:api"))
 //Library
 val DependencyHandler.LIBRARY get() = implementation(project(":library"))
 
+val DependencyHandler.GLIDE get() = implementation(GlideLibs.GLIDE)
+
 
 fun DependencyHandler.addCoreDependencies() {
     implementation(CoreLibs.CORE_KTX)

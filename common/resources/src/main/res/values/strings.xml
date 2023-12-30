@@ -98,6 +98,10 @@
     <string name="auth_button_title_x">Continue with X</string>
     <string name="auth_button_title_facebook">Continue with Facebook</string>
     <string name="title_continue">Continue</string>
+    <string name="title_dietary_preferences">Dietary Preferences</string>
+    <string name="title_health_concerns">Health Concerns</string>
+    <string name="desc_health_concerns">Select your health concerns, and let\'s tailor a plan that prioritizes your well-being. Each choice you make is a step toward a healthier you!</string>
+    <string name="desc_dietary_preferences">Scroll through and tap to select your diet preferences. Remember, every click shapes your fitness journey.</string>
     <string name="in_a_moment_you_receive_a_cod">Got the code we texted you? Pop it in here to get started!</string>
     <string name="label_firstname">First Name</string>
     <string name="label_lastname">Last Name</string>

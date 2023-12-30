@@ -9,6 +9,7 @@ android {
 dependencies {
     ONBOARD_API
     AUTHENTICATION_API
+    THEME
     LIBRARY
     RESOURCES
 }

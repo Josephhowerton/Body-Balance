@@ -1,19 +1,22 @@
 package com.fitness.onboard.onboard.basic.view
 
-import android.graphics.Paint
-import android.graphics.Typeface
-import android.util.Log
-import androidx.compose.foundation.Canvas
+
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
@@ -21,54 +24,69 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.nativeCanvas
-import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
+import com.fitness.component.HorizontalRuler
+import com.fitness.component.VerticalRuler
+import com.fitness.component.components.StandardTextSmall
 import com.fitness.component.components.StandardTitleText
 import com.fitness.component.properties.GuidelineProperties
 import com.fitness.onboard.onboard.basic.viewmodel.BasicInformationEvent
 import com.fitness.onboard.onboard.basic.viewmodel.BasicInformationState
 import com.fitness.resources.R
 import com.fitness.theme.ui.BodyBalanceTheme
+import com.fitness.theme.ui.Green
+import extensions.format
+import extensions.toFeetAndInches
+import kotlinx.coroutines.delay
 
 @Preview(showBackground = true)
 @Composable
-fun MeasurementPreview() = Surface {
-    Measurement()
+private fun WeightPreview() = BodyBalanceTheme {
+    Surface {
+        WeightMeasurementContent(BasicInformationState())
+    }
 }
 
 @Preview(showBackground = true)
 @Composable
-private fun HeightWeightPreview() = BodyBalanceTheme {
+private fun HeightPreview() = BodyBalanceTheme {
     Surface {
-        HeightWeight(state = BasicInformationState())
+        HeightMeasurementContent(BasicInformationState())
     }
 }
 
 @Composable
-fun HeightWeight(
+fun WeightMeasurementContent(
     state: BasicInformationState,
     onTriggerEvent: (BasicInformationEvent) -> Unit = {}
 ) {
     ConstraintLayout(modifier = Modifier.fillMaxSize()) {
-        val (title, image, weightMeasurement, heightMeasurement, continueButton) = createRefs()
+        val (title, image, weightMeasurement, weightValue, continueButton) = createRefs()
 
         val topGuide = createGuidelineFromTop(50.dp)
-        val midGuide = createGuidelineFromTop(.5f)
         val bottomGuide = createGuidelineFromBottom(GuidelineProperties.BOTTOM_100)
         val startGuide = createGuidelineFromStart(GuidelineProperties.START)
         val endGuide = createGuidelineFromEnd(GuidelineProperties.END)
 
-        StandardTitleText(text = R.string.title_continue, modifier = Modifier.constrainAs(title){
+        var currentNumber by remember {
+            mutableFloatStateOf(0f)
+        }
+
+        StandardTitleText(text = R.string.title_continue, modifier = Modifier.constrainAs(title) {
             top.linkTo(topGuide)
             start.linkTo(startGuide)
         })
@@ -76,17 +94,132 @@ fun HeightWeight(
         Image(
             painter = painterResource(id = R.drawable.icon_women_temp),
             contentDescription = "women",
-            modifier = Modifier.constrainAs(image){
-                top.linkTo(title.bottom, 50.dp)
+            modifier = Modifier.constrainAs(image) {
+                top.linkTo(title.bottom, 75.dp)
                 start.linkTo(startGuide)
                 end.linkTo(endGuide)
             }
         )
 
-        Measurement(Modifier.constrainAs(weightMeasurement){
-            bottom.linkTo(parent.bottom)
-            start.linkTo(startGuide)
+        Text(text = "${currentNumber.format(2)} lbs",
+            fontSize = 24.sp,
+            modifier = Modifier.constrainAs(weightValue) {
+                top.linkTo(image.bottom)
+                bottom.linkTo(continueButton.top)
+                start.linkTo(startGuide)
+                end.linkTo(endGuide)
+            })
+
+        Button(
+            onClick = { },
+            modifier = Modifier.constrainAs(continueButton) {
+                end.linkTo(endGuide)
+                bottom.linkTo(weightMeasurement.top, 20.dp)
+            }
+        ) {
+            Text(text = stringResource(id = R.string.title_continue))
+        }
+
+        WeightMeasurement(
+            onMeasurementChanged = { currentNumber = it },
+            modifier = Modifier.constrainAs(weightMeasurement) {
+                start.linkTo(parent.start)
+                end.linkTo(parent.end)
+                bottom.linkTo(parent.bottom)
+            })
+
+
+    }
+}
+
+@Composable
+fun HeightMeasurementContent(
+    state: BasicInformationState,
+    onTriggerEvent: (BasicInformationEvent) -> Unit = {}
+) {
+    ConstraintLayout(modifier = Modifier.fillMaxSize()) {
+        val (title, image, weightLocked, heightMeasurement, heightValue, continueButton) = createRefs()
+
+        val topGuide = createGuidelineFromTop(50.dp)
+        val bottomGuide = createGuidelineFromBottom(GuidelineProperties.BOTTOM_100)
+        val startGuide = createGuidelineFromStart(GuidelineProperties.START)
+        val endGuide = createGuidelineFromEnd(GuidelineProperties.END)
+
+        var currentNumber by remember {
+            mutableFloatStateOf(0f)
+        }
+
+        StandardTitleText(text = R.string.title_continue, modifier = Modifier.constrainAs(title) {
+            top.linkTo(topGuide)
+            end.linkTo(endGuide)
         })
+
+        val isVisible = remember { mutableStateOf(false) }
+        val rotationYAnimatable  = remember { Animatable(0f) }
+
+        val textColor by animateColorAsState(
+            targetValue = if (isVisible.value) Green else Color.Black,
+            animationSpec = tween(durationMillis = 2000),
+            label = "textColor"
+        )
+
+        LaunchedEffect(key1 = Unit) {
+            delay(250)
+            isVisible.value = true
+            rotationYAnimatable.animateTo(
+                targetValue = 720f, // Rotate 360 degrees
+                animationSpec = tween(durationMillis = 1000, easing = LinearEasing)
+            )
+        }
+
+        AnimatedVisibility(
+            visible = isVisible.value,
+            modifier = Modifier.constrainAs(weightLocked) {
+                top.linkTo(title.bottom, 10.dp)
+                end.linkTo(endGuide)
+            }
+        ) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+
+                Icon(imageVector = Icons.Default.Check,
+                    tint = textColor,
+                    contentDescription = stringResource(id = R.string.content_description_checkmark),
+                    modifier = Modifier.graphicsLayer {
+                        rotationY = rotationYAnimatable.value
+                        cameraDistance = 12f * density
+                    }
+                )
+
+                Spacer(modifier = Modifier.size(5.dp))
+
+                StandardTextSmall(
+                    text = R.string.weight,
+                    color = textColor
+                )
+            }
+
+        }
+
+
+        Image(
+            painter = painterResource(id = R.drawable.icon_women_temp),
+            contentDescription = "women",
+            modifier = Modifier.constrainAs(image) {
+                top.linkTo(title.bottom, 75.dp)
+                start.linkTo(startGuide, 75.dp)
+                end.linkTo(endGuide)
+            }
+        )
+
+        val (feet, inches) = currentNumber.toFeetAndInches()
+        Text(text = "${feet}' ${inches}''",
+            fontSize = 24.sp,
+            modifier = Modifier.constrainAs(heightValue) {
+                top.linkTo(image.bottom)
+                bottom.linkTo(continueButton.top)
+                start.linkTo(startGuide, 75.dp)
+                end.linkTo(endGuide)
+            })
 
         Button(
             onClick = { /*TODO*/ },
@@ -97,87 +230,40 @@ fun HeightWeight(
         ) {
             Text(text = stringResource(id = R.string.title_continue))
         }
-    }
-}
 
-@Composable
-fun Measurement(modifier: Modifier = Modifier, onMeasurementChanged: (Float) -> Unit = {}) =
-    Box(contentAlignment = Alignment.BottomCenter, modifier = modifier) {
-    CorrectedRuler(onMeasurementChanged)
-    Icon(imageVector = Icons.Filled.KeyboardArrowUp, contentDescription = "", modifier = Modifier.padding(bottom = 15.dp))
-}
-
-@Composable
-fun CorrectedRuler(
-    currentNumber: (Float) -> Unit,
-    modifier: Modifier = Modifier,
-    height: Dp = 100.dp,
-    steps: Int = 700,  // Number of steps in the ruler
-    stepWidth: Dp = 20.dp  // Width of each step
-) {
-    val scrollState = rememberScrollState()
-    val density = LocalDensity.current
-
-    BoxWithConstraints(
-        contentAlignment = Alignment.TopCenter,
-        modifier = modifier
-            .height(height)
-            .horizontalScroll(scrollState)
-    ) {
-        val canvasWidth = stepWidth * steps
-
-        Canvas(
-            modifier = Modifier
-                .height(height)
-                .width(canvasWidth)
-        ) {
-            val canvasHeight = size.height
-
-            for (i in 0 until steps) {
-                val xPosition = i * stepWidth.toPx()
-                val yStart = (canvasHeight / 2)
-                val yEndUp = (yStart * .85f)
-                val yEndDown = (yStart * 1.15f)
-
-                drawLine(
-                    color = Color.Black,
-                    start = Offset(xPosition, yStart),
-                    end = Offset(xPosition, yEndUp),
-                    strokeWidth = 3f
-                )
-
-                drawLine(
-                    color = Color.Black,
-                    start = Offset(xPosition, yStart),
-                    end = Offset(xPosition, yEndDown),
-                    strokeWidth = 3f
-                )
-
-                if (i % 5 == 0) {
-                    drawContext.canvas.nativeCanvas.drawText(
-                        (i + 80).toString(),
-                        xPosition,
-                        (yStart * .50f), // Adjust label position
-                        Paint().apply {
-                            color = android.graphics.Color.BLACK
-                            textSize = 40f // Size of the label
-                            textAlign = Paint.Align.CENTER
-                            typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
-                        }
-                    )
-                }
+        HeightMeasurement(onMeasurementChanged = { currentNumber = it },
+            modifier = Modifier.constrainAs(heightMeasurement) {
+                start.linkTo(parent.start)
+                top.linkTo(parent.top)
+                bottom.linkTo(parent.bottom)
             }
-        }
+        )
 
-        LaunchedEffect(scrollState.value) {
 
-            val centerOfScreen = (constraints.minHeight/2)
-            val step = (((scrollState.value*stepWidth.value)/centerOfScreen)/8) + 90
-
-            Log.e("CenterOfScreen", centerOfScreen.toString())
-
-            // Update the current number based on stepAtCenter
-            currentNumber(step)
-        }
     }
 }
+
+@Composable
+fun WeightMeasurement(modifier: Modifier = Modifier, onMeasurementChanged: (Float) -> Unit = {}) =
+    Box(contentAlignment = Alignment.BottomCenter, modifier = modifier) {
+        HorizontalRuler(onMeasurementChanged)
+        Icon(
+            imageVector = Icons.Filled.KeyboardArrowUp,
+            contentDescription = "",
+            modifier = Modifier.padding(bottom = 15.dp)
+        )
+    }
+
+
+@Composable
+fun HeightMeasurement(modifier: Modifier = Modifier, onMeasurementChanged: (Float) -> Unit = {}) =
+    Box(contentAlignment = Alignment.CenterEnd, modifier = modifier) {
+        VerticalRuler(onMeasurementChanged)
+        Icon(
+            imageVector = Icons.Filled.KeyboardArrowLeft,
+            contentDescription = "",
+            modifier = Modifier.padding(bottom = 15.dp)
+        )
+    }
+
+

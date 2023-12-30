@@ -21,4 +21,6 @@ dependencies {
     RESOURCES
     LIBRARY
     THEME
+
+    GLIDE
 }

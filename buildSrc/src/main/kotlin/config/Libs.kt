@@ -20,6 +20,7 @@ private object Version {
     const val GOOGLE_PLAY_AUTH = "20.7.0"
     const val MATERIAL = "1.4.0"
     const val LIB_PHONE_NUMBER = "8.12.39"
+    const val GLIDE = "2.2.13"
 }
 
 object CoreLibs{
@@ -85,4 +86,8 @@ object FirebaseLibs{
 object ExoPlayerLibs{
     const val EXO_PLAYER = "androidx.media3:media3-exoplayer:${Version.EXO_PLAYER}"
     const val EXO_PLAYER_UI = "androidx.media3:media3-ui:${Version.EXO_PLAYER}"
+}
+
+object GlideLibs {
+    const val GLIDE = "com.github.skydoves:landscapist-glide:${Version.GLIDE}"
 }
