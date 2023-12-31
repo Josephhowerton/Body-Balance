@@ -9,6 +9,8 @@ import com.fitness.navigation.Destinations
 import com.fitness.onboard.OnboardEntry
 import com.fitness.onboard.onboard.basic.view.BasicInformationScreen
 import com.fitness.onboard.onboard.basic.viewmodel.BasicInformationViewModel
+import com.fitness.onboard.onboard.fitness.view.FitnessScreen
+import com.fitness.onboard.onboard.fitness.viewmodel.FitnessViewModel
 import com.fitness.onboard.onboard.welcome.WelcomeScreen
 import extensions.cast
 import javax.inject.Inject
@@ -21,7 +23,6 @@ class OnboardEntryImpl @Inject constructor() : OnboardEntry() {
         const val FITNESS_LEVEL_ASSESSMENT = "basic_information"
         const val NUTRITION_PREFERENCES = "nutritional_preferences"
         const val INITIAL_GOALS = "nutritional_preferences"
-        const val APP_WALKTHROUGH = "app_walkthrough"
         const val FEEDBACK = "feedback"
     }
     override fun NavGraphBuilder.navigation(navController: NavHostController, destinations: Destinations) { 
@@ -36,54 +37,30 @@ class OnboardEntryImpl @Inject constructor() : OnboardEntry() {
                 val viewmodel: BasicInformationViewModel = hiltViewModel()
                 BasicInformationScreen(
                     state = viewmodel.uiState.cast(),
-                    onTriggerEvent = {},
-                    onError = {}
+                    onTriggerEvent = { viewmodel.onTriggerEvent(it) },
+                    onComplete = { navController.navigate(FITNESS_LEVEL_ASSESSMENT) }
                 )
             }
 
             composable(FITNESS_LEVEL_ASSESSMENT){
-                val viewmodel: BasicInformationViewModel = hiltViewModel()
-                BasicInformationScreen(
+                val viewmodel: FitnessViewModel = hiltViewModel()
+                FitnessScreen(
                     state = viewmodel.uiState.cast(),
-                    onTriggerEvent = {},
-                    onError = {}
+                    onTriggerEvent = { viewmodel.onTriggerEvent(it) },
+                    onComplete = { navController.navigate(NUTRITION_PREFERENCES) }
                 )
             }
 
             composable(NUTRITION_PREFERENCES){
                 val viewmodel: BasicInformationViewModel = hiltViewModel()
-                BasicInformationScreen(
-                    state = viewmodel.uiState.cast(),
-                    onTriggerEvent = {},
-                    onError = {}
-                )
             }
 
             composable(INITIAL_GOALS){
                 val viewmodel: BasicInformationViewModel = hiltViewModel()
-                BasicInformationScreen(
-                    state = viewmodel.uiState.cast(),
-                    onTriggerEvent = {},
-                    onError = {}
-                )
-            }
-
-            composable(APP_WALKTHROUGH){
-                val viewmodel: BasicInformationViewModel = hiltViewModel()
-                BasicInformationScreen(
-                    state = viewmodel.uiState.cast(),
-                    onTriggerEvent = {},
-                    onError = {}
-                )
             }
 
             composable(FEEDBACK){
                 val viewmodel: BasicInformationViewModel = hiltViewModel()
-                BasicInformationScreen(
-                    state = viewmodel.uiState.cast(),
-                    onTriggerEvent = {},
-                    onError = {}
-                )
             }
         }
     }

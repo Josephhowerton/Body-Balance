@@ -32,6 +32,8 @@ import com.fitness.component.components.StandardTextSmall
 import com.fitness.component.components.StandardTitleText
 import com.fitness.component.components.TextItemComponent
 import com.fitness.component.properties.GuidelineProperties
+import com.fitness.onboard.onboard.basic.viewmodel.BasicInformationEvent
+import com.fitness.onboard.onboard.basic.viewmodel.BasicInformationState
 import com.fitness.resources.R
 import com.fitness.theme.ui.BodyBalanceTheme
 import extensions.Dark
@@ -42,12 +44,15 @@ import extensions.Light
 @Composable
 private fun DietaryPreferencesPreview() = BodyBalanceTheme {
     Surface {
-        DietaryPreferences()
+        DietaryPreferences(BasicInformationState())
     }
 }
 
 @Composable
-fun DietaryPreferences() = ConstraintLayout(modifier = Modifier.fillMaxSize()) {
+fun DietaryPreferences(
+    state: BasicInformationState,
+    onTriggerEvent: (BasicInformationEvent) -> Unit = {}
+) = ConstraintLayout(modifier = Modifier.fillMaxSize()) {
 
     val (title, list, continueButton) = createRefs()
 
@@ -116,9 +121,6 @@ fun DietaryPreferences() = ConstraintLayout(modifier = Modifier.fillMaxSize()) {
                 Spacer(modifier = Modifier.size(20.dp))
             }
         }
-
-
-
     }
 
     AnimatedVisibility(

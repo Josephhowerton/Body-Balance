@@ -5,7 +5,6 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
@@ -57,7 +56,7 @@ import kotlinx.coroutines.delay
 @Composable
 private fun WeightPreview() = BodyBalanceTheme {
     Surface {
-        WeightMeasurementContent(BasicInformationState())
+        WeightMeasurement(BasicInformationState())
     }
 }
 
@@ -65,12 +64,12 @@ private fun WeightPreview() = BodyBalanceTheme {
 @Composable
 private fun HeightPreview() = BodyBalanceTheme {
     Surface {
-        HeightMeasurementContent(BasicInformationState())
+        HeightMeasurement(BasicInformationState())
     }
 }
 
 @Composable
-fun WeightMeasurementContent(
+fun WeightMeasurement(
     state: BasicInformationState,
     onTriggerEvent: (BasicInformationEvent) -> Unit = {}
 ) {
@@ -133,7 +132,7 @@ fun WeightMeasurementContent(
 }
 
 @Composable
-fun HeightMeasurementContent(
+fun HeightMeasurement(
     state: BasicInformationState,
     onTriggerEvent: (BasicInformationEvent) -> Unit = {}
 ) {

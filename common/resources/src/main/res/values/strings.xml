@@ -139,5 +139,6 @@
     <string name="feature_planning">Diet &amp; Fitness Planning</string>
     <string name="feature_tracking">Diet &amp; Fitness Tracking</string>
     <string name="feature_deep_analysis">Deep Analysis</string>
-
+    <string name="title_onboarding_unknown_failure">Temporary Issue Saving Your Information</string>
+    <string name="desc_onboarding_unknown_failure">We encountered a minor hiccup while saving your information to our system. Don\'t worry, we\'ll proceed to the next step for now. You can always update your information later in the account settings. Thank you for your understanding</string>
 </resources>

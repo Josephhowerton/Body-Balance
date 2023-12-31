@@ -21,6 +21,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -42,6 +43,19 @@ import com.fitness.component.properties.GuidelineProperties
 import com.fitness.onboard.onboard.basic.viewmodel.BasicInformationEvent
 import com.fitness.onboard.onboard.basic.viewmodel.BasicInformationState
 import com.fitness.resources.R
+import com.fitness.theme.ui.BodyBalanceTheme
+import extensions.Dark
+import extensions.Light
+
+
+@Light
+@Dark
+@Composable
+private fun PreviewGenderAge() = BodyBalanceTheme {
+    Surface {
+        GenderAge(state = BasicInformationState())
+    }
+}
 
 @Composable
 fun GenderAge(
@@ -50,7 +64,6 @@ fun GenderAge(
 ) {
     ConstraintLayout(modifier = Modifier.fillMaxSize()) {
         val (maleImage, maleCircle, femaleImage, femaleCircle, sexPicker, agePicker, continueButton) = createRefs()
-
 
         val topGuide = createGuidelineFromTop(GuidelineProperties.SECOND_TOP)
         val midGuide = createGuidelineFromTop(.5f)
@@ -64,8 +77,8 @@ fun GenderAge(
         var isChecked by remember { mutableStateOf(true) }
 
 
-        val maleColor =
-            if (!isChecked) Color.Transparent else MaterialTheme.colorScheme.secondaryContainer
+        val maleColor = if (!isChecked) Color.Transparent else MaterialTheme.colorScheme.secondaryContainer
+
         Box(modifier = Modifier
             .background(maleColor, CircleShape)
             .constrainAs(maleCircle) {
@@ -89,8 +102,7 @@ fun GenderAge(
                 }
         )
 
-        val femaleColor =
-            if (isChecked) Color.Transparent else MaterialTheme.colorScheme.secondaryContainer
+        val femaleColor = if (isChecked) Color.Transparent else MaterialTheme.colorScheme.secondaryContainer
         Box(modifier = Modifier
             .background(femaleColor, CircleShape)
             .constrainAs(femaleCircle) {
@@ -209,7 +221,8 @@ fun TextToggleSwitch(
     }
 }
 
-@Preview(showBackground = true)
+@Light
+@Dark
 @Composable
 fun TextToggleSwitchPreview() {
     var isChecked by remember { mutableStateOf(true) }
@@ -220,6 +233,8 @@ fun TextToggleSwitchPreview() {
     )
 }
 
+@Light
+@Dark
 @Composable
 fun CenteredLazyRow(modifier: Modifier = Modifier) {
     val numbers = (20..100).toList()

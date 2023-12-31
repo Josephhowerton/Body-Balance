@@ -21,5 +21,4 @@ class CreateUserUseCase @Inject constructor(
         val result = firestore { firestoreResult }
         emit(result)
     }
-
 }

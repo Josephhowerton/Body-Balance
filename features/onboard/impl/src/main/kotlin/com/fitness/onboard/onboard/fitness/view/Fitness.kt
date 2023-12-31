@@ -1,4 +1,4 @@
-package com.fitness.onboard.onboard.basic.view
+package com.fitness.onboard.onboard.fitness.view
 
 import android.content.res.Configuration
 import androidx.compose.material3.Surface
@@ -9,9 +9,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.fitness.component.screens.ErrorScreen
 import com.fitness.component.screens.LoadingScreen
 import com.fitness.component.screens.MessageScreen
-import com.fitness.onboard.onboard.basic.viewmodel.BasicInformationEvent
-import com.fitness.onboard.onboard.basic.viewmodel.BasicInformationState
-import com.fitness.onboard.onboard.basic.viewmodel.BasicInformationStep
+import com.fitness.onboard.onboard.fitness.viewmodel.FitnessEvent
+import com.fitness.onboard.onboard.fitness.viewmodel.FitnessState
+import com.fitness.onboard.onboard.fitness.viewmodel.FitnessStep
 import com.fitness.resources.R
 import com.fitness.theme.ui.BodyBalanceTheme
 import extensions.cast
@@ -22,24 +22,24 @@ import state.BaseViewState
 @Preview(name = "Light", showBackground = true)
 @Preview(name = "Dark", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
-private fun BasicInformationPreview() = BodyBalanceTheme {
+private fun FitnessLevelsPreview() = BodyBalanceTheme {
     Surface {
-        BasicInformationContent(state = BasicInformationState())
+        FitnessLevels(state = FitnessState())
     }
 }
 
 @Composable
-fun BasicInformationScreen(
-    state: StateFlow<BaseViewState<BasicInformationState>>,
-    onTriggerEvent: (BasicInformationEvent) -> Unit,
+fun FitnessScreen(
+    state: StateFlow<BaseViewState<FitnessState>>,
+    onTriggerEvent: (FitnessEvent) -> Unit,
     onComplete: () -> Unit
 ) {
     val uiState by state.collectAsState()
 
     when (uiState) {
         is BaseViewState.Data -> {
-            BasicInformationContent(
-                state = uiState.cast<BaseViewState.Data<BasicInformationState>>().value,
+            Fitness(
+                state = uiState.cast<BaseViewState.Data<FitnessState>>().value,
                 onTriggerEvent = onTriggerEvent,
                 onComplete = onComplete
             )
@@ -64,29 +64,22 @@ fun BasicInformationScreen(
 }
 
 @Composable
-private fun BasicInformationContent(
-    state: BasicInformationState,
-    onTriggerEvent: (BasicInformationEvent) -> Unit = {},
+private fun Fitness(
+    state: FitnessState,
+    onTriggerEvent: (FitnessEvent) -> Unit = {},
     onComplete: () ->  Unit = {}
 ) {
     when(state.step){
-        BasicInformationStep.GENDER_AGE -> {
-            GenderAge(state = state, onTriggerEvent)
+        FitnessStep.FITNESS_LEVELS -> {
+            FitnessLevels(state = state, onTriggerEvent = onTriggerEvent)
         }
-        BasicInformationStep.WEIGHT -> {
-            WeightMeasurement(state = state, onTriggerEvent)
+        FitnessStep.HABITS -> {
+            Habits(state = state,  onTriggerEvent = onTriggerEvent)
         }
-        BasicInformationStep.HEIGHT -> {
-            HeightMeasurement(state = state, onTriggerEvent)
+        FitnessStep.GOALS -> {
+            Goals(state = state, onTriggerEvent =  onTriggerEvent)
         }
-        BasicInformationStep.HEALTH_CONCERNS -> {
-            HealthConcerns(state = state, onTriggerEvent)
-        }
-        BasicInformationStep.DIETARY_PREFERENCES -> {
-             DietaryPreferences(state = state, onTriggerEvent)
-        }
-
-        BasicInformationStep.SAVE_BASIC_INFORMATION -> onTriggerEvent(BasicInformationEvent.SaveBasicInformation)
-        BasicInformationStep.COMPLETE -> onComplete()
+        FitnessStep.SAVE_FITNESS_INFO -> onTriggerEvent(FitnessEvent.SaveFitnessInfo)
+        FitnessStep.COMPLETE -> onComplete()
     }
 }

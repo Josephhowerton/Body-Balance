@@ -7,6 +7,8 @@ android {
 }
 
 dependencies {
+    addFirebaseDependencies()
+    DOMAIN
     ONBOARD_API
     AUTHENTICATION_API
     THEME
