@@ -26,7 +26,4 @@ sealed class SignInEvent {
     object GoogleAuthentication : SignInEvent()
     object FacebookAuthentication : SignInEvent()
     object XAuthentication : SignInEvent()
-
-    object TermsAndConditions : SignInEvent()
-    object PrivacyPolicy : SignInEvent()
 }

@@ -80,6 +80,8 @@ val DependencyHandler.DASHBOARD get() = implementation(project(":features:dashbo
 val DependencyHandler.DASHBOARD_API get() = api(project(":features:dashboard:api"))
 val DependencyHandler.ONBOARD get() = implementation(project(":features:onboard:impl"))
 val DependencyHandler.ONBOARD_API get() = api(project(":features:onboard:api"))
+val DependencyHandler.SIGN_OUT get() = implementation(project(":features:signout:impl"))
+val DependencyHandler.SIGN_OUT_API get() = api(project(":features:signout:api"))
 val DependencyHandler.USER_PROFILE get() = implementation(project(":features:user-profile:impl"))
 val DependencyHandler.USER_PROFILE_API get() = api(project(":features:user-profile:api"))
 val DependencyHandler.WELCOME get() = implementation(project(":features:welcome:impl"))
@@ -156,6 +158,7 @@ fun DependencyHandler.addFeatureDependencies(){
     ONBOARD
     USER_PROFILE
     WELCOME
+    SIGN_OUT
 }
 
 fun DependencyHandler.addFeatureAPIDependencies(){
@@ -164,6 +167,7 @@ fun DependencyHandler.addFeatureAPIDependencies(){
     ONBOARD_API
     USER_PROFILE_API
     WELCOME_API
+    SIGN_OUT_API
 }
 
 

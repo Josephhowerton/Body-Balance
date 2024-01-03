@@ -11,5 +11,5 @@ interface AuthRepository {
     suspend fun verifyPhoneNumberWithCode(verificationId: String, code: String): Task<AuthResult>
     suspend fun signUpWithEmail(firstname:String, lastname:String, email: String, password: String): Task<AuthResult>
     suspend fun sendPasswordResetEmail(email: String): Task<Unit>
-    suspend fun signOut(): Task<Unit>
+    suspend fun signOut(): Unit
 }

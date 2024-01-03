@@ -11,4 +11,5 @@ dependencies {
     addHiltDependencies()
     addFirebaseDependencies()
     DATA_API
+    LIBRARY
 }

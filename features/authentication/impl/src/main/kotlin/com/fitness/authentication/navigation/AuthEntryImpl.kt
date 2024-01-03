@@ -87,7 +87,6 @@ class AuthEntryImpl @Inject constructor() : AuthEntry() {
                 SignUpPhoneScreen(
                     state = viewModel.uiState.cast(),
                     onPopBack = { navController.popBackStack() },
-                    onComplete = {},
                     onTriggerEvent = { viewModel.onTriggerEvent(it) },
                     onTriggerNavigation = {
                         navController.navigate(it) {
@@ -102,7 +101,6 @@ class AuthEntryImpl @Inject constructor() : AuthEntry() {
                 SignInEmailScreen(
                     state = viewModel.uiState.cast(),
                     onPopBack = { navController.popBackStack() },
-                    onComplete = {},
                     onTriggerEvent = { viewModel.onTriggerEvent(it) },
                     onTriggerNavigation = { navController.navigate(it) { popUpTo(signUp) } }
                 )

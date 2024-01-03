@@ -84,6 +84,6 @@ class AuthRepositoryImpl @Inject constructor(private val firebase: FirebaseAuth)
         firebase.sendPasswordResetEmail(email)
             .onSuccessTask { Tasks.forResult(Unit) }
 
-    override suspend fun signOut(): Task<Unit> = Tasks.forResult(firebase.signOut())
+    override suspend fun signOut(): Unit = firebase.signOut()
 
 }

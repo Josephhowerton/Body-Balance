@@ -11,6 +11,7 @@ dependencies {
     DOMAIN
     ONBOARD_API
     AUTHENTICATION_API
+    SIGN_OUT_API
     THEME
     LIBRARY
     RESOURCES

@@ -3,7 +3,7 @@ package com.fitness.domain.usecase.auth
 import auth.authenticate
 import com.fitness.data.extensions.toUserDomain
 import com.fitness.data.repository.AuthRepository
-import com.fitness.data.model.model.user.UserAccountDomain
+import com.fitness.data.model.domain.user.UserDomain
 import kotlinx.coroutines.flow.FlowCollector
 import state.DataState
 import usecase.DataStateUseCase
@@ -11,11 +11,11 @@ import javax.inject.Inject
 
 class EmailPasswordSignUpUseCase @Inject constructor(
     private val authRepository: AuthRepository
-) : DataStateUseCase<EmailPasswordSignUpUseCase.Params, UserAccountDomain>() {
+) : DataStateUseCase<EmailPasswordSignUpUseCase.Params, UserDomain>() {
 
     data class Params(val firstname: String, val lastname: String, val email: String, val password: String)
 
-    override suspend fun FlowCollector<DataState<UserAccountDomain>>.execute(params: Params) {
+    override suspend fun FlowCollector<DataState<UserDomain>>.execute(params: Params) {
         val result = authRepository.signUpWithEmail(
             firstname = params.firstname,
             lastname = params.lastname,

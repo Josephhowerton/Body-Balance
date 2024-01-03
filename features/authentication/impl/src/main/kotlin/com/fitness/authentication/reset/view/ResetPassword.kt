@@ -36,6 +36,7 @@ import com.fitness.resources.R
 import com.fitness.theme.ui.BodyBalanceTheme
 import extensions.TextFieldState
 import extensions.cast
+import failure.Failure
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import state.BaseViewState
@@ -73,7 +74,7 @@ fun SendPasswordResetScreen(
             }
         }
         is BaseViewState.Error -> {
-            val failure = uiState.cast<BaseViewState.Error>().throwable as AuthFailure
+            val failure = uiState.cast<BaseViewState.Error>().throwable as Failure
 
             ErrorScreen(title = failure.title, description = failure.description) {
                 onPopBack()

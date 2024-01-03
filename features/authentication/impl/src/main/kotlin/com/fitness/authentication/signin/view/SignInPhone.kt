@@ -40,6 +40,7 @@ import extensions.Dark
 import extensions.Light
 import extensions.TextFieldState
 import extensions.cast
+import failure.Failure
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import state.BaseViewState
@@ -78,7 +79,7 @@ fun SignInPhoneScreen(
             }
         }
         is BaseViewState.Error -> {
-            val failure = uiState.cast<BaseViewState.Error>().throwable as AuthFailure
+            val failure = uiState.cast<BaseViewState.Error>().throwable as Failure
 
             ErrorScreen(title = failure.title, description = failure.description) {
                 onPopBack()

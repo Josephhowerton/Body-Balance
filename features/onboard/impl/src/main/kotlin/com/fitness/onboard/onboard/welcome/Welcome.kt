@@ -32,9 +32,7 @@ fun PreviewVerificationCodeInput() = BodyBalanceTheme {
 }
 
 @Composable
-fun WelcomeScreen(
-    onContinue: () -> Unit = {}
-) {
+fun WelcomeScreen(onContinue: () -> Unit = {}) {
     ConstraintLayout(modifier = Modifier.fillMaxSize()) {
 
         val (title, description, features, getStarted) = createRefs()
@@ -75,7 +73,7 @@ fun WelcomeScreen(
         })
 
         Button(
-            onClick = { /*TODO*/ },
+            onClick = { onContinue() },
             modifier = Modifier.constrainAs(getStarted) {
                 end.linkTo(endGuide)
                 bottom.linkTo(bottomGuide)

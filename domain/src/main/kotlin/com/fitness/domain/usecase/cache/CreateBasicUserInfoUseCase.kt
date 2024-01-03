@@ -1,23 +1,24 @@
 package com.fitness.domain.usecase.cache
 
+import cache.firestore
+import com.fitness.data.extensions.toUserBasicInfoCache
+import com.fitness.data.model.cache.user.UserBasicInfoCache
+import com.fitness.data.model.domain.user.UserBasicInfoDomain
+import com.fitness.data.model.domain.user.UserFitnessLevelDomain
 import com.fitness.data.repository.UserRepository
+import enums.Gender
 import kotlinx.coroutines.flow.FlowCollector
 import state.DataState
 import usecase.DataStateUseCase
 import javax.inject.Inject
 
-class CreateBasicUserInfoUseCase @Inject constructor(val userRepository: UserRepository)
-    : DataStateUseCase<CreateBasicUserInfoUseCase.Params, Unit>() {
-    data class Params(
-        val age: Int,
-        val gender: String,
-        val height: Double,
-        val weight: Double,
-        val dietaryPreferences: List<String>,
-        val healthConcerns: List<String>
-    )
+class CreateBasicUserInfoUseCase @Inject constructor(private val userRepository: UserRepository) :
+    DataStateUseCase<CreateBasicUserInfoUseCase.Params, Unit>() {
+    data class Params(val userBasicInfoDomain: UserBasicInfoDomain)
 
     override suspend fun FlowCollector<DataState<Unit>>.execute(params: Params) {
-        TODO("Not yet implemented")
+        val firestoreResult = userRepository.createUserBasicInfo(info = params.userBasicInfoDomain.toUserBasicInfoCache())
+        val result = firestore { firestoreResult }
+        emit(result)
     }
 }

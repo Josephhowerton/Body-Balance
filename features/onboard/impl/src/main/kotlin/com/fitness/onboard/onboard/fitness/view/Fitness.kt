@@ -1,6 +1,7 @@
 package com.fitness.onboard.onboard.fitness.view
 
 import android.content.res.Configuration
+import androidx.compose.animation.Crossfade
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -15,6 +16,7 @@ import com.fitness.onboard.onboard.fitness.viewmodel.FitnessStep
 import com.fitness.resources.R
 import com.fitness.theme.ui.BodyBalanceTheme
 import extensions.cast
+import failure.AuthStateFailure
 import failure.Failure
 import kotlinx.coroutines.flow.StateFlow
 import state.BaseViewState
@@ -24,7 +26,7 @@ import state.BaseViewState
 @Composable
 private fun FitnessLevelsPreview() = BodyBalanceTheme {
     Surface {
-        FitnessLevels(state = FitnessState())
+        FitnessLevels()
     }
 }
 
@@ -32,7 +34,8 @@ private fun FitnessLevelsPreview() = BodyBalanceTheme {
 fun FitnessScreen(
     state: StateFlow<BaseViewState<FitnessState>>,
     onTriggerEvent: (FitnessEvent) -> Unit,
-    onComplete: () -> Unit
+    onComplete: () -> Unit,
+    onForceSignOut: () -> Unit
 ) {
     val uiState by state.collectAsState()
 
@@ -49,7 +52,12 @@ fun FitnessScreen(
             val failure = uiState.cast<BaseViewState.Error>().throwable as Failure
 
             ErrorScreen(title = failure.title, description = failure.description) {
-                onComplete()
+                if(failure is AuthStateFailure){
+                    onForceSignOut()
+                }
+                else{
+                    onComplete()
+                }
             }
         }
 
@@ -69,17 +77,12 @@ private fun Fitness(
     onTriggerEvent: (FitnessEvent) -> Unit = {},
     onComplete: () ->  Unit = {}
 ) {
-    when(state.step){
-        FitnessStep.FITNESS_LEVELS -> {
-            FitnessLevels(state = state, onTriggerEvent = onTriggerEvent)
+    Crossfade(targetState = state.step, label = "Fitness") {
+        when(it){
+            FitnessStep.FITNESS_LEVELS -> FitnessLevels(onTriggerEvent = onTriggerEvent)
+            FitnessStep.HABITS -> Habits(onTriggerEvent = onTriggerEvent)
+            FitnessStep.SAVE_FITNESS_INFO -> onTriggerEvent(FitnessEvent.SaveFitnessInfo)
+            FitnessStep.COMPLETE -> onComplete()
         }
-        FitnessStep.HABITS -> {
-            Habits(state = state,  onTriggerEvent = onTriggerEvent)
-        }
-        FitnessStep.GOALS -> {
-            Goals(state = state, onTriggerEvent =  onTriggerEvent)
-        }
-        FitnessStep.SAVE_FITNESS_INFO -> onTriggerEvent(FitnessEvent.SaveFitnessInfo)
-        FitnessStep.COMPLETE -> onComplete()
     }
 }

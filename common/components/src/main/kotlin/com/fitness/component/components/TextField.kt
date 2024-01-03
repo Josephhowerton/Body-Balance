@@ -61,10 +61,12 @@ fun StandardTextField(
         modifier = modifier.border(1.dp, Color.Black, textFieldShape()),
         keyboardOptions = keyboardOptions,
         keyboardActions = keyboardActions,
-        colors = TextFieldDefaults.textFieldColors(
-            containerColor = Color.Transparent,
+        colors = TextFieldDefaults.colors(
+            focusedContainerColor = Color.Transparent,
+            unfocusedContainerColor = Color.Transparent,
+            disabledContainerColor = Color.Transparent,
             focusedIndicatorColor = Color.Transparent,
-            unfocusedIndicatorColor = Color.Transparent
+            unfocusedIndicatorColor = Color.Transparent,
         )
     )
 }

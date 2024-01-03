@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="primary">#6200EE</color> <!-- Example Primary Color -->
+    <color name="primaryVariant">#3700B3</color> <!-- Example Primary Variant -->
+    <color name="onPrimary">#FFFFFF</color> <!-- Text/icon color on primary color -->
+    <color name="secondary">#03DAC6</color> <!-- Example Secondary Color -->
+    <color name="secondaryVariant">#018786</color> <!-- Example Secondary Variant -->
+    <color name="onSecondary">#000000</color> <!-- Text/icon color on secondary color -->
+    <color name="background">#FFFFFF</color> <!-- Background Color -->
+    <color name="onBackground">#000000</color> <!-- Text/icon color on background -->
+    <color name="surface">#FFFFFF</color> <!-- Surface Color -->
+    <color name="onSurface">#000000</color> <!-- Text/icon color on surface -->
+    <color name="error">#B00020</color> <!-- Error Color -->
+    <color name="onError">#FFFFFF</color> <!-- Text/icon color on error -->
+</resources>

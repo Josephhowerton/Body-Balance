@@ -5,6 +5,7 @@ import auth.PhoneVerificationError
 import auth.formatPhoneNumberToE164
 import auth.toAuthFailure
 import com.fitness.authentication.manager.AuthenticationManager
+import com.fitness.authentication.manager.AuthenticationState
 import com.fitness.authentication.util.AuthStateHolder
 import com.fitness.authentication.util.isVerified
 import com.fitness.authentication.util.updatePhoneState
@@ -13,7 +14,7 @@ import com.fitness.authentication.util.verifyName
 import com.fitness.authentication.util.verifyPassword
 import com.fitness.authentication.util.verifyPhone
 import com.fitness.data.PhoneAuthState
-import com.fitness.data.model.model.user.UserAccountDomain
+import com.fitness.data.model.domain.user.UserDomain
 import com.fitness.domain.usecase.auth.EmailPasswordSignUpUseCase
 import com.fitness.domain.usecase.auth.FacebookSignUpUseCase
 import com.fitness.domain.usecase.auth.GoogleSignUpUseCase
@@ -30,14 +31,14 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SignUpViewModel @Inject constructor(
-    val sendVerificationCodeUseCase: SendVerificationCodeUseCase,
-    val verificationCodeUseCase: VerifyPhoneNumberUseCase,
-    val emailPasswordSignUpUseCase: EmailPasswordSignUpUseCase,
-    val facebookSignUpUseCase: FacebookSignUpUseCase,
-    val googleSignUpUseCase: GoogleSignUpUseCase,
-    val xSignUpUseCase: XSignUpUseCase,
-    val createUserUseCase: CreateUserUseCase,
-    val authManager: AuthenticationManager
+    private val sendVerificationCodeUseCase: SendVerificationCodeUseCase,
+    private val verificationCodeUseCase: VerifyPhoneNumberUseCase,
+    private val emailPasswordSignUpUseCase: EmailPasswordSignUpUseCase,
+    private val facebookSignUpUseCase: FacebookSignUpUseCase,
+    private val googleSignUpUseCase: GoogleSignUpUseCase,
+    private val xSignUpUseCase: XSignUpUseCase,
+    private val createUserUseCase: CreateUserUseCase,
+    private val authManager: AuthenticationManager
 ) : IntentViewModel<BaseViewState<SignUpState>, SignUpEvent>() {
 
     init {
@@ -269,10 +270,10 @@ class SignUpViewModel @Inject constructor(
         }
     }
 
-    private fun onCreateUser(userAccountDomain: UserAccountDomain) = safeLaunch {
-        val params = CreateUserUseCase.Params(userAccountDomain)
+    private fun onCreateUser(userDomain: UserDomain) = safeLaunch {
+        val params = CreateUserUseCase.Params(userDomain)
         call(createUserUseCase(params)) {
-            authManager.update(com.fitness.authentication.manager.AuthenticationState.Authenticated)
+            authManager.update(AuthenticationState.OnBoard)
         }
     }
 }

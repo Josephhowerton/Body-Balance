@@ -22,5 +22,5 @@ class DataModule {
 
     @Provides
     @Singleton
-    fun provideUserRepository(firestore: FirebaseFirestore): UserRepository = UserRepositoryImpl(firestore)
+    fun provideUserRepository(firebaseAuth: FirebaseAuth, firestore: FirebaseFirestore): UserRepository = UserRepositoryImpl(firebaseAuth, firestore)
 }

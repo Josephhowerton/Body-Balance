@@ -11,7 +11,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.fitness.bodybalance.AppViewModel
+import com.fitness.bodybalance.viewmodel.AppViewModel
 import com.fitness.bodybalance.di.BodyBalanceApplication
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
@@ -35,7 +35,7 @@ class MainActivity : ComponentActivity() {
             if (showMainScreen) {
                 val viewModel: AppViewModel = viewModel()
                 AppContent(
-                    authState = viewModel.authState.collectAsState(),
+                    authStateFlow = viewModel.authState,
                     appTheme = viewModel.appTheme.collectAsState(),
                     showMainHubAnimation = viewModel.showMainHubAnimation,
                     appProvider = (application as BodyBalanceApplication).appProvider

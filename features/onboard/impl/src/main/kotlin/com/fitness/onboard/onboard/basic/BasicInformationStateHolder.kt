@@ -1,5 +1,7 @@
 package com.fitness.onboard.onboard.basic
 
+import enums.Gender
+
 object BasicInformationStateHolder {
     private var BasicInformationState: BasicInformationState = BasicInformationState()
 
@@ -15,9 +17,7 @@ object BasicInformationStateHolder {
 
 data class BasicInformationState(
     val age: Int? = null,
-    val gender: String? = null,
+    val gender: Gender? = null,
     val height: Double? = null,
-    val weight: Double? = null,
-    val dietaryPreferences: List<String>? = null,
-    val healthConcerns: List<String>? = null
+    val weight: Double? = null
 )

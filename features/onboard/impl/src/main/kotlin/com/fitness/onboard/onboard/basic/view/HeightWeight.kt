@@ -7,7 +7,10 @@ import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,6 +20,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
@@ -24,7 +28,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableDoubleStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -34,29 +38,32 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.Dimension
 import com.fitness.component.HorizontalRuler
 import com.fitness.component.VerticalRuler
 import com.fitness.component.components.StandardTextSmall
 import com.fitness.component.components.StandardTitleText
 import com.fitness.component.properties.GuidelineProperties
 import com.fitness.onboard.onboard.basic.viewmodel.BasicInformationEvent
-import com.fitness.onboard.onboard.basic.viewmodel.BasicInformationState
 import com.fitness.resources.R
 import com.fitness.theme.ui.BodyBalanceTheme
 import com.fitness.theme.ui.Green
-import extensions.format
-import extensions.toFeetAndInches
+import enums.LengthUnit
+import enums.MassUnit
+import enums.formatHeight
+import enums.formatWeight
 import kotlinx.coroutines.delay
 
 @Preview(showBackground = true)
 @Composable
 private fun WeightPreview() = BodyBalanceTheme {
     Surface {
-        WeightMeasurement(BasicInformationState())
+        WeightMeasurement()
     }
 }
 
@@ -64,43 +71,61 @@ private fun WeightPreview() = BodyBalanceTheme {
 @Composable
 private fun HeightPreview() = BodyBalanceTheme {
     Surface {
-        HeightMeasurement(BasicInformationState())
+        HeightMeasurement()
     }
 }
 
 @Composable
-fun WeightMeasurement(
-    state: BasicInformationState,
-    onTriggerEvent: (BasicInformationEvent) -> Unit = {}
-) {
+fun WeightMeasurement(onTriggerEvent: (BasicInformationEvent) -> Unit = {}) {
     ConstraintLayout(modifier = Modifier.fillMaxSize()) {
-        val (title, image, weightMeasurement, weightValue, continueButton) = createRefs()
+        val (title, desc, image, weightMeasurement, weightValue, continueButton, bottomSheet) = createRefs()
 
         val topGuide = createGuidelineFromTop(50.dp)
-        val bottomGuide = createGuidelineFromBottom(GuidelineProperties.BOTTOM_100)
         val startGuide = createGuidelineFromStart(GuidelineProperties.START)
         val endGuide = createGuidelineFromEnd(GuidelineProperties.END)
+        val bottomGuide = createGuidelineFromBottom(10.dp)
 
-        var currentNumber by remember {
-            mutableFloatStateOf(0f)
-        }
+        var weightNumber by remember { mutableDoubleStateOf(0.0) }
+        var units by remember { mutableStateOf(MassUnit.POUNDS) }
 
-        StandardTitleText(text = R.string.title_continue, modifier = Modifier.constrainAs(title) {
-            top.linkTo(topGuide)
-            start.linkTo(startGuide)
-        })
+        StandardTitleText(text = R.string.select_weight,
+            modifier = Modifier.constrainAs(title) {
+                top.linkTo(topGuide)
+                start.linkTo(startGuide)
+            }
+        )
+
+        StandardTextSmall(
+            text = R.string.desc_select_weight,
+            textAlign = TextAlign.Start,
+            modifier = Modifier.constrainAs(desc) {
+                top.linkTo(title.bottom, 10.dp)
+                start.linkTo(startGuide)
+                end.linkTo(endGuide)
+                width = Dimension.fillToConstraints
+            }
+        )
 
         Image(
             painter = painterResource(id = R.drawable.icon_women_temp),
             contentDescription = "women",
             modifier = Modifier.constrainAs(image) {
-                top.linkTo(title.bottom, 75.dp)
+                top.linkTo(desc.bottom, 75.dp)
                 start.linkTo(startGuide)
-                end.linkTo(endGuide)
+                end.linkTo(endGuide, 75.dp)
             }
         )
 
-        Text(text = "${currentNumber.format(2)} lbs",
+        WeightMeasurementOptions(
+            onSelection = { units = it },
+            modifier = Modifier.constrainAs(bottomSheet) {
+                end.linkTo(parent.end)
+                top.linkTo(image.top)
+                bottom.linkTo(image.bottom)
+            }
+        )
+
+        Text(text = formatWeight(weightNumber, units),
             fontSize = 24.sp,
             modifier = Modifier.constrainAs(weightValue) {
                 top.linkTo(image.bottom)
@@ -110,51 +135,59 @@ fun WeightMeasurement(
             })
 
         Button(
-            onClick = { },
+            onClick = { onTriggerEvent(BasicInformationEvent.Weight(weight = weightNumber.toDouble())) },
             modifier = Modifier.constrainAs(continueButton) {
                 end.linkTo(endGuide)
                 bottom.linkTo(weightMeasurement.top, 20.dp)
-            }
-        ) {
+            })
+        {
             Text(text = stringResource(id = R.string.title_continue))
         }
 
         WeightMeasurement(
-            onMeasurementChanged = { currentNumber = it },
+            onMeasurementChanged = { weightNumber = it },
             modifier = Modifier.constrainAs(weightMeasurement) {
                 start.linkTo(parent.start)
                 end.linkTo(parent.end)
-                bottom.linkTo(parent.bottom)
-            })
-
-
+                bottom.linkTo(bottomGuide)
+            }
+        )
     }
 }
 
 @Composable
-fun HeightMeasurement(
-    state: BasicInformationState,
-    onTriggerEvent: (BasicInformationEvent) -> Unit = {}
-) {
+fun HeightMeasurement(onTriggerEvent: (BasicInformationEvent) -> Unit = {}) {
     ConstraintLayout(modifier = Modifier.fillMaxSize()) {
-        val (title, image, weightLocked, heightMeasurement, heightValue, continueButton) = createRefs()
+        val (title, desc, image, weightLocked, heightMeasurement, heightValue, continueButton, bottomSheet) = createRefs()
 
         val topGuide = createGuidelineFromTop(50.dp)
         val bottomGuide = createGuidelineFromBottom(GuidelineProperties.BOTTOM_100)
         val startGuide = createGuidelineFromStart(GuidelineProperties.START)
         val endGuide = createGuidelineFromEnd(GuidelineProperties.END)
 
-        var currentNumber by remember {
-            mutableFloatStateOf(0f)
-        }
+        var heightNumber by remember { mutableDoubleStateOf(0.0) }
+        var units by remember { mutableStateOf(LengthUnit.FEET) }
 
-        StandardTitleText(text = R.string.title_continue, modifier = Modifier.constrainAs(title) {
-            top.linkTo(topGuide)
-            end.linkTo(endGuide)
-        })
+        StandardTitleText(text = R.string.select_height,
+            modifier = Modifier.constrainAs(title) {
+                top.linkTo(topGuide)
+                end.linkTo(endGuide)
+            }
+        )
+
+        StandardTextSmall(
+            text = R.string.desc_select_height,
+            textAlign = TextAlign.End,
+            modifier = Modifier.constrainAs(desc) {
+                top.linkTo(title.bottom, 10.dp)
+                start.linkTo(heightMeasurement.end)
+                end.linkTo(endGuide)
+                width = Dimension.fillToConstraints
+            }
+        )
 
         val isVisible = remember { mutableStateOf(false) }
-        val rotationYAnimatable  = remember { Animatable(0f) }
+        val rotationYAnimatable = remember { Animatable(0f) }
 
         val textColor by animateColorAsState(
             targetValue = if (isVisible.value) Green else Color.Black,
@@ -174,7 +207,7 @@ fun HeightMeasurement(
         AnimatedVisibility(
             visible = isVisible.value,
             modifier = Modifier.constrainAs(weightLocked) {
-                top.linkTo(title.bottom, 10.dp)
+                top.linkTo(desc.bottom, 10.dp)
                 end.linkTo(endGuide)
             }
         ) {
@@ -196,22 +229,19 @@ fun HeightMeasurement(
                     color = textColor
                 )
             }
-
         }
-
 
         Image(
             painter = painterResource(id = R.drawable.icon_women_temp),
             contentDescription = "women",
             modifier = Modifier.constrainAs(image) {
-                top.linkTo(title.bottom, 75.dp)
+                top.linkTo(desc.bottom, 75.dp)
                 start.linkTo(startGuide, 75.dp)
                 end.linkTo(endGuide)
             }
         )
 
-        val (feet, inches) = currentNumber.toFeetAndInches()
-        Text(text = "${feet}' ${inches}''",
+        Text(text = formatHeight(heightNumber, units),
             fontSize = 24.sp,
             modifier = Modifier.constrainAs(heightValue) {
                 top.linkTo(image.bottom)
@@ -221,7 +251,7 @@ fun HeightMeasurement(
             })
 
         Button(
-            onClick = { /*TODO*/ },
+            onClick = { onTriggerEvent(BasicInformationEvent.Height(height = heightNumber)) },
             modifier = Modifier.constrainAs(continueButton) {
                 end.linkTo(endGuide)
                 bottom.linkTo(bottomGuide)
@@ -230,7 +260,8 @@ fun HeightMeasurement(
             Text(text = stringResource(id = R.string.title_continue))
         }
 
-        HeightMeasurement(onMeasurementChanged = { currentNumber = it },
+        HeightMeasurement(
+            onMeasurementChanged = { heightNumber = it },
             modifier = Modifier.constrainAs(heightMeasurement) {
                 start.linkTo(parent.start)
                 top.linkTo(parent.top)
@@ -238,12 +269,21 @@ fun HeightMeasurement(
             }
         )
 
-
+        HeightMeasurementOptions(
+            onSelection = { units = it },
+            modifier = Modifier
+                .constrainAs(bottomSheet) {
+                    bottom.linkTo(parent.bottom)
+                    top.linkTo(heightValue.bottom)
+                    start.linkTo(heightMeasurement.end)
+                    width = Dimension.fillToConstraints
+                }
+        )
     }
 }
 
 @Composable
-fun WeightMeasurement(modifier: Modifier = Modifier, onMeasurementChanged: (Float) -> Unit = {}) =
+private fun WeightMeasurement(modifier: Modifier = Modifier, onMeasurementChanged: (Double) -> Unit = {}) =
     Box(contentAlignment = Alignment.BottomCenter, modifier = modifier) {
         HorizontalRuler(onMeasurementChanged)
         Icon(
@@ -255,7 +295,7 @@ fun WeightMeasurement(modifier: Modifier = Modifier, onMeasurementChanged: (Floa
 
 
 @Composable
-fun HeightMeasurement(modifier: Modifier = Modifier, onMeasurementChanged: (Float) -> Unit = {}) =
+private fun HeightMeasurement(modifier: Modifier = Modifier, onMeasurementChanged: (Double) -> Unit = {}) =
     Box(contentAlignment = Alignment.CenterEnd, modifier = modifier) {
         VerticalRuler(onMeasurementChanged)
         Icon(
@@ -265,4 +305,137 @@ fun HeightMeasurement(modifier: Modifier = Modifier, onMeasurementChanged: (Floa
         )
     }
 
+
+@Preview
+@Composable
+private fun WeightMeasurementOptions(modifier: Modifier = Modifier, onSelection: (MassUnit) -> Unit = {}) {
+    var units by remember { mutableStateOf(MassUnit.POUNDS) }
+
+    Column(
+        horizontalAlignment = Alignment.Start,
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+        modifier = modifier.padding(16.dp)
+    ) {
+
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(5.dp),
+            modifier = Modifier.clickable {
+                if (units != MassUnit.KILOGRAM) {
+                    onSelection(MassUnit.KILOGRAM)
+                    units = MassUnit.KILOGRAM
+                }
+            }
+        ) {
+
+            Icon(
+                modifier = Modifier.size(14.dp),
+                imageVector = Icons.Default.PlayArrow,
+                contentDescription = stringResource(id = R.string.kilograms)
+            )
+
+            StandardTextSmall(text = R.string.kilograms)
+
+        }
+
+
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(5.dp),
+            modifier = Modifier.clickable {
+                if (units != MassUnit.POUNDS) {
+                    onSelection(MassUnit.POUNDS)
+                    units = MassUnit.POUNDS
+                }
+            }
+        ) {
+
+            Icon(
+                modifier = Modifier.size(14.dp),
+                imageVector = Icons.Default.PlayArrow,
+                contentDescription = stringResource(id = R.string.pounds)
+            )
+
+            StandardTextSmall(text = R.string.pounds)
+        }
+    }
+
+
+}
+
+@Preview
+@Composable
+fun HeightMeasurementOptions(
+    modifier: Modifier = Modifier,
+    onSelection: (LengthUnit) -> Unit = {}
+) {
+    var units by remember { mutableStateOf(LengthUnit.FEET) }
+    Column(
+        horizontalAlignment = Alignment.Start,
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+        modifier = modifier
+    ) {
+
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(5.dp),
+            modifier = Modifier.clickable {
+                if (units != LengthUnit.CENTIMETER) {
+                    onSelection(LengthUnit.CENTIMETER)
+                    units = LengthUnit.CENTIMETER
+                }
+            }) {
+
+            Icon(
+                modifier = Modifier.size(14.dp),
+                imageVector = Icons.Default.PlayArrow,
+                contentDescription = stringResource(id = R.string.centimeters)
+            )
+
+            StandardTextSmall(text = R.string.centimeters)
+
+        }
+
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(5.dp),
+            modifier = Modifier.clickable {
+                if (units != LengthUnit.METER) {
+                    onSelection(LengthUnit.METER)
+                    units = LengthUnit.METER
+                }
+            }) {
+
+            Icon(
+                modifier = Modifier.size(14.dp),
+                imageVector = Icons.Default.PlayArrow,
+                contentDescription = stringResource(id = R.string.meters)
+            )
+
+            StandardTextSmall(text = R.string.meters)
+
+        }
+
+
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(5.dp),
+            modifier = Modifier.clickable {
+                if (units != LengthUnit.FEET) {
+                    onSelection(LengthUnit.FEET)
+                    units = LengthUnit.FEET
+                }
+            }) {
+
+            Icon(
+                modifier = Modifier.size(14.dp),
+                imageVector = Icons.Default.PlayArrow,
+                contentDescription = stringResource(id = R.string.feet_inches)
+            )
+
+            StandardTextSmall(text = R.string.feet_inches)
+
+        }
+    }
+}
 

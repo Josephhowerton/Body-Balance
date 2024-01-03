@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun HorizontalRuler(
-    currentNumber: (Float) -> Unit,
+    currentNumber: (Double) -> Unit,
     modifier: Modifier = Modifier,
     height: Dp = 100.dp,
     steps: Int = 700,  // Number of steps in the ruler
@@ -91,7 +91,7 @@ fun HorizontalRuler(
         LaunchedEffect(scrollState.value) {
 
             val centerOfScreen = (constraints.minHeight/2)
-            val step = (((scrollState.value*stepWidth.value)/centerOfScreen)/8) + 90
+            val step = (((scrollState.value*stepWidth.value)/centerOfScreen)/8) + 90.0
 
             Log.e("CenterOfScreen", centerOfScreen.toString())
 
@@ -103,7 +103,7 @@ fun HorizontalRuler(
 
 @Composable
 fun VerticalRuler(
-    currentNumber: (Float) -> Unit,
+    currentNumber: (Double) -> Unit,
     modifier: Modifier = Modifier,
     width: Dp = 100.dp,
     steps: Int = 275,
@@ -171,7 +171,7 @@ fun VerticalRuler(
         LaunchedEffect(scrollState.value) {
 
             val centerOfScreen = (constraints.maxWidth/2)
-            val step = (((scrollState.value*stepWidth.value)/centerOfScreen)/8) + 20.5f
+            val step = (((scrollState.value*stepWidth.value)/centerOfScreen)/8) + 20.5
 
             Log.e("CenterOfScreen", centerOfScreen.toString())
 

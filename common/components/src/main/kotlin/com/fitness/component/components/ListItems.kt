@@ -174,7 +174,6 @@ fun TextItemUnSelected(
 
 @Composable
 fun TextItemBack(
-    modifier: Modifier = Modifier,
     size: Dp = 120.dp
 ) {
     Column(

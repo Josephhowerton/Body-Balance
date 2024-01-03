@@ -18,7 +18,7 @@ import com.fitness.domain.usecase.auth.FacebookSignInUseCase
 import com.fitness.domain.usecase.auth.GoogleSignInUseCase
 import com.fitness.domain.usecase.auth.SendVerificationCodeUseCase
 import com.fitness.domain.usecase.auth.VerifyPhoneNumberUseCase
-import com.fitness.domain.usecase.auth.XLoginUseCase
+import com.fitness.domain.usecase.auth.XSignInUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import extensions.TextFieldState
 import state.BaseViewState
@@ -32,7 +32,7 @@ class SignInViewModel @Inject constructor(
     private val emailPasswordSignInUseCase: EmailPasswordSignInUseCase,
     private val facebookSignInUseCase: FacebookSignInUseCase,
     private val googleSignInUseCase: GoogleSignInUseCase,
-    private val xLoginUseCase: XLoginUseCase,
+    private val xLoginUseCase: XSignInUseCase,
     private val authManager: AuthenticationManager
 ) : IntentViewModel<BaseViewState<SignInState>, SignInEvent>() {
 
@@ -70,8 +70,6 @@ class SignInViewModel @Inject constructor(
             is SignInEvent.XAuthentication -> {
                 onXAuthentication()
             }
-
-            else -> {}
         }
     }
 
@@ -155,7 +153,7 @@ class SignInViewModel @Inject constructor(
 
     private fun onEmailPasswordAuthentication(email: String, password:String) = safeLaunch {
         execute(emailPasswordSignInUseCase(EmailPasswordSignInUseCase.Params(email, password))) {
-            setState(BaseViewState.Data(SignInState(isAuthenticated = true)))
+            authManager.update(AuthenticationState.Authenticated)
         }
     }
 
@@ -197,7 +195,7 @@ class SignInViewModel @Inject constructor(
     }
 
     private fun onXAuthentication() = safeLaunch {
-        execute(xLoginUseCase(XLoginUseCase.Params)) {
+        execute(xLoginUseCase(XSignInUseCase.Params)) {
             authManager.update(AuthenticationState.Authenticated)
         }
     }

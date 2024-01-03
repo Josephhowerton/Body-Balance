@@ -1,6 +1,7 @@
 package com.fitness.bodybalance.view
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -26,6 +27,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -53,13 +55,15 @@ import com.fitness.navigation.find
 import com.fitness.onboard.OnboardEntry
 import com.fitness.welcome.WelcomeEntry
 import com.fitness.resources.R
+import com.fitness.signout.SignOutEntry
 import com.fitness.theme.AppTheme
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 @Composable
 fun AppContent(
-    authState: State<AuthenticationState>,
+    authStateFlow: StateFlow<AuthenticationState>,
     appTheme: State<AppTheme>,
     showMainHubAnimation: Boolean,
     appProvider: AppProvider
@@ -67,7 +71,7 @@ fun AppContent(
 
     BodyBalanceTheme(appTheme = appTheme) {
         Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.surface) {
-            AppHub(authState, appProvider, showMainHubAnimation)
+            AppHub(authStateFlow, appProvider, showMainHubAnimation)
         }
     }
 }
@@ -75,51 +79,58 @@ fun AppContent(
 
 @Composable
 fun AppHub(
-    authState: State<AuthenticationState>,
+    authStateFlow: StateFlow<AuthenticationState>,
     appProvider: AppProvider,
-    showMainHubAnimation: Boolean,
-    items: List<DrawerItem> = DrawerNavigationUtil.drawerNavItems,
-    scope: CoroutineScope = rememberCoroutineScope(),
-    drawerState: DrawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+    showWelcomeAnimation: Boolean
 ) {
-    val navController = rememberNavController()
-    var bottomNavState by remember {
-        mutableStateOf(true)
-    }
+    val authState by authStateFlow.collectAsState()
 
-    if (authState.value == AuthenticationState.Authenticated) {
-
-        ModalNavigationDrawer(
-            drawerState = drawerState,
-            drawerContent = {
-                ModularDrawSheet(
-                    items,
-                    scope,
-                    drawerState
-                ) {
-                    navController.navigate(it.route)
-                    bottomNavState = it.route == "home"
-                }
-            }) {
-            MainHub(
-                bottomNavState = bottomNavState,
-                showMainHubAnimation = showMainHubAnimation,
-                destinations = appProvider.destinations,
-                scope = scope,
-                drawerState = drawerState
-            )
+    Crossfade(targetState = authState, label = "") {
+        when(it){
+            is AuthenticationState.Authenticated -> {
+                MainHub(showMainHubAnimation = showWelcomeAnimation, destinations = appProvider.destinations,)
+            }
+            is AuthenticationState.UnAuthenticated -> {
+                AuthenticationHub(destinations = appProvider.destinations)
+            }
+            is AuthenticationState.OnBoard -> {
+                OnboardHub(destinations = appProvider.destinations)
+            }
         }
-    } else {
-        OnboardingAuthenticationHub(
-            destinations = appProvider.destinations
+    }
+}
+
+@Composable
+fun MainHub(
+    showMainHubAnimation: Boolean,
+    destinations: Destinations,
+    scope: CoroutineScope = rememberCoroutineScope(),
+    navController: NavHostController = rememberNavController(),
+    items: List<DrawerItem> = DrawerNavigationUtil.drawerNavItems,
+    drawerState: DrawerState = rememberDrawerState(initialValue = DrawerValue.Closed),
+) {
+    var bottomNavState by remember { mutableStateOf(true) }
+    ModalNavigationDrawer(
+        drawerState = drawerState,
+        drawerContent = {
+            ModularDrawSheet(items, scope, drawerState) { item ->
+                navController.navigate(item.route)
+                bottomNavState = item.route == "home"
+            }
+        }) {
+        MainHubNavigation(
+            bottomNavState = bottomNavState,
+            showMainHubAnimation = showMainHubAnimation,
+            destinations = destinations,
+            scope = scope,
+            drawerState = drawerState
         )
     }
 }
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainHub(
+fun MainHubNavigation(
     bottomNavState: Boolean,
     showMainHubAnimation: Boolean,
     destinations: Destinations,
@@ -148,72 +159,6 @@ fun MainHub(
             with(dashboard){
                 composable(navController, destinations)
             }
-        }
-    }
-}
-
-@Composable
-fun OnboardingAuthenticationHub(
-    destinations: Destinations,
-    navController: NavHostController = rememberNavController(),
-) {
-
-    val welcomeEntry = destinations.find<WelcomeEntry>()
-    val onboardEntry = destinations.find<OnboardEntry>()
-    val authEntry = destinations.find<AuthEntry>()
-
-    NavHost(navController, startDestination = onboardEntry.featureRoute) {
-
-        with(welcomeEntry) {
-            composable(navController, destinations)
-        }
-
-        with(onboardEntry){
-            navController.popBackStack(authEntry.featureRoute, false)
-            navigation(navController, destinations)
-        }
-
-        with(authEntry) {
-            navController.popBackStack(welcomeEntry.featureRoute, false)
-            navigation(navController, destinations)
-        }
-    }
-}
-
-@Composable
-fun ModularDrawSheet(
-    items: List<DrawerItem>,
-    scope: CoroutineScope,
-    drawerState: DrawerState,
-    onSelectionChange: (DrawerItem) -> Unit
-) {
-
-    var selectedItem by remember { mutableStateOf(items[0]) }
-
-    ModalDrawerSheet {
-        Spacer(Modifier.height(12.dp))
-        items.forEach { item ->
-            NavigationDrawerItem(
-                icon = {
-                    Icon(
-                        painterResource(id = item.icon),
-                        contentDescription = stringResource(id = item.contentDescription),
-                        modifier = Modifier.size(24.dp)
-                    )
-                },
-                label = { Text(item.name) },
-                selected = item == selectedItem,
-                onClick = {
-                    scope.launch { drawerState.close() }
-
-                    if (selectedItem != item) {
-                        selectedItem = item
-                        onSelectionChange(selectedItem)
-                    }
-
-                },
-                modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
-            )
         }
     }
 }
@@ -253,6 +198,85 @@ fun NavBar(
                         tint = Color.Blue,
                         contentDescription = "${item.name} Icon")
                 }
+            )
+        }
+    }
+}
+@Composable
+fun AuthenticationHub(
+    destinations: Destinations,
+    navController: NavHostController = rememberNavController(),
+) {
+
+    val welcomeEntry = destinations.find<WelcomeEntry>()
+    val authEntry = destinations.find<AuthEntry>()
+    val signOutEntry = destinations.find<SignOutEntry>()
+
+    NavHost(navController, startDestination = authEntry.featureRoute) {
+
+        with(welcomeEntry) {
+            composable(navController, destinations)
+        }
+
+        with(authEntry) {
+            navController.popBackStack(welcomeEntry.featureRoute, false)
+            navigation(navController, destinations)
+        }
+
+        with(signOutEntry){
+            composable(navController, destinations)
+        }
+    }
+}
+
+@Composable
+fun OnboardHub(
+    destinations: Destinations,
+    navController: NavHostController = rememberNavController(),
+) {
+
+    val onboardEntry = destinations.find<OnboardEntry>()
+
+    NavHost(navController, startDestination = onboardEntry.featureRoute) {
+        with(onboardEntry){
+            navigation(navController, destinations)
+        }
+    }
+}
+
+@Composable
+fun ModularDrawSheet(
+    items: List<DrawerItem>,
+    scope: CoroutineScope,
+    drawerState: DrawerState,
+    onSelectionChange: (DrawerItem) -> Unit
+) {
+
+    var selectedItem by remember { mutableStateOf(items[0]) }
+
+    ModalDrawerSheet {
+        Spacer(Modifier.height(12.dp))
+        items.forEach { item ->
+            NavigationDrawerItem(
+                icon = {
+                    Icon(
+                        painterResource(id = item.icon),
+                        contentDescription = stringResource(id = item.contentDescription),
+                        modifier = Modifier.size(24.dp)
+                    )
+                },
+                label = { Text(item.name) },
+                selected = item == selectedItem,
+                onClick = {
+                    scope.launch { drawerState.close() }
+
+                    if (selectedItem != item) {
+                        selectedItem = item
+                        onSelectionChange(selectedItem)
+                    }
+
+                },
+                modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
             )
         }
     }
