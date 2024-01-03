@@ -57,7 +57,7 @@ import com.fitness.component.properties.GuidelineProperties
 import com.fitness.onboard.onboard.basic.viewmodel.BasicInformationEvent
 import com.fitness.resources.R
 import com.fitness.theme.ui.BodyBalanceTheme
-import enums.Gender
+import enums.EGender
 import extensions.Dark
 import extensions.Light
 import kotlin.math.abs
@@ -105,7 +105,7 @@ fun GenderAge(onTriggerEvent: (BasicInformationEvent) -> Unit = {}) {
         val femaleColor =
             if (isMale) Color.Transparent else MaterialTheme.colorScheme.secondaryContainer
 
-        val gender by remember { mutableStateOf(if (isMale) Gender.MALE else Gender.FEMALE) }
+        val gender by remember { mutableStateOf(if (isMale) EGender.MALE else EGender.FEMALE) }
         var age by remember { mutableIntStateOf(18) }
 
         StandardTitleText(

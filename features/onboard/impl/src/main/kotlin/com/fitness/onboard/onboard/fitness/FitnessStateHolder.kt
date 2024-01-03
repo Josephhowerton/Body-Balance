@@ -1,7 +1,7 @@
 package com.fitness.onboard.onboard.fitness
 
-import enums.FitnessHabits
-import enums.FitnessLevel
+import enums.EFitnessHabits
+import enums.EFitnessLevel
 
 object FitnessStateHolder {
     private var fitnessState: FitnessState = FitnessState()
@@ -17,6 +17,6 @@ object FitnessStateHolder {
 }
 
 data class FitnessState(
-    val level: FitnessLevel? = null,
-    val habits: List<FitnessHabits>? = null
+    val level: EFitnessLevel? = null,
+    val habits: List<EFitnessHabits>? = null
 )

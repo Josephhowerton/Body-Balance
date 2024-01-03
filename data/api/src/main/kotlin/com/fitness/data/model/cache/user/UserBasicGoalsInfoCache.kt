@@ -4,5 +4,6 @@ import enums.EGoals
 
 data class UserBasicGoalsInfoCache(
     val userId: String,
-    val goals: List<EGoals>
+    val goals: List<EGoals>,
+    val lastUpdated: Long,
 )

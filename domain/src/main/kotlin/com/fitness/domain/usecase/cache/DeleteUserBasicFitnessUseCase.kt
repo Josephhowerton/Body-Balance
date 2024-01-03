@@ -6,15 +6,14 @@ import state.DataState
 import usecase.DataStateUseCase
 import javax.inject.Inject
 
-class DeleteUserUseCase  @Inject constructor(
+class DeleteUserBasicFitnessUseCase  @Inject constructor(
     private val userRepository: UserRepository
-) : DataStateUseCase<DeleteUserUseCase.Params, Unit>() {
+) : DataStateUseCase<DeleteUserBasicFitnessUseCase.Params, Unit>() {
 
     data class Params(val id: String)
 
     override suspend fun FlowCollector<DataState<Unit>>.execute(params: Params) {
-        val result = userRepository.deleteUser(params.id)
+        val result = userRepository.deleteBasicFitnessInfo(params.id)
         emit(result)
     }
 }
-

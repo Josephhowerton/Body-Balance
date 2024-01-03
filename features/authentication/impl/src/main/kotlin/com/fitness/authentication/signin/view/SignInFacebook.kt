@@ -27,8 +27,6 @@ fun FacebookBottomAuthSheet(onTriggerEvent: (SignInEvent) -> Unit) {
     val sheetState = rememberModalBottomSheetState()
     val coroutineScope = rememberCoroutineScope()
 
-    val context = LocalContext.current
-
     ModalBottomSheet(
         onDismissRequest = { onTriggerEvent(SignInEvent.SelectAuthMethod(AuthMethod.NONE)) },
         sheetState = sheetState,

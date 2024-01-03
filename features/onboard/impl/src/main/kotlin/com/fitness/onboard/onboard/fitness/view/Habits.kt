@@ -51,7 +51,7 @@ import com.fitness.component.properties.GuidelineProperties
 import com.fitness.onboard.onboard.fitness.viewmodel.FitnessEvent
 import com.fitness.resources.R
 import com.fitness.theme.ui.BodyBalanceTheme
-import enums.FitnessHabits
+import enums.EFitnessHabits
 import extensions.Dark
 import extensions.Light
 
@@ -77,7 +77,7 @@ fun Habits(onTriggerEvent: (FitnessEvent) -> Unit = {}) = ConstraintLayout(modif
 
     val gridState = rememberLazyGridState()
     val isScrolling = gridState.isScrollInProgress
-    val habits = remember { mutableListOf<FitnessHabits>() }
+    val habits = remember { mutableListOf<EFitnessHabits>() }
 
     LazyVerticalGrid(
         state = gridState,
@@ -91,7 +91,7 @@ fun Habits(onTriggerEvent: (FitnessEvent) -> Unit = {}) = ConstraintLayout(modif
             },
         columns = GridCells.Fixed(3)
     ) {
-        items(FitnessHabits.values()) {
+        items(EFitnessHabits.values()) {
             FitnessHabitsItem(it, onClick = {
                 if (habits.contains(it)) {
                     habits.remove(it)
@@ -173,7 +173,7 @@ fun Habits(onTriggerEvent: (FitnessEvent) -> Unit = {}) = ConstraintLayout(modif
 
 @Composable
 private fun FitnessHabitsItem(
-    habit: FitnessHabits,
+    habit: EFitnessHabits,
     onClick:() -> Unit,
     modifier: Modifier = Modifier,
     size: Dp = 120.dp

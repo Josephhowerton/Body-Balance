@@ -1,9 +1,6 @@
 package com.fitness.domain.usecase.cache
 
-import cache.firestore
-import com.fitness.data.extensions.toUserBasicGoalsInfoCache
 import com.fitness.data.extensions.toUserBasicNutritionInfoCache
-import com.fitness.data.model.domain.user.UserBasicGoalsInfoDomain
 import com.fitness.data.model.domain.user.UserBasicNutritionInfoDomain
 import com.fitness.data.repository.UserRepository
 import kotlinx.coroutines.flow.FlowCollector
@@ -16,8 +13,7 @@ class CreateUserBasicNutritionInfoUseCase @Inject constructor(private val userRe
     data class Params(val userBasicNutritionInfo: UserBasicNutritionInfoDomain)
 
     override suspend fun FlowCollector<DataState<Unit>>.execute(params: Params) {
-        val firestoreResult = userRepository.createBasicNutritionInfo(info = params.userBasicNutritionInfo.toUserBasicNutritionInfoCache())
-        val result = firestore { firestoreResult }
+        val result = userRepository.createBasicNutritionInfo(info = params.userBasicNutritionInfo.toUserBasicNutritionInfoCache())
         emit(result)
     }
 }

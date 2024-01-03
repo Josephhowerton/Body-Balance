@@ -1,6 +1,5 @@
 package com.fitness.domain.usecase.cache
 
-import cache.firestore
 import com.fitness.data.extensions.toUserBasicGoalsInfoCache
 import com.fitness.data.model.domain.user.UserBasicGoalsInfoDomain
 import com.fitness.data.repository.UserRepository
@@ -14,8 +13,7 @@ class CreateUserBasicGoalsInfoUseCase @Inject constructor(private val userReposi
     data class Params(val userBasicGoalsInfo: UserBasicGoalsInfoDomain)
 
     override suspend fun FlowCollector<DataState<Unit>>.execute(params: Params) {
-        val firestoreResult = userRepository.createUserBasicGoalsInfo(info = params.userBasicGoalsInfo.toUserBasicGoalsInfoCache())
-        val result = firestore { firestoreResult }
+        val result = userRepository.createUserBasicGoalsInfo(info = params.userBasicGoalsInfo.toUserBasicGoalsInfoCache())
         emit(result)
     }
 }

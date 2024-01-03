@@ -1,6 +1,6 @@
 package enums
 
-enum class FitnessLevel {
+enum class EFitnessLevel {
     Beginner,
     Intermediate,
     Advance

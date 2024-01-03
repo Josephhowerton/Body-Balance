@@ -8,6 +8,7 @@ data class UserCache(
     val profilePictureUrl: String?,
     val isTermAndPrivacyAccepted: Boolean,
     val lastUpdated: Long,
-    val isNewUser: Boolean
+    val isNewUser: Boolean,
+
 )
 

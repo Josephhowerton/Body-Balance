@@ -5,16 +5,14 @@ import kotlinx.coroutines.flow.FlowCollector
 import state.DataState
 import usecase.DataStateUseCase
 import javax.inject.Inject
-
-class DeleteUserUseCase  @Inject constructor(
+class DeleteBasicUserInfoUseCase  @Inject constructor(
     private val userRepository: UserRepository
-) : DataStateUseCase<DeleteUserUseCase.Params, Unit>() {
+) : DataStateUseCase<DeleteBasicUserInfoUseCase.Params, Unit>() {
 
     data class Params(val id: String)
 
     override suspend fun FlowCollector<DataState<Unit>>.execute(params: Params) {
-        val result = userRepository.deleteUser(params.id)
+        val result = userRepository.deleteUserBasicInfo(params.id)
         emit(result)
     }
 }
-

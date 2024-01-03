@@ -2,7 +2,7 @@ package enums
 
 import com.fitness.resources.R
 
-enum class FitnessHabits(val title: Int) {
+enum class EFitnessHabits(val title: Int) {
     CARDIO(R.string.fitness_habit_cardio),
     STRENGTH_TRAINING(R.string.fitness_habit_strength),
     WEIGHTLIFTING(R.string.fitness_habit_weightlifting),

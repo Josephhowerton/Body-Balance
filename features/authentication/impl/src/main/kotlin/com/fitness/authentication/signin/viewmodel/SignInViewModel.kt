@@ -14,11 +14,8 @@ import com.fitness.authentication.util.verifyPassword
 import com.fitness.authentication.util.verifyPhone
 import com.fitness.data.PhoneAuthState
 import com.fitness.domain.usecase.auth.EmailPasswordSignInUseCase
-import com.fitness.domain.usecase.auth.FacebookSignInUseCase
-import com.fitness.domain.usecase.auth.GoogleSignInUseCase
 import com.fitness.domain.usecase.auth.SendVerificationCodeUseCase
 import com.fitness.domain.usecase.auth.VerifyPhoneNumberUseCase
-import com.fitness.domain.usecase.auth.XSignInUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import extensions.TextFieldState
 import state.BaseViewState

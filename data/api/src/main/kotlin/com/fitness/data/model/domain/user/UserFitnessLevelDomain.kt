@@ -1,10 +1,10 @@
 package com.fitness.data.model.domain.user
 
-import enums.FitnessHabits
-import enums.FitnessLevel
+import enums.EFitnessHabits
+import enums.EFitnessLevel
 
 data class UserFitnessLevelDomain(
     val userId: String,
-    val level: FitnessLevel,
-    val habits: List<FitnessHabits>
+    val level: EFitnessLevel,
+    val habits: List<EFitnessHabits>
 )

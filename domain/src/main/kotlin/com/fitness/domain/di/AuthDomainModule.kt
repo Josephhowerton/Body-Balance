@@ -3,16 +3,10 @@ package com.fitness.domain.di
 import com.fitness.data.repository.AuthRepository
 import com.fitness.domain.usecase.auth.EmailPasswordSignUpUseCase
 import com.fitness.domain.usecase.auth.EmailPasswordSignInUseCase
-import com.fitness.domain.usecase.auth.FacebookSignUpUseCase
-import com.fitness.domain.usecase.auth.FacebookSignInUseCase
-import com.fitness.domain.usecase.auth.GoogleSignUpUseCase
-import com.fitness.domain.usecase.auth.GoogleSignInUseCase
 import com.fitness.domain.usecase.auth.SendPasswordResetEmailUseCase
 import com.fitness.domain.usecase.auth.SendVerificationCodeUseCase
 import com.fitness.domain.usecase.auth.SignOutUseCase
 import com.fitness.domain.usecase.auth.VerifyPhoneNumberUseCase
-import com.fitness.domain.usecase.auth.XSignUpUseCase
-import com.fitness.domain.usecase.auth.XSignInUseCase
 import com.google.firebase.auth.FirebaseAuth
 import dagger.Module
 import dagger.Provides

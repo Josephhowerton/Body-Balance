@@ -1,6 +1,6 @@
 package enums
 
-enum class Gender {
+enum class EGender {
     MALE,
     FEMALE
 }

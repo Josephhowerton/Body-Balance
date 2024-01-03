@@ -5,12 +5,15 @@ import com.google.android.gms.tasks.Tasks
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.DocumentSnapshot
+import failure.FIFTEEN_SECONDS
+import failure.THIRTY_SECONDS
 import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withTimeout
 import state.DataState
 
-suspend inline fun <reified T> cast(call: () -> Task<DocumentSnapshot>): Task<T> {
+inline fun <reified T> cast(call: () -> DocumentSnapshot): Task<T> {
     return try {
-        val response = call().await()
+        val response = call()
         Tasks.forResult(response.toObject(T::class.java))
     } catch (e: Exception) {
         Tasks.forException(e)
@@ -19,8 +22,10 @@ suspend inline fun <reified T> cast(call: () -> Task<DocumentSnapshot>): Task<T>
 
 suspend fun <T> firestore(call: () -> Task<T>): DataState<T> {
     return try {
-        val response = call().await()
-        DataState.Success(response)
+        withTimeout(FIFTEEN_SECONDS){
+            val response = call().await()
+            DataState.Success(response)
+        }
     } catch (e: Exception) {
         DataState.Error(e)
     }

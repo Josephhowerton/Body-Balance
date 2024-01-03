@@ -4,7 +4,7 @@ import com.fitness.data.model.cache.user.UserBasicGoalsInfoCache
 import com.fitness.data.model.cache.user.UserBasicInfoCache
 import com.fitness.data.model.cache.user.UserBasicNutritionInfoCache
 import com.fitness.data.model.cache.user.UserCache
-import com.fitness.data.model.cache.user.UserFitnessLevelCache
+import com.fitness.data.model.cache.user.UserBasicFitnessLevelCache
 import com.fitness.data.model.domain.user.UserBasicGoalsInfoDomain
 import com.fitness.data.model.domain.user.UserBasicInfoDomain
 import com.fitness.data.model.domain.user.UserBasicNutritionInfoDomain
@@ -75,7 +75,7 @@ fun UserBasicInfoCache.toUserBasicInfoDomain(): UserBasicInfoDomain {
     )
 }
 
-fun UserFitnessLevelCache.toUserFitnessLevelDomain(): UserFitnessLevelDomain {
+fun UserBasicFitnessLevelCache.toUserFitnessLevelDomain(): UserFitnessLevelDomain {
     return UserFitnessLevelDomain(
         userId = this.userId,
         level = this.level,
@@ -84,8 +84,8 @@ fun UserFitnessLevelCache.toUserFitnessLevelDomain(): UserFitnessLevelDomain {
 }
 
 
-fun UserFitnessLevelDomain.toUserFitnessLevelCache(): UserFitnessLevelCache {
-    return UserFitnessLevelCache(
+fun UserFitnessLevelDomain.toUserFitnessLevelCache(): UserBasicFitnessLevelCache {
+    return UserBasicFitnessLevelCache(
         userId = this.userId,
         level = this.level,
         habits = this.habits

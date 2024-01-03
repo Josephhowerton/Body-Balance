@@ -6,5 +6,6 @@ import enums.ENutritionPreferences
 data class UserBasicNutritionInfoCache(
     val userId: String,
     val restrictions: List<EDietaryRestrictions>,
-    val preferences: List<ENutritionPreferences>
+    val preferences: List<ENutritionPreferences>,
+    val lastUpdated: Long,
 )

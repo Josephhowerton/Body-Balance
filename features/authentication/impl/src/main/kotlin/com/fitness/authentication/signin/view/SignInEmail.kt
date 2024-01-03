@@ -60,7 +60,6 @@ private fun SignInEmailPreview() = BodyBalanceTheme {
     }
 }
 
-
 @Composable
 fun SignInEmailScreen(
     state: StateFlow<BaseViewState<SignInState>> = MutableStateFlow(BaseViewState.Data(SignInState())),

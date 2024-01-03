@@ -1,6 +1,6 @@
 package com.fitness.onboard.onboard.basic.viewmodel
 
-import enums.Gender
+import enums.EGender
 import enums.SystemOfMeasurement
 
 data class BasicInformationState(
@@ -9,7 +9,7 @@ data class BasicInformationState(
 )
 
 sealed class BasicInformationEvent{
-    data class GenderAge(val gender: Gender, val age: Int): BasicInformationEvent()
+    data class GenderAge(val gender: EGender, val age: Int): BasicInformationEvent()
     data class Height(val height: Double): BasicInformationEvent()
     data class Weight(val weight: Double): BasicInformationEvent()
     object SaveBasicInformation: BasicInformationEvent()
