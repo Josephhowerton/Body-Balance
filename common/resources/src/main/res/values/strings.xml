@@ -300,4 +300,10 @@
     <string name="title_improve_digestion">Improve Digestion</string>
     <string name="title_decrease_screen_time">Decrease Screen Time</string>
     <string name="title_achieve_work_life_balance">Achieve Work-Life Balance</string>
+    <string name="title_connection_timeout">Temporary Connection Timeout</string>
+    <string name="desc_connection_timeout">Oops! It seems we\'re having a bit of a delay connecting to our servers. Please check your internet connection and try again in a moment. Rest assured, your progress has been saved. We appreciate your patience!</string>
+    <string name="title_generic_error">Unexpected Error Encountered</string>
+    <string name="desc_generic_error">We\'ve encountered an unexpected issue. Please try again. If the problem persists, feel free to reach out to our support team. We\'re here to help you!</string>
+
+
 </resources>

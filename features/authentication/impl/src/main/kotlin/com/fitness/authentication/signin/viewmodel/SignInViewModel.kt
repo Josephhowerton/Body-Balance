@@ -27,9 +27,6 @@ class SignInViewModel @Inject constructor(
     private val sendVerificationCodeUseCase: SendVerificationCodeUseCase,
     private val verificationCodeUseCase: VerifyPhoneNumberUseCase,
     private val emailPasswordSignInUseCase: EmailPasswordSignInUseCase,
-    private val facebookSignInUseCase: FacebookSignInUseCase,
-    private val googleSignInUseCase: GoogleSignInUseCase,
-    private val xLoginUseCase: XSignInUseCase,
     private val authManager: AuthenticationManager
 ) : IntentViewModel<BaseViewState<SignInState>, SignInEvent>() {
 
@@ -54,18 +51,6 @@ class SignInViewModel @Inject constructor(
 
             is SignInEvent.SelectAuthMethod ->{
                 onSelectAuthMethod(event)
-            }
-
-            is SignInEvent.GoogleAuthentication -> {
-                onGoogleAuthentication()
-            }
-
-            is SignInEvent.FacebookAuthentication -> {
-                onFacebookAuthentication()
-            }
-
-            is SignInEvent.XAuthentication -> {
-                onXAuthentication()
             }
         }
     }
@@ -178,22 +163,5 @@ class SignInViewModel @Inject constructor(
                 )
             )
         )
-    }
-    private fun onGoogleAuthentication() = safeLaunch {
-        execute(googleSignInUseCase(GoogleSignInUseCase.Params)) {
-            setState(BaseViewState.Data(SignInState(isAuthenticated = true)))
-        }
-    }
-
-    private fun onFacebookAuthentication() = safeLaunch {
-        execute(facebookSignInUseCase(FacebookSignInUseCase.Params)) {
-            setState(BaseViewState.Data(SignInState(isAuthenticated = true)))
-        }
-    }
-
-    private fun onXAuthentication() = safeLaunch {
-        execute(xLoginUseCase(XSignInUseCase.Params)) {
-            authManager.update(AuthenticationState.Authenticated)
-        }
     }
 }

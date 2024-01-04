@@ -23,7 +23,4 @@ sealed class SignInEvent {
     data class PhoneAuthentication(val phoneNumber: String): SignInEvent()
     data class VerifyPhoneAuthentication(val verificationId: String, val code: String) : SignInEvent()
     data class SelectAuthMethod(val method: AuthMethod): SignInEvent()
-    object GoogleAuthentication : SignInEvent()
-    object FacebookAuthentication : SignInEvent()
-    object XAuthentication : SignInEvent()
 }

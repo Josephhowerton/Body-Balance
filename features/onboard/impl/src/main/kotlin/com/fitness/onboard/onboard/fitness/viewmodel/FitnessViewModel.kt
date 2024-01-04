@@ -5,6 +5,7 @@ import com.fitness.domain.usecase.cache.CreateUserBasicFitnessUseCase
 import com.fitness.domain.usecase.cache.GetCurrentUserIdUseCase
 import com.fitness.onboard.onboard.fitness.FitnessStateHolder
 import com.fitness.onboard.util.OnboardFailure
+import com.fitness.onboard.util.toOnboardFailure
 import dagger.hilt.android.lifecycle.HiltViewModel
 import state.BaseViewState
 import viewmodel.IntentViewModel
@@ -26,6 +27,10 @@ class FitnessViewModel @Inject constructor(
 
             is FitnessEvent.SaveFitnessInfo -> getCurrentUserId()
         }
+    }
+
+    override fun handleError(exception: Throwable) {
+        super.handleError(exception.toOnboardFailure())
     }
 
     private fun onFitnessLevels(event: FitnessEvent.FitnessLevel){

@@ -66,7 +66,6 @@ class AuthEntryImpl @Inject constructor() : AuthEntry() {
                 SignUpScreen(
                     state = viewModel.uiState.cast(),
                     onPopBack = { navController.popBackStack() },
-                    onTriggerEvent = { viewModel.onTriggerEvent(it) },
                     onTriggerNavigation = { navController.navigate(it) }
                 )
             }

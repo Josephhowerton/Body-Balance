@@ -7,6 +7,7 @@ import com.fitness.domain.usecase.cache.CreateUserBasicGoalsInfoUseCase
 import com.fitness.domain.usecase.cache.GetCurrentUserIdUseCase
 import com.fitness.onboard.onboard.goal.GoalStateHolder
 import com.fitness.onboard.util.OnboardFailure
+import com.fitness.onboard.util.toOnboardFailure
 import dagger.hilt.android.lifecycle.HiltViewModel
 import state.BaseViewState
 import viewmodel.IntentViewModel
@@ -27,6 +28,10 @@ class GoalViewModel @Inject constructor(
             is GoalEvent.SaveInfo -> onGetCurrentUserID()
             is GoalEvent.ForceComplete -> onForceComplete()
         }
+    }
+
+    override fun handleError(exception: Throwable) {
+        super.handleError(exception.toOnboardFailure())
     }
 
     private fun onGoals (event: GoalEvent.Goals){

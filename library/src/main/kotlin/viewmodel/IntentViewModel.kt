@@ -3,6 +3,7 @@ package viewmodel
 import com.google.firebase.crashlytics.ktx.crashlytics
 import com.google.firebase.ktx.Firebase
 import extensions.cast
+import failure.toFailure
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import state.BaseViewState
@@ -28,6 +29,6 @@ abstract class IntentViewModel<STATE: BaseViewState<*>, EVENT> : BaseViewModel()
     override fun handleError(exception: Throwable) {
         super.handleError(exception)
         Firebase.crashlytics.recordException(exception)
-        _uiState.value = BaseViewState.Error(exception)
+        _uiState.value = BaseViewState.Error(exception.toFailure())
     }
 }

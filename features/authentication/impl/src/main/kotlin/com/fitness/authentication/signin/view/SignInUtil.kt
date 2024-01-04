@@ -1,5 +1,6 @@
 package com.fitness.authentication.signin.view
 
+import android.util.Log
 import androidx.compose.runtime.Composable
 import com.fitness.authentication.signin.viewmodel.SignInEvent
 import com.fitness.authentication.util.AuthMethod

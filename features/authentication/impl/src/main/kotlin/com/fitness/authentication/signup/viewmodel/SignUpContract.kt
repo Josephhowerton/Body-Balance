@@ -39,7 +39,4 @@ sealed class SignUpEvent {
     data class VerifyPhoneAuthentication(val verificationId: String, val code: String) : SignUpEvent()
     data class SelectAuthMethod(val method: AuthMethod) : SignUpEvent()
     data class ThirdPartyAuthError(val error: Throwable) : SignUpEvent()
-    object GoogleAuthentication : SignUpEvent()
-    object FacebookAuthentication : SignUpEvent()
-    object XAuthentication : SignUpEvent()
 }

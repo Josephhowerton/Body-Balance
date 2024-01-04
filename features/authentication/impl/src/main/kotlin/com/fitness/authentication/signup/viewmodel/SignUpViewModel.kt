@@ -31,9 +31,6 @@ class SignUpViewModel @Inject constructor(
     private val sendVerificationCodeUseCase: SendVerificationCodeUseCase,
     private val verificationCodeUseCase: VerifyPhoneNumberUseCase,
     private val emailPasswordSignUpUseCase: EmailPasswordSignUpUseCase,
-    private val facebookSignUpUseCase: FacebookSignUpUseCase,
-    private val googleSignUpUseCase: GoogleSignUpUseCase,
-    private val xSignUpUseCase: XSignUpUseCase,
     private val createUserUseCase: CreateUserUseCase,
     private val authManager: AuthenticationManager
 ) : IntentViewModel<BaseViewState<SignUpState>, SignUpEvent>() {
@@ -58,18 +55,6 @@ class SignUpViewModel @Inject constructor(
 
             is SignUpEvent.SelectAuthMethod -> {
                 onSelectAuthMethod(event)
-            }
-
-            is SignUpEvent.GoogleAuthentication -> {
-                onGoogleAuthentication()
-            }
-
-            is SignUpEvent.FacebookAuthentication -> {
-                onFacebookAuthentication()
-            }
-
-            is SignUpEvent.XAuthentication -> {
-                onXAuthentication()
             }
 
             is SignUpEvent.ThirdPartyAuthError -> {
@@ -247,24 +232,6 @@ class SignUpViewModel @Inject constructor(
                 SignUpState(authMethod = event.method)
             )
         )
-    }
-
-    private fun onGoogleAuthentication() = safeLaunch {
-        execute(googleSignUpUseCase(GoogleSignUpUseCase.Params)) {
-            onCreateUser(it)
-        }
-    }
-
-    private fun onFacebookAuthentication() = safeLaunch {
-        execute(facebookSignUpUseCase(FacebookSignUpUseCase.Params)) {
-            onCreateUser(it)
-        }
-    }
-
-    private fun onXAuthentication() = safeLaunch {
-        execute(xSignUpUseCase(XSignUpUseCase.Params)) {
-            onCreateUser(it)
-        }
     }
 
     private fun onCreateUser(userDomain: UserDomain) = safeLaunch {

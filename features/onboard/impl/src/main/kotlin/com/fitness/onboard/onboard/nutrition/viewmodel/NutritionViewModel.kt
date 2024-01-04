@@ -5,6 +5,7 @@ import com.fitness.domain.usecase.cache.CreateUserBasicNutritionInfoUseCase
 import com.fitness.domain.usecase.cache.GetCurrentUserIdUseCase
 import com.fitness.onboard.onboard.nutrition.NutritionStateHolder
 import com.fitness.onboard.util.OnboardFailure
+import com.fitness.onboard.util.toOnboardFailure
 import dagger.hilt.android.lifecycle.HiltViewModel
 import state.BaseViewState
 import viewmodel.IntentViewModel
@@ -24,6 +25,10 @@ class NutritionViewModel @Inject constructor(
             is NutritionEvent.DietaryRestrictions -> onDietaryRestrictions(event)
             is NutritionEvent.SaveFitnessInfo -> getCurrentUserId()
         }
+    }
+
+    override fun handleError(exception: Throwable) {
+        super.handleError(exception.toOnboardFailure())
     }
 
     private fun onNutritionPreferences (event: NutritionEvent.NutritionPreferences){

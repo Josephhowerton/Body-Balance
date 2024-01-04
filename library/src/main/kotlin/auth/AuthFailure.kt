@@ -11,6 +11,8 @@ import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.auth.FirebaseAuthWebException
 import com.fitness.resources.R
 import failure.Failure
+import failure.TimeoutCancellationFailure
+import kotlinx.coroutines.TimeoutCancellationException
 
 /**
  * @param description description of error displayed to user
@@ -37,8 +39,11 @@ data class PhoneVerificationError(val verificationId: String, val p0: String, va
  * @see FirebaseAuthWeakPasswordException Thrown when using a weak password (less than 6 chars) to create a new account or to update an existing account's password.
  * @see FirebaseAuthWebException Thrown when a web operation couldn't be completed.
  */
-fun Throwable.toAuthFailure(): AuthFailure =
+fun Throwable.toAuthFailure(): Failure =
     when (this) {
+
+        is TimeoutCancellationException -> TimeoutCancellationFailure()
+
         is FirebaseAuthInvalidCredentialsException -> {
             AuthFailure.UserError(
                 title = R.string.incorrect_credentials,

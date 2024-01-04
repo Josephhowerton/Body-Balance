@@ -54,13 +54,14 @@ fun UserDomain.toUserCache(lastUpdated: Long = System.currentTimeMillis()): User
 
 
 // Extension function to convert UserBasicInfoDomain to UserBasicInfoCache
-fun UserBasicInfoDomain.toUserBasicInfoCache(): UserBasicInfoCache {
+fun UserBasicInfoDomain.toUserBasicInfoCache(lastUpdated: Long = System.currentTimeMillis()): UserBasicInfoCache {
     return UserBasicInfoCache(
         userId = this.userId,
         age = this.age,
         gender = this.gender,
         height = this.height,
-        weight = this.weight
+        weight = this.weight,
+        lastUpdated = lastUpdated
     )
 }
 
@@ -84,19 +85,21 @@ fun UserBasicFitnessLevelCache.toUserFitnessLevelDomain(): UserFitnessLevelDomai
 }
 
 
-fun UserFitnessLevelDomain.toUserFitnessLevelCache(): UserBasicFitnessLevelCache {
+fun UserFitnessLevelDomain.toUserFitnessLevelCache(lastUpdated: Long = System.currentTimeMillis()): UserBasicFitnessLevelCache {
     return UserBasicFitnessLevelCache(
         userId = this.userId,
         level = this.level,
-        habits = this.habits
+        habits = this.habits,
+        lastUpdated = lastUpdated
     )
 }
 
-fun UserBasicNutritionInfoDomain.toUserBasicNutritionInfoCache(): UserBasicNutritionInfoCache {
+fun UserBasicNutritionInfoDomain.toUserBasicNutritionInfoCache(lastUpdated: Long = System.currentTimeMillis()): UserBasicNutritionInfoCache {
     return UserBasicNutritionInfoCache(
         userId = userId,
         restrictions = restrictions,
         preferences = preferences,
+        lastUpdated = lastUpdated
     )
 }
 
@@ -108,10 +111,11 @@ fun UserBasicNutritionInfoCache.toUserBasicNutritionInfoDomain(): UserBasicNutri
     )
 }
 
-fun UserBasicGoalsInfoDomain.toUserBasicGoalsInfoCache(): UserBasicGoalsInfoCache {
+fun UserBasicGoalsInfoDomain.toUserBasicGoalsInfoCache(lastUpdated: Long = System.currentTimeMillis()): UserBasicGoalsInfoCache {
     return UserBasicGoalsInfoCache(
         userId = userId,
-        goals = goals
+        goals = goals,
+        lastUpdated = lastUpdated
     )
 }
 
