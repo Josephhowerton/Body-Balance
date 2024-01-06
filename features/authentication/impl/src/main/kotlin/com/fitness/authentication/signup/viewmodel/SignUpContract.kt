@@ -1,7 +1,7 @@
 package com.fitness.authentication.signup.viewmodel
 
 import com.fitness.authentication.util.AuthMethod
-import com.fitness.data.PhoneAuthState
+import auth.PhoneAuthState
 import extensions.TextFieldState
 
 data class SignUpState(

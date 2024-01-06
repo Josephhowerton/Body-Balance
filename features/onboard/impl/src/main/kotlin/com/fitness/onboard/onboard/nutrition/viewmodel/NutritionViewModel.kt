@@ -21,8 +21,9 @@ class NutritionViewModel @Inject constructor(
     init { setState(BaseViewState.Data(NutritionState())) }
     override fun onTriggerEvent(event: NutritionEvent) {
         when(event){
-            is NutritionEvent.NutritionPreferences -> onNutritionPreferences (event)
+            is NutritionEvent.HealthLabels -> onNutritionPreferences (event)
             is NutritionEvent.DietaryRestrictions -> onDietaryRestrictions(event)
+            is NutritionEvent.CuisineType -> onCuisineType(event)
             is NutritionEvent.SaveFitnessInfo -> getCurrentUserId()
         }
     }
@@ -31,13 +32,18 @@ class NutritionViewModel @Inject constructor(
         super.handleError(exception.toOnboardFailure())
     }
 
-    private fun onNutritionPreferences (event: NutritionEvent.NutritionPreferences){
-        stateHolder.updateState(stateHolder.getState().copy(preferences = event.preferences))
+    private fun onNutritionPreferences (event: NutritionEvent.HealthLabels){
+        stateHolder.updateState(stateHolder.getState().copy(labels = event.labels))
         setState(BaseViewState.Data(NutritionState(NutritionStep.DIETARY_RESTRICTIONS)))
     }
 
     private fun onDietaryRestrictions(event: NutritionEvent.DietaryRestrictions){
         stateHolder.updateState(stateHolder.getState().copy(restrictions = event.restrictions))
+        setState(BaseViewState.Data(NutritionState(NutritionStep.CUISINE_TYPE)))
+    }
+
+    private fun onCuisineType(event: NutritionEvent.CuisineType){
+        stateHolder.updateState(stateHolder.getState().copy(cuisineType = event.cuisineType))
         setState(BaseViewState.Data(NutritionState(NutritionStep.SAVE_INFO)))
     }
 
@@ -50,9 +56,10 @@ class NutritionViewModel @Inject constructor(
     private fun onVerify(id: String){
         val fitness = stateHolder.getState()
         val restrictions = fitness.restrictions
-        val preferences = fitness.preferences
-        if(restrictions != null && preferences != null){
-            val userBasicInfo = UserBasicNutritionInfoDomain(id, restrictions=restrictions, preferences=preferences)
+        val labels = fitness.labels
+        val cuisineType = fitness.cuisineType
+        if(restrictions != null && labels != null && cuisineType != null){
+            val userBasicInfo = UserBasicNutritionInfoDomain(id, restrictions=restrictions, labels=labels, cuisineType = cuisineType)
             onSaveFitnessLevelsInfo(userBasicInfo)
         }else{
             setState(BaseViewState.Error(OnboardFailure.UnknownFailure()))

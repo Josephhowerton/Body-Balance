@@ -65,7 +65,7 @@ fun FitnessLevels(onTriggerEvent: (FitnessEvent) -> Unit = {}){
         val startGuide = createGuidelineFromStart(GuidelineProperties.START)
         val endGuide = createGuidelineFromEnd(GuidelineProperties.END)
 
-        var level by remember { mutableStateOf(EFitnessLevel.Beginner) }
+        var level by remember { mutableStateOf(EFitnessLevel.BEGINNER) }
 
         StandardTitleText(
             text = R.string.title_select_fitness_level,
@@ -128,7 +128,7 @@ private fun FitnessLevelOptions(
     onSelection: (EFitnessLevel) -> Unit = {}
 ) {
     val size = 96.dp
-    var level by remember { mutableStateOf(EFitnessLevel.Beginner) }
+    var level by remember { mutableStateOf(EFitnessLevel.BEGINNER) }
 
     Column(
         horizontalAlignment = Alignment.Start,
@@ -137,14 +137,14 @@ private fun FitnessLevelOptions(
     ) {
 
         Card(
-            colors = CardDefaults.cardColors(containerColor = if (level == EFitnessLevel.Beginner) Green else MaterialTheme.colorScheme.surfaceVariant),
+            colors = CardDefaults.cardColors(containerColor = if (level == EFitnessLevel.BEGINNER) Green else MaterialTheme.colorScheme.surfaceVariant),
             shape = CircleShape,
             modifier = Modifier
                 .size(size)
                 .clickable {
-                    if (level != EFitnessLevel.Beginner) {
-                        onSelection(EFitnessLevel.Beginner)
-                        level = EFitnessLevel.Beginner
+                    if (level != EFitnessLevel.BEGINNER) {
+                        onSelection(EFitnessLevel.BEGINNER)
+                        level = EFitnessLevel.BEGINNER
                     }
                 }
         ) {
@@ -160,14 +160,14 @@ private fun FitnessLevelOptions(
         }
 
         Card(
-            colors = CardDefaults.cardColors(containerColor = if (level == EFitnessLevel.Intermediate) Green else MaterialTheme.colorScheme.surfaceVariant),
+            colors = CardDefaults.cardColors(containerColor = if (level == EFitnessLevel.INTERMEDIATE) Green else MaterialTheme.colorScheme.surfaceVariant),
             shape = CircleShape,
             modifier = Modifier
                 .size(size)
                 .clickable {
-                    if (level != EFitnessLevel.Intermediate) {
-                        onSelection(EFitnessLevel.Intermediate)
-                        level = EFitnessLevel.Intermediate
+                    if (level != EFitnessLevel.INTERMEDIATE) {
+                        onSelection(EFitnessLevel.INTERMEDIATE)
+                        level = EFitnessLevel.INTERMEDIATE
                     }
                 }
         ) {
@@ -183,14 +183,14 @@ private fun FitnessLevelOptions(
         }
 
         Card(
-            colors = CardDefaults.cardColors(containerColor = if (level == EFitnessLevel.Advance) Green else MaterialTheme.colorScheme.surfaceVariant),
+            colors = CardDefaults.cardColors(containerColor = if (level == EFitnessLevel.ADVANCE) Green else MaterialTheme.colorScheme.surfaceVariant),
             shape = CircleShape,
             modifier = Modifier
                 .size(size)
                 .clickable {
-                    if (level != EFitnessLevel.Advance) {
-                        onSelection(EFitnessLevel.Advance)
-                        level = EFitnessLevel.Advance
+                    if (level != EFitnessLevel.ADVANCE) {
+                        onSelection(EFitnessLevel.ADVANCE)
+                        level = EFitnessLevel.ADVANCE
                     }
                 }
         ) {

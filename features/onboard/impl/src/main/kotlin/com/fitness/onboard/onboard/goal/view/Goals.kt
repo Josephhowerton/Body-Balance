@@ -46,7 +46,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import com.fitness.component.components.StandardTextSmall
 import com.fitness.component.components.StandardTitleText
-import com.fitness.component.components.TextItemBack
+import com.fitness.component.components.TextItemTransition
 import com.fitness.component.components.TextItemSelected
 import com.fitness.component.components.TextItemUnSelected
 import com.fitness.component.properties.GuidelineProperties
@@ -280,7 +280,7 @@ private fun GoalsItem(
     }
 
     if(rotationAnimatable.value > 20f && rotationAnimatable.value < 270f){
-        TextItemBack(size = size)
+        TextItemTransition(size = size)
     }
 
 }

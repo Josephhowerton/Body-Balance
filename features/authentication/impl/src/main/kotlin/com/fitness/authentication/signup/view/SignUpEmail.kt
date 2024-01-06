@@ -2,7 +2,6 @@ package com.fitness.authentication.signup.view
 
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Surface
@@ -23,21 +22,17 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.constraintlayout.compose.ChainStyle
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import auth.AuthFailure
 import com.fitness.authentication.navigation.AuthEntryImpl
 import com.fitness.authentication.signup.viewmodel.SignUpEvent
 import com.fitness.authentication.signup.viewmodel.SignUpState
-import com.fitness.authentication.util.AuthMethod
 import com.fitness.authentication.util.DisplayErrorMessage
 import com.fitness.authentication.util.DisplayFieldState
 import com.fitness.authentication.util.PasswordTrailingIcon
 import com.fitness.authentication.util.SignInAnnotatedText
-import com.fitness.authentication.util.TermsAndPrivacyAnnotatedText
 import com.fitness.component.components.StandardButton
-import com.fitness.component.components.StandardIconButton
 import com.fitness.component.components.StandardText
 import com.fitness.component.components.StandardTextField
 import com.fitness.component.components.StandardTextSmall
@@ -68,7 +63,6 @@ fun SignUpEmailScreen(
     onTriggerEvent: (SignUpEvent) -> Unit = {},
     onTriggerNavigation: (String) -> Unit,
     onComplete: () -> Unit = {}
-
 ) {
     val uiState by state.collectAsState()
 
@@ -138,8 +132,6 @@ private fun SignUpEmailContent(
         val lastnameRequester = remember { FocusRequester() }
         val emailRequester = remember { FocusRequester() }
         val passwordRequester = remember { FocusRequester() }
-
-        HandleAuthMethod(authMethod = state.authMethod, onTriggerEvent = onTriggerEvent)
 
         SignInAnnotatedText(
             onClick = { onTriggerNavigation(AuthEntryImpl.signInEmail) },
@@ -317,57 +309,5 @@ private fun SignUpEmailContent(
                 width = Dimension.fillToConstraints
             }
         )
-
-//        StandardTextSmall(
-//            text = R.string.or,
-//            modifier = Modifier
-//                .padding(10.dp)
-//                .constrainAs(or) {
-//                    start.linkTo(startGuideline)
-//                    end.linkTo(endGuideline)
-//                    top.linkTo(phone.bottom, 10.dp)
-//                }
-//        )
-//
-//        createHorizontalChain(google, facebook, x, chainStyle = ChainStyle.Packed)
-//
-//        StandardIconButton(
-//            icon = R.drawable.icon_google_logo,
-//            desc = R.string.content_description_google,
-//            onClick = { onTriggerEvent(SignUpEvent.SelectAuthMethod(AuthMethod.GOOGLE)) },
-//            modifier = Modifier
-//                .padding(8.dp)
-//                .constrainAs(google) {
-//                    start.linkTo(startGuideline)
-//                    end.linkTo(facebook.start)
-//                    top.linkTo(or.bottom, 10.dp)
-//                }
-//        )
-//
-//        StandardIconButton(
-//            icon = R.drawable.icon_facebook_logo,
-//            desc = R.string.content_description_facebook,
-//            onClick = { onTriggerEvent(SignUpEvent.SelectAuthMethod(AuthMethod.FACEBOOK)) },
-//            modifier = Modifier
-//                .padding(8.dp)
-//                .constrainAs(facebook) {
-//                    start.linkTo(google.end)
-//                    end.linkTo(x.start)
-//                    top.linkTo(or.bottom, 10.dp)
-//                }
-//        )
-//
-//        StandardIconButton(
-//            icon = R.drawable.icon_x_logo,
-//            desc = R.string.content_description_x,
-//            onClick = { onTriggerEvent(SignUpEvent.SelectAuthMethod(AuthMethod.X)) },
-//            modifier = Modifier
-//                .padding(8.dp)
-//                .constrainAs(x) {
-//                    start.linkTo(facebook.end)
-//                    end.linkTo(endGuideline)
-//                    top.linkTo(or.bottom, 10.dp)
-//                }
-//        )
     }
 }

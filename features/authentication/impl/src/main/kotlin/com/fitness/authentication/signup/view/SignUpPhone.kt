@@ -38,7 +38,7 @@ import com.fitness.component.properties.GuidelineProperties
 import com.fitness.component.screens.ErrorScreen
 import com.fitness.component.screens.LoadingScreen
 import com.fitness.component.screens.MessageScreen
-import com.fitness.data.PhoneAuthState
+import auth.PhoneAuthState
 import com.fitness.resources.R
 import com.fitness.theme.ui.BodyBalanceTheme
 import extensions.TextFieldState
@@ -150,8 +150,6 @@ private fun SignUpPhoneContent(
 
         val lastnameRequester = remember { FocusRequester() }
         val phoneRequester = remember { FocusRequester() }
-
-        HandleAuthMethod(authMethod = state.authMethod, onTriggerEvent = onTriggerEvent)
 
         SignInAnnotatedText(
             onClick = { onTriggerNavigation(AuthEntryImpl.signInEmail) },

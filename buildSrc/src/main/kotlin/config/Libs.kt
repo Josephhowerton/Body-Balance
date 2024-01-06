@@ -21,6 +21,9 @@ private object Version {
     const val MATERIAL = "1.4.0"
     const val LIB_PHONE_NUMBER = "8.12.39"
     const val GLIDE = "2.2.13"
+    const val RETROFIT = "2.9.0"
+    const val RETROFIT_COROUTINES = "0.9.2"
+    const val OKHTTP = "4.9.0"
 }
 
 object CoreLibs{
@@ -29,7 +32,7 @@ object CoreLibs{
 
 }
 
-object ComposeLibs {
+object ComposeLibs{
     const val ACTIVITY_COMPOSE = "androidx.activity:activity-compose:${Version.ACTIVITY_COMPOSE}"
     const val COMPOSE_BOM = "androidx.compose:compose-bom:${Version.COMPOSE_BOM}"
     const val COMPOSE_UI = "androidx.compose.ui:ui"
@@ -48,14 +51,14 @@ object NavigationLibs{
     const val NAVIGATION_RUNTIME = "androidx.navigation:navigation-runtime-ktx:${Version.COMPOSE_NAVIGATION}"
 }
 
-object TestingLibs {
+object TestingLibs{
     const val JUNIT = "junit:junit:${Version.JUNIT}"
     const val JUNIT_EXT = "androidx.test.ext:junit:${Version.JUNIT_EXT}"
     const val ESPRESSO = "androidx.test.espresso:espresso-core:${Version.ESPRESSO}"
     const val COMPOSE_UI_TEST = "androidx.compose.ui:ui-test-junit4"
 }
 
-object HiltLibs {
+object HiltLibs{
     const val HILT = "com.google.dagger:hilt-android:${Version.HILT}"
     const val HILT_COMPILER = "com.google.dagger:hilt-android-compiler:${Version.HILT}"
     const val HILT_NAVIGATION = "androidx.hilt:hilt-navigation-compose:${Version.HILT_NAVIGATION}"
@@ -88,6 +91,14 @@ object ExoPlayerLibs{
     const val EXO_PLAYER_UI = "androidx.media3:media3-ui:${Version.EXO_PLAYER}"
 }
 
-object GlideLibs {
+object GlideLibs{
     const val GLIDE = "com.github.skydoves:landscapist-glide:${Version.GLIDE}"
+}
+
+object NetworkLibs{
+    const val RETROFIT = "com.squareup.retrofit2:retrofit:${Version.RETROFIT}"
+    const val GSON = "com.squareup.retrofit2:converter-gson:${Version.RETROFIT}"
+    const val RETROFIT_COROUTINES = "com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:${Version.RETROFIT_COROUTINES}"
+    const val OKHTTP = "com.squareup.okhttp3:okhttp:${Version.OKHTTP}"
+    const val OKHTTP_INTERCEPTOR = "com.squareup.okhttp3:logging-interceptor:${Version.OKHTTP}"
 }

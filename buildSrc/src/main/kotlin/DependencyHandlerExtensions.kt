@@ -175,3 +175,11 @@ fun DependencyHandler.addMedia3Dependencies(){
     api(ExoPlayerLibs.EXO_PLAYER)
     api(ExoPlayerLibs.EXO_PLAYER_UI)
 }
+
+fun DependencyHandler.addNetworkDependencies(){
+    api(NetworkLibs.RETROFIT)
+    api(NetworkLibs.GSON)
+    api(NetworkLibs.RETROFIT_COROUTINES)
+    api(NetworkLibs.OKHTTP)
+    api(NetworkLibs.OKHTTP_INTERCEPTOR)
+}

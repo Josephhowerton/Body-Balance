@@ -35,7 +35,7 @@ import androidx.constraintlayout.compose.Dimension
 import com.fitness.component.components.StandardText
 import com.fitness.component.components.StandardTextSmall
 import com.fitness.component.properties.GuidelineProperties
-import com.fitness.data.PhoneAuthState
+import auth.PhoneAuthState
 import com.fitness.resources.R
 import com.fitness.theme.ui.BodyBalanceTheme
 import extensions.Dark

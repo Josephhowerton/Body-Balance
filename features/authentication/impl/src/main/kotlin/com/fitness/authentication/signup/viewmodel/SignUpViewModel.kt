@@ -13,7 +13,7 @@ import com.fitness.authentication.util.verifyEmail
 import com.fitness.authentication.util.verifyName
 import com.fitness.authentication.util.verifyPassword
 import com.fitness.authentication.util.verifyPhone
-import com.fitness.data.PhoneAuthState
+import auth.PhoneAuthState
 import com.fitness.data.model.domain.user.UserDomain
 import com.fitness.domain.usecase.auth.EmailPasswordSignUpUseCase
 import com.fitness.domain.usecase.auth.SendVerificationCodeUseCase

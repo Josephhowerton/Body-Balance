@@ -7,7 +7,8 @@ android{
 }
 
 dependencies {
-    AUTHENTICATION_MANAGER
+    addNetworkDependencies()
     addFirebaseDependencies()
+    AUTHENTICATION_MANAGER
     LIBRARY
 }

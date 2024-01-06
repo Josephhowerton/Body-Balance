@@ -1,7 +1,7 @@
 package com.fitness.data.di
 
-import com.fitness.data.AuthRepositoryImpl
-import com.fitness.data.UserRepositoryImpl
+import com.fitness.data.repository.AuthRepositoryImpl
+import com.fitness.data.repository.UserRepositoryImpl
 import com.fitness.data.repository.AuthRepository
 import com.fitness.data.repository.UserRepository
 import com.google.firebase.auth.FirebaseAuth

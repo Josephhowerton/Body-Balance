@@ -1,6 +1,10 @@
 package enums
 
-enum class SystemOfMeasurement{
+import com.fitness.resources.R
+
+interface Units
+
+enum class SystemOfMeasurement {
     METRIC,
     CUSTOMARY
 }
@@ -10,40 +14,42 @@ enum class TimeUnits {
     MINUTES,
     HOUR
 }
-enum class LengthUnit(val toMeter: Double) {
-    METER(1.0),
-    KILOMETER(1000.0),
-    CENTIMETER(0.01),
-    MILLIMETER(0.001),
-    INCHES(0.0254),
-    FEET(0.3048),
-    YARDS(0.9144),
-    MILES(1609.34)
+
+enum class LengthUnit(val toMeter: Double, val unitResourceId: Int): Units {
+    METER(1.0, R.string.unit_meter),
+    KILOMETER(1000.0, R.string.unit_kilometer),
+    CENTIMETER(0.01, R.string.unit_centimeter),
+    MILLIMETER(0.001, R.string.unit_millimeter),
+    INCHES(0.0254, R.string.unit_inches),
+    FEET(0.3048, R.string.unit_feet),
+    YARDS(0.9144, R.string.unit_yards),
+    MILES(1609.34, R.string.unit_miles)
 }
 
-enum class MassUnit(val toKilogram: Double) {
-    GRAM(0.001),
-    KILOGRAM(1.0),
-    MILLIGRAM(1e-6),
-    OUNCES(0.0283495),
-    POUNDS(0.453592)
+enum class MassUnit(val toKilogram: Double, val unitResourceId: Int): Units {
+    GRAM(0.001, R.string.unit_gram),
+    KILOGRAM(1.0, R.string.unit_kilogram),
+    MILLIGRAM(1e-6, R.string.unit_milligram),
+    MICROGRAM(1e-9, R.string.unit_microgram),
+    OUNCES(0.0283495, R.string.unit_ounces),
+    POUNDS(0.453592, R.string.unit_pounds)
 }
 
-enum class VolumeUnit(val toLiter: Double) {
-    LITER(1.0),
-    MILLILITER(0.001),
-    TEASPOON(0.00492892),
-    TABLESPOON(0.0147868),
-    FLUID_OUNCES(0.0295735),
-    CUPS(0.236588),
-    PINTS(0.473176),
-    QUARTS(0.946353),
-    GALLONS(3.78541)
+enum class VolumeUnit(val toLiter: Double, val unitResourceId: Int): Units {
+    LITER(1.0, R.string.unit_liter),
+    MILLILITER(0.001, R.string.unit_milliliter),
+    TEASPOON(0.00492892, R.string.unit_teaspoon),
+    TABLESPOON(0.0147868, R.string.unit_tablespoon),
+    FLUID_OUNCES(0.0295735, R.string.unit_fluid_ounces),
+    CUPS(0.236588, R.string.unit_cups),
+    PINTS(0.473176, R.string.unit_pints),
+    QUARTS(0.946353, R.string.unit_quarts),
+    GALLONS(3.78541, R.string.unit_gallons)
 }
 
-enum class TemperatureUnit {
-    CELSIUS,
-    FAHRENHEIT
+enum class TemperatureUnit(val unitResourceId: Int) {
+    CELSIUS(R.string.unit_celsius),
+    FAHRENHEIT(R.string.unit_fahrenheit)
 }
 
 fun convertLength(value: Double, fromUnit: LengthUnit, toUnit: LengthUnit): Double {

@@ -1,6 +1,6 @@
 package com.fitness.domain.usecase.auth
 
-import com.fitness.data.PhoneAuthState
+import auth.PhoneAuthState
 import com.fitness.data.repository.AuthRepository
 import kotlinx.coroutines.flow.FlowCollector
 import state.DataState

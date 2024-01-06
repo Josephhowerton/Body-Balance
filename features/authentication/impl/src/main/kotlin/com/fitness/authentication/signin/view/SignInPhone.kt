@@ -17,7 +17,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
-import auth.AuthFailure
 import com.fitness.authentication.navigation.AuthEntryImpl
 import com.fitness.authentication.signin.viewmodel.SignInEvent
 import com.fitness.authentication.signin.viewmodel.SignInState
@@ -33,7 +32,7 @@ import com.fitness.component.properties.GuidelineProperties
 import com.fitness.component.screens.ErrorScreen
 import com.fitness.component.screens.LoadingScreen
 import com.fitness.component.screens.MessageScreen
-import com.fitness.data.PhoneAuthState
+import auth.PhoneAuthState
 import com.fitness.resources.R
 import com.fitness.theme.ui.BodyBalanceTheme
 import extensions.Dark

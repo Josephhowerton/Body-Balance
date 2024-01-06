@@ -1,6 +1,6 @@
 package com.fitness.data.repository
 
-import com.fitness.data.PhoneAuthState
+import auth.PhoneAuthState
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import kotlinx.coroutines.flow.Flow

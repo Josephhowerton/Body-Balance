@@ -51,129 +51,127 @@ import com.fitness.component.properties.GuidelineProperties
 import com.fitness.onboard.onboard.nutrition.viewmodel.NutritionEvent
 import com.fitness.resources.R
 import com.fitness.theme.ui.BodyBalanceTheme
-import enums.EDietaryRestrictions
+import enums.EHealthLabel
 import extensions.Dark
 import extensions.Light
+
 
 @Light
 @Dark
 @Composable
-private fun DietaryRestrictionsPreview() = BodyBalanceTheme {
+private fun HealthLabelsPreview() = BodyBalanceTheme {
     Surface {
-        DietaryRestrictions()
+        HealthLabels()
     }
 }
 
 @Composable
-fun DietaryRestrictions(onTriggerEvent: (NutritionEvent) -> Unit = {}) =
-    ConstraintLayout(modifier = Modifier.fillMaxSize()) {
+fun HealthLabels(onTriggerEvent: (NutritionEvent) -> Unit = {}) = ConstraintLayout(modifier = Modifier.fillMaxSize()) {
 
-        val (title, list, continueButton) = createRefs()
+    val (title, list, continueButton) = createRefs()
 
-        val bottomGuide = createGuidelineFromBottom(GuidelineProperties.BOTTOM_100)
-        val endGuide = createGuidelineFromEnd(GuidelineProperties.END)
+    val bottomGuide = createGuidelineFromBottom(GuidelineProperties.BOTTOM_100)
+    val endGuide = createGuidelineFromEnd(GuidelineProperties.END)
 
+    val gridState = rememberLazyGridState()
+    val isScrolling = gridState.isScrollInProgress
 
-        val gridState = rememberLazyGridState()
-        val isScrolling = gridState.isScrollInProgress
+    val preferences = remember { mutableListOf<EHealthLabel>() }
 
-        val restrictions = remember { mutableListOf<EDietaryRestrictions>() }
-
-        LazyVerticalGrid(
-            state = gridState,
-            modifier = Modifier
-                .constrainAs(list) {
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                    top.linkTo(title.bottom)
-                    bottom.linkTo(parent.bottom)
-                    height = Dimension.fillToConstraints
-                },
-            columns = GridCells.Fixed(3)
-        ) {
-            items(EDietaryRestrictions.values()) {
-                RestrictionItem(it, onClick = {
-                    if (restrictions.contains(it)) {
-                        restrictions.remove(it)
-                    } else {
-                        restrictions.add(it)
-                    }
-                })
-            }
+    LazyVerticalGrid(
+        state = gridState,
+        modifier = Modifier.constrainAs(list) {
+            start.linkTo(parent.start)
+            end.linkTo(parent.end)
+            top.linkTo(title.bottom)
+            bottom.linkTo(parent.bottom)
+            height = Dimension.fillToConstraints
+        },
+        columns = GridCells.Fixed(3)
+    ) {
+        items(EHealthLabel.values()) {
+            HealthLabelItem(it, onClick = {
+                if (preferences.contains(it)) {
+                    preferences.remove(it)
+                } else {
+                    preferences.add(it)
+                }
+            })
         }
+    }
 
-        AnimatedVisibility(
-            visible = !isScrolling,
-            modifier = Modifier.constrainAs(title) {
-                top.linkTo(parent.top)
-                start.linkTo(parent.start)
-            }
-        ) {
-            Card(
-                shape = RectangleShape,
-                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+    AnimatedVisibility(
+        visible = !isScrolling,
+        modifier = Modifier.constrainAs(title) {
+            top.linkTo(parent.top)
+            start.linkTo(parent.start)
+        }
+    ) {
+        Card(
+            shape = RectangleShape,
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+            modifier = Modifier
+                .wrapContentHeight()
+                .fillMaxWidth()
+                .constrainAs(title) {
+                    top.linkTo(parent.top)
+                    start.linkTo(parent.start)
+                }) {
+
+            Column(
                 modifier = Modifier
+                    .padding(20.dp)
                     .wrapContentHeight()
                     .fillMaxWidth()
-                    .constrainAs(title) {
-                        top.linkTo(parent.top)
-                        start.linkTo(parent.start)
-                    }) {
+            ) {
 
-                Column(
-                    modifier = Modifier
-                        .padding(20.dp)
-                        .wrapContentHeight()
-                        .fillMaxWidth()
-                ) {
+                StandardTitleText(
+                    text = R.string.onboarding_health_labels_title,
+                    modifier = Modifier.padding()
+                )
 
-                    StandardTitleText(
-                        text = R.string.title_dietary_restrictions,
-                        modifier = Modifier.padding()
-                    )
+                Spacer(modifier = Modifier.size(10.dp))
 
-                    Spacer(modifier = Modifier.size(10.dp))
+                StandardTextSmall(
+                    text = R.string.onboarding_health_labels_description,
+                    textAlign = TextAlign.Start,
+                    modifier = Modifier.padding()
+                )
 
-                    StandardTextSmall(
-                        text = R.string.desc_dietary_restrictions,
-                        textAlign = TextAlign.Start,
-                        modifier = Modifier.padding()
-                    )
-
-                    Spacer(modifier = Modifier.size(20.dp))
-                }
+                Spacer(modifier = Modifier.size(20.dp))
             }
         }
+    }
 
-        AnimatedVisibility(
-            visible = !isScrolling,
+    AnimatedVisibility(
+        visible = !isScrolling,
+        modifier = Modifier
+            .shadow(elevation = 5.dp, shape = CircleShape)
+            .constrainAs(continueButton) {
+                end.linkTo(endGuide)
+                bottom.linkTo(bottomGuide)
+            }
+    ) {
+        Button(
+            onClick = { onTriggerEvent(NutritionEvent.HealthLabels(labels = preferences)) },
             modifier = Modifier
-                .shadow(elevation = 5.dp, shape = CircleShape)
+                .shadow(
+                    elevation = 5.dp,
+                    shape = CircleShape,
+                )
                 .constrainAs(continueButton) {
                     end.linkTo(endGuide)
                     bottom.linkTo(bottomGuide)
                 }
         ) {
-            Button(
-                onClick = { onTriggerEvent(NutritionEvent.DietaryRestrictions(restrictions)) },
-                modifier = Modifier
-                    .shadow(
-                        elevation = 5.dp,
-                        shape = CircleShape,
-                    )
-                    .constrainAs(continueButton) {
-                        end.linkTo(endGuide)
-                        bottom.linkTo(bottomGuide)
-                    }
-            ) {
-                Text(text = stringResource(id = R.string.title_continue))
-            }
+            Text(text = stringResource(id = R.string.title_continue))
         }
     }
+}
 
 @Composable
-fun RestrictionItem(
-    restrictions: EDietaryRestrictions,
+fun HealthLabelItem(
+    label: EHealthLabel,
     onClick:() -> Unit,
     modifier: Modifier = Modifier,
     size: Dp = 120.dp
@@ -212,9 +210,9 @@ fun RestrictionItem(
 
     ) {
         if (rotationAnimatable.value < 90f) {
-            TextItemUnSelected(text = stringResource(id = restrictions.title), size = size)
+            TextItemUnSelected(text = stringResource(id = label.title), size = size)
         } else if (rotationAnimatable.value > 270f) {
-            TextItemSelected(text = stringResource(id = restrictions.title), size = size)
+            TextItemSelected(text = stringResource(id = label.title), size = size)
         }
     }
 

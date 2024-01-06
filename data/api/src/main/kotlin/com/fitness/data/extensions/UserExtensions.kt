@@ -98,7 +98,8 @@ fun UserBasicNutritionInfoDomain.toUserBasicNutritionInfoCache(lastUpdated: Long
     return UserBasicNutritionInfoCache(
         userId = userId,
         restrictions = restrictions,
-        preferences = preferences,
+        labels = labels,
+        cuisineType = cuisineType,
         lastUpdated = lastUpdated
     )
 }
@@ -107,7 +108,8 @@ fun UserBasicNutritionInfoCache.toUserBasicNutritionInfoDomain(): UserBasicNutri
     return UserBasicNutritionInfoDomain(
         userId = userId,
         restrictions = restrictions,
-        preferences = preferences,
+        labels = labels,
+        cuisineType = cuisineType
     )
 }
 

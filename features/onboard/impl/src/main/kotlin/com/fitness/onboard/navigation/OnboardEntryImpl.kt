@@ -8,13 +8,13 @@ import androidx.navigation.navigation
 import com.fitness.navigation.Destinations
 import com.fitness.navigation.find
 import com.fitness.onboard.OnboardEntry
-import com.fitness.onboard.onboard.basic.view.BasicInformationScreen
+import com.fitness.onboard.onboard.basic.BasicInformationScreen
 import com.fitness.onboard.onboard.basic.viewmodel.BasicInformationViewModel
-import com.fitness.onboard.onboard.fitness.view.FitnessScreen
+import com.fitness.onboard.onboard.fitness.FitnessScreen
 import com.fitness.onboard.onboard.fitness.viewmodel.FitnessViewModel
 import com.fitness.onboard.onboard.goal.view.GoalsScreen
 import com.fitness.onboard.onboard.goal.viewmodel.GoalViewModel
-import com.fitness.onboard.onboard.nutrition.view.NutritionScreen
+import com.fitness.onboard.onboard.nutrition.NutritionScreen
 import com.fitness.onboard.onboard.nutrition.viewmodel.NutritionViewModel
 import com.fitness.onboard.onboard.welcome.WelcomeScreen
 import com.fitness.signout.SignOutEntry

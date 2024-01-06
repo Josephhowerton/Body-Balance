@@ -1,6 +1,8 @@
 package com.fitness.onboard.onboard.nutrition
 
+import enums.ECuisineType
 import enums.EDietaryRestrictions
+import enums.EHealthLabel
 import enums.ENutritionPreferences
 
 
@@ -18,6 +20,7 @@ object NutritionStateHolder {
 }
 
 data class NutritionState(
-    val preferences: List<ENutritionPreferences>? = null,
-    val restrictions: List<EDietaryRestrictions>? = null
+    val labels: List<EHealthLabel>? = null,
+    val restrictions: List<EDietaryRestrictions>? = null,
+    val cuisineType: List<ECuisineType>? = null
 )

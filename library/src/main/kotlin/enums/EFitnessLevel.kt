@@ -1,7 +1,7 @@
 package enums
 
 enum class EFitnessLevel {
-    Beginner,
-    Intermediate,
-    Advance
+    BEGINNER,
+    INTERMEDIATE,
+    ADVANCE
 }

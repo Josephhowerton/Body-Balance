@@ -28,22 +28,6 @@ class AuthDomainModule {
 
     @Provides
     @Singleton
-    fun provideFacebookSignInUseCase() = FacebookSignInUseCase()
-
-    @Provides
-    @Singleton
-    fun provideFacebookSignUpUseCase() = FacebookSignUpUseCase()
-
-    @Provides
-    @Singleton
-    fun provideGoogleSignInUseCase(firebaseAuth: FirebaseAuth) = GoogleSignInUseCase(firebaseAuth)
-
-    @Provides
-    @Singleton
-    fun provideGoogleSignUpUseCase(firebaseAuth: FirebaseAuth) = GoogleSignUpUseCase(firebaseAuth)
-
-    @Provides
-    @Singleton
     fun provideSendPasswordResetEmailUseCase(authRepository: AuthRepository) = SendPasswordResetEmailUseCase(authRepository)
 
     @Provides
@@ -57,13 +41,5 @@ class AuthDomainModule {
     @Provides
     @Singleton
     fun provideVerifyPhoneNumberUseCase(authRepository: AuthRepository) = VerifyPhoneNumberUseCase(authRepository)
-
-    @Provides
-    @Singleton
-    fun provideXCreateUseCase() = XSignUpUseCase()
-
-    @Provides
-    @Singleton
-    fun provideXLoginUseCase() = XSignInUseCase()
 
 }
