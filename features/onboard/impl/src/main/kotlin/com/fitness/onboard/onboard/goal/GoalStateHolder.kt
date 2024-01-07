@@ -1,5 +1,6 @@
 package com.fitness.onboard.onboard.goal
 
+import com.fitness.onboard.onboard.goal.viewmodel.GoalStep
 import enums.EGoals
 
 
@@ -16,4 +17,4 @@ object GoalStateHolder {
     }
 }
 
-data class GoalState(val goals: List<EGoals>? = null)
+data class GoalState(val currentStep: GoalStep = GoalStep.GOALS, val goals: List<EGoals> = emptyList())

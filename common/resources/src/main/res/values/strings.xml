@@ -526,4 +526,7 @@
     <string name="title_south_east_asian">South East Asian</string>
     <string name="title_world">World</string>
     <string name="title_omelet">Omelet</string>
+    <string name="title_error">Error</string>
+    <string name="title_dismiss">Dismiss</string>
+    <string name="desc_error_min_items_required">We need at least %1$d items to make things happen. Mind adding more?</string>
 </resources>

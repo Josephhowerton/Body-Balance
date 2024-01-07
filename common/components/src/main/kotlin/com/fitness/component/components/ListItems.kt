@@ -1,11 +1,11 @@
 package com.fitness.component.components
 
 import android.media.MediaPlayer
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.TweenSpec
 import androidx.compose.animation.core.animateDpAsState
@@ -18,22 +18,28 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Info
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -48,7 +54,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.drawscope.clipRect
 import androidx.compose.ui.graphics.graphicsLayer
@@ -56,17 +64,21 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.drawable.toBitmap
+import com.fitness.component.properties.GuidelineProperties
+import com.fitness.component.properties.STANDARD_TEXT_SIZE
 import com.fitness.resources.R
 import com.fitness.theme.ui.BodyBalanceTheme
 import com.fitness.theme.ui.Green
 import enums.EHealthLabel
 import extensions.Dark
+import extensions.Item
 import extensions.Light
 import kotlinx.coroutines.delay
 import java.io.IOException
@@ -75,68 +87,141 @@ import java.io.IOException
 @Light
 @Dark
 @Composable
-private fun PreviewContent() = ConstraintLayout(modifier = Modifier.fillMaxSize()) {
+private fun PreviewList() = BodyBalanceTheme {
+    Surface {
+        BalanceLazyColumn(
+            title = R.string.title_fitness_habits,
+            description = R.string.desc_fitness_habits,
+            items = EHealthLabel.values(),
+            selections = mutableListOf(),
+            onButtonClicked = { Log.e("Preview", it.toString())}
+        )
+    }
+}
 
-    val list = createRef()
 
+@Composable
+fun <T: Item> BalanceLazyColumn(
+    title: Int,
+    description: Int,
+    items: Array<T>,
+    selections: MutableList<T>,
+    modifier: Modifier = Modifier,
+    onButtonClicked: (List<T>) -> Unit
+) = ConstraintLayout(modifier = modifier.fillMaxSize()) {
+
+    val bottomGuide = createGuidelineFromBottom(GuidelineProperties.BOTTOM_100)
+    val endGuide = createGuidelineFromEnd(GuidelineProperties.END)
+
+    val (titleRef, listRef, okRef) = createRefs()
     val gridState = rememberLazyGridState()
-    val goals = remember { mutableListOf<String>() }
-
+    val isScrolling = gridState.isScrollInProgress
     LazyVerticalGrid(
         state = gridState,
         modifier = Modifier
-            .constrainAs(list) {
+            .constrainAs(listRef) {
                 start.linkTo(parent.start)
                 end.linkTo(parent.end)
-                top.linkTo(parent.top)
+                top.linkTo(titleRef.bottom)
                 bottom.linkTo(parent.bottom)
                 height = Dimension.fillToConstraints
             },
         columns = GridCells.Fixed(3)
     ) {
-        items(EHealthLabel.values()) { label ->
-            TextItem(
-                text = stringResource(id = label.title),
+        items(items) { item ->
+            BalanceItem(
+                item = item,
+                selectedState = selections.isSelected(item),
                 onClick = {
-                    if (goals.contains(it)) {
-                        goals.remove(it)
+                    if (selections.contains(it)) {
+                        selections.remove(it)
                     } else {
-                        goals.add(it)
+                        selections.add(it)
                     }
                 }
             )
         }
     }
-}
 
-@Light
-@Dark
-@Composable
-private fun TextItemUnSelectedPreview() = BodyBalanceTheme {
-    Surface {
-        TextItemUnSelected("Unselected")
+    AnimatedVisibility(
+        visible = !isScrolling,
+        modifier = Modifier.constrainAs(titleRef) {
+            top.linkTo(parent.top)
+            start.linkTo(parent.start)
+        }
+    ) {
+        Card(
+            shape = RectangleShape,
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+            modifier = Modifier
+                .wrapContentHeight()
+                .fillMaxWidth()
+                .constrainAs(titleRef) {
+                    top.linkTo(parent.top)
+                    start.linkTo(parent.start)
+                }) {
+
+            Column(
+                modifier = Modifier
+                    .padding(20.dp)
+                    .wrapContentHeight()
+                    .fillMaxWidth()
+            ) {
+
+                StandardTitleText(
+                    text = title,
+                    modifier = Modifier.padding()
+                )
+
+                Spacer(modifier = Modifier.size(10.dp))
+
+                StandardTextSmall(
+                    text = description,
+                    textAlign = TextAlign.Start,
+                    modifier = Modifier.padding()
+                )
+
+                Spacer(modifier = Modifier.size(20.dp))
+            }
+        }
+    }
+
+    AnimatedVisibility(
+        visible = !isScrolling,
+        modifier = Modifier
+            .shadow(elevation = 5.dp, shape = CircleShape)
+            .constrainAs(okRef) {
+                end.linkTo(endGuide)
+                bottom.linkTo(bottomGuide)
+            }
+    ) {
+        Button(
+            onClick = { onButtonClicked(selections) },
+            modifier = Modifier
+                .shadow(
+                    elevation = 5.dp,
+                    shape = CircleShape,
+                )
+                .constrainAs(okRef) {
+                    end.linkTo(endGuide)
+                    bottom.linkTo(bottomGuide)
+                }
+        ) {
+            Text(text = stringResource(id = R.string.title_continue))
+        }
     }
 }
-
-@Light
-@Dark
 @Composable
-private fun TextItemSelectedPreview() = BodyBalanceTheme {
-    Surface {
-        TextItemSelected("Selected")
-    }
-}
-
-@Composable
-fun TextItem(
-    text: String,
-    onClick: (String) -> Unit,
+private fun <T: Item> BalanceItem(
+    item: T,
+    onClick: (T) -> Unit,
     modifier: Modifier = Modifier,
     size: Dp = 120.dp,
+    selectedState: ItemState = ItemState.UNSELECTED
 ) {
 
     val animatable = remember { Animatable(0f) }
-    var itemState by remember { mutableStateOf(ItemState.UNSELECTED) }
+    var itemState by remember { mutableStateOf(selectedState) }
 
     LaunchedEffect(key1 = itemState) {
         when (itemState) {
@@ -162,7 +247,7 @@ fun TextItem(
         modifier = modifier
             .clickable {
                 itemState = itemState.onItemClickState()
-                onClick(text)
+                onClick(item)
             }
             .wrapContentSize()
             .graphicsLayer {
@@ -172,11 +257,12 @@ fun TextItem(
     ) {
         if (animatable.value < 70f) {
             TextItemUnSelected(
-                text = text,
+                title = item.title,
+                desc = item.desc,
                 size = size
             )
         } else if (animatable.value > 270f) {
-            TextItemSelected(text = text, size = size)
+            TextItemSelected(title = item.title, size = size)
         }
 
     }
@@ -189,28 +275,30 @@ fun TextItem(
 
 @Composable
 fun TextItemUnSelected(
-    title: String,
-    desc: String,
+    title: Int,
     modifier: Modifier = Modifier,
+    desc: Int? = null,
     size: Dp = 120.dp,
 ) {
-    var isTitleVisible = MutableTransitionState(initialState = true)
+    var showInfo by remember { mutableStateOf(false) }
     var targetValue by remember { mutableIntStateOf(5) }
 
     val animateInt = animateIntAsState(
         targetValue = targetValue,
         label = "TextItemUnSelected",
         finishedListener = {
-            targetValue = if(targetValue == 5){
+            targetValue = if (targetValue == 5) {
                 40
-            } else{
+            } else {
                 5
             }
         }
     )
 
     Card(
-        modifier = modifier.wrapContentSize().padding(5.dp),
+        modifier = modifier
+            .wrapContentSize()
+            .padding(5.dp),
         shape = RoundedCornerShape(animateInt.value, 40, 5, 40),
     ) {
         ConstraintLayout(
@@ -220,24 +308,53 @@ fun TextItemUnSelected(
         ) {
             val (text, icon) = createRefs()
 
-            TransitionalText(
-                title = title,
-                desc = desc,
-                modifier = Modifier.constrainAs(text) {
-                    start.linkTo(parent.start)
-                    top.linkTo(parent.top)
-                    bottom.linkTo(icon.top)
-                }
-            )
+            desc?.let {
+                TransitionalText(
+                    title = stringResource(id = title),
+                    desc = stringResource(id = desc),
+                    showInfo = showInfo,
+                    modifier = Modifier.constrainAs(text) {
+                        start.linkTo(parent.start)
+                        top.linkTo(parent.top)
+                        bottom.linkTo(icon.top)
+                    }
+                )
 
-            TransitionalIcon(
-                iconDefault = Icons.Default.Info,
-                iconTransition = Icons.Default.ArrowBack,
-                modifier = Modifier.constrainAs(icon) {
-                    end.linkTo(parent.end)
-                    bottom.linkTo(icon.top)
-                }
-            )
+                TransitionalIcon(
+                    iconDefault = Icons.Default.Info,
+                    iconTransition = Icons.Default.ArrowBack,
+                    onTapInfo = { showInfo = it },
+                    showInfo = showInfo,
+                    modifier = Modifier.constrainAs(icon) {
+                        end.linkTo(parent.end)
+                        bottom.linkTo(parent.bottom)
+                    }
+                )
+
+            } ?: run {
+                Text(
+                    text = stringResource(id = title),
+                    modifier = Modifier
+                        .constrainAs(text) {
+                            start.linkTo(parent.start)
+                            top.linkTo(parent.top)
+                            bottom.linkTo(icon.top)
+                        }
+                )
+
+                Icon(
+                    imageVector = Icons.Default.Add,
+                    contentDescription = stringResource(id = R.string.content_description_checkmark),
+                    modifier = Modifier
+                        .padding(5.dp)
+                        .constrainAs(icon) {
+                            end.linkTo(parent.end)
+                            bottom.linkTo(parent.bottom)
+                        }
+                )
+            }
+
+
         }
     }
 }
@@ -247,18 +364,20 @@ private fun TransitionalText(
     title: String,
     desc: String,
     showInfo: Boolean,
-    modifier: Modifier,
-    onTapInfo: (Boolean) -> Unit
-){
-    val showInfoState by remember{ mutableStateOf(showInfo) }
+    modifier: Modifier
+) {
     Box(modifier = modifier) {
-        AnimatedVisibility(visible = !showInfoState) {
-            Text(text = title, modifier = Modifier.clickable{ onTapInfo()})
-
+        AnimatedVisibility(visible = !showInfo) {
+            Text(text = title, modifier = Modifier)
         }
-        AnimatedVisibility(visible = showInfoState) {
-            Text(text = desc)
-
+        AnimatedVisibility(visible = showInfo) {
+            Text(
+                text = desc,
+                overflow = TextOverflow.Ellipsis,
+                maxLines = 3,
+                fontSize = STANDARD_TEXT_SIZE,
+                modifier = modifier
+            )
         }
     }
 
@@ -269,16 +388,24 @@ private fun TransitionalIcon(
     iconDefault: ImageVector,
     iconTransition: ImageVector,
     showInfo: Boolean,
-    modifier: Modifier
-){
+    modifier: Modifier,
+    onTapInfo: (Boolean) -> Unit
+) {
 
-    val showInfoState by remember{ mutableStateOf(showInfo) }
+    var showInfoState by remember { mutableStateOf(showInfo) }
+
     Box(modifier = modifier) {
         AnimatedVisibility(visible = !showInfoState) {
             Icon(
                 imageVector = iconDefault,
                 contentDescription = stringResource(id = R.string.content_description_checkmark),
-                modifier = Modifier.padding(5.dp)
+                modifier = Modifier
+                    .padding(5.dp)
+                    .clickable {
+                        showInfoState = !showInfoState
+                        onTapInfo(showInfoState)
+
+                    }
             )
 
         }
@@ -286,7 +413,12 @@ private fun TransitionalIcon(
             Icon(
                 imageVector = iconTransition,
                 contentDescription = stringResource(id = R.string.content_description_checkmark),
-                modifier = Modifier.padding(5.dp)
+                modifier = Modifier
+                    .padding(5.dp)
+                    .clickable {
+                        showInfoState = !showInfoState
+                        onTapInfo(showInfoState)
+                    }
             )
         }
     }
@@ -305,7 +437,7 @@ fun TextItemTransition(size: Dp = 120.dp) {
 }
 
 @Composable
-fun TextItemSelected(text: String, modifier: Modifier = Modifier, size: Dp = 120.dp) {
+fun TextItemSelected(title: Int, modifier: Modifier = Modifier, size: Dp = 120.dp) {
 
     var startAnimations by remember { mutableStateOf(false) }
 
@@ -359,7 +491,7 @@ fun TextItemSelected(text: String, modifier: Modifier = Modifier, size: Dp = 120
 
             val (textRef, checkMark) = createRefs()
 
-            Text(text = text,
+            Text(text = stringResource(id = title),
                 modifier = Modifier.constrainAs(textRef) {
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
@@ -445,10 +577,6 @@ fun PlayWavSound() {
     }
 }
 
-private fun isInfoAvailable(desc: String?, icon: ImageVector?): Boolean =
-    desc != null && icon == Icons.Default.Info
-
-
 enum class ItemState {
     SELECTED,
     UNSELECTED
@@ -460,3 +588,10 @@ fun ItemState.onItemClickState() =
     } else {
         ItemState.SELECTED
     }
+
+fun <T: Item> List<Item>.isSelected(t: T)=
+    if(this.contains(t)) {
+    ItemState.SELECTED
+} else {
+    ItemState.UNSELECTED
+}

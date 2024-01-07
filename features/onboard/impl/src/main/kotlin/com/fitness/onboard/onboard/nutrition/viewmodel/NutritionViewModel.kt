@@ -3,10 +3,17 @@ package com.fitness.onboard.onboard.nutrition.viewmodel
 import com.fitness.data.model.domain.user.UserBasicNutritionInfoDomain
 import com.fitness.domain.usecase.cache.CreateUserBasicNutritionInfoUseCase
 import com.fitness.domain.usecase.cache.GetCurrentUserIdUseCase
+import com.fitness.onboard.onboard.fitness.viewmodel.FitnessState
 import com.fitness.onboard.onboard.nutrition.NutritionStateHolder
+import com.fitness.onboard.util.CUISINE_TYPE_MIN_SELECTION
+import com.fitness.onboard.util.DIETARY_RESTRICTIONS_MIN_SELECTION
+import com.fitness.onboard.util.GOALS_MIN_SELECTION
+import com.fitness.onboard.util.HEALTH_LABELS_MIN_SELECTION
 import com.fitness.onboard.util.OnboardFailure
+import com.fitness.onboard.util.isMinSelection
 import com.fitness.onboard.util.toOnboardFailure
 import dagger.hilt.android.lifecycle.HiltViewModel
+import failure.MinimumNumberOfSelectionFailure
 import state.BaseViewState
 import viewmodel.IntentViewModel
 import javax.inject.Inject
@@ -21,10 +28,11 @@ class NutritionViewModel @Inject constructor(
     init { setState(BaseViewState.Data(NutritionState())) }
     override fun onTriggerEvent(event: NutritionEvent) {
         when(event){
-            is NutritionEvent.HealthLabels -> onNutritionPreferences (event)
+            is NutritionEvent.HealthLabels -> onHealthLabels (event)
             is NutritionEvent.DietaryRestrictions -> onDietaryRestrictions(event)
             is NutritionEvent.CuisineType -> onCuisineType(event)
             is NutritionEvent.SaveFitnessInfo -> getCurrentUserId()
+            is NutritionEvent.DismissDialog -> onDismissDialog()
         }
     }
 
@@ -32,19 +40,41 @@ class NutritionViewModel @Inject constructor(
         super.handleError(exception.toOnboardFailure())
     }
 
-    private fun onNutritionPreferences (event: NutritionEvent.HealthLabels){
+    private fun onDismissDialog(){
+        val state = stateHolder.getState()
+        setState(BaseViewState.Data(NutritionState(step =  state.currentStep, labels = state.labels, restrictions = state.restrictions, cuisineType = state.cuisineType)))
+    }
+
+    private fun onHealthLabels (event: NutritionEvent.HealthLabels){
         stateHolder.updateState(stateHolder.getState().copy(labels = event.labels))
-        setState(BaseViewState.Data(NutritionState(NutritionStep.DIETARY_RESTRICTIONS)))
+        if (isMinSelection(event.labels.size, HEALTH_LABELS_MIN_SELECTION)) {
+            setState(BaseViewState.Data(NutritionState(NutritionStep.DIETARY_RESTRICTIONS)))
+            stateHolder.updateState(stateHolder.getState().copy(currentStep = NutritionStep.DIETARY_RESTRICTIONS))
+        }
+        else{
+            setState(BaseViewState.Error(MinimumNumberOfSelectionFailure(minSelection = HEALTH_LABELS_MIN_SELECTION)))
+        }
     }
 
     private fun onDietaryRestrictions(event: NutritionEvent.DietaryRestrictions){
         stateHolder.updateState(stateHolder.getState().copy(restrictions = event.restrictions))
-        setState(BaseViewState.Data(NutritionState(NutritionStep.CUISINE_TYPE)))
+        if (isMinSelection(event.restrictions.size, DIETARY_RESTRICTIONS_MIN_SELECTION)) {
+            setState(BaseViewState.Data(NutritionState(NutritionStep.CUISINE_TYPE)))
+            stateHolder.updateState(stateHolder.getState().copy(currentStep = NutritionStep.CUISINE_TYPE))
+        }
+        else{
+            setState(BaseViewState.Error(MinimumNumberOfSelectionFailure(minSelection = DIETARY_RESTRICTIONS_MIN_SELECTION)))
+        }
     }
 
     private fun onCuisineType(event: NutritionEvent.CuisineType){
         stateHolder.updateState(stateHolder.getState().copy(cuisineType = event.cuisineType))
-        setState(BaseViewState.Data(NutritionState(NutritionStep.SAVE_INFO)))
+        if (isMinSelection(event.cuisineType.size, CUISINE_TYPE_MIN_SELECTION)) {
+            setState(BaseViewState.Data(NutritionState(NutritionStep.SAVE_INFO)))
+        }
+        else{
+            setState(BaseViewState.Error(MinimumNumberOfSelectionFailure(minSelection = CUISINE_TYPE_MIN_SELECTION)))
+        }
     }
 
     private fun getCurrentUserId() = safeLaunch {
@@ -58,7 +88,7 @@ class NutritionViewModel @Inject constructor(
         val restrictions = fitness.restrictions
         val labels = fitness.labels
         val cuisineType = fitness.cuisineType
-        if(restrictions != null && labels != null && cuisineType != null){
+        if(restrictions.isNotEmpty() && labels.isNotEmpty() && cuisineType.isNotEmpty()){
             val userBasicInfo = UserBasicNutritionInfoDomain(id, restrictions=restrictions, labels=labels, cuisineType = cuisineType)
             onSaveFitnessLevelsInfo(userBasicInfo)
         }else{

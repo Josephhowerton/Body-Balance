@@ -1,6 +1,6 @@
 package com.fitness.domain.usecase.cache
 
-import com.fitness.data.repository.UserRepository
+import com.fitness.data.repository.user.UserRepository
 import failure.AuthStateFailure
 import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.tasks.await

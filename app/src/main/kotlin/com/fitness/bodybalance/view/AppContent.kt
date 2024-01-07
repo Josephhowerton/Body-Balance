@@ -115,7 +115,7 @@ fun MainHub(
         drawerContent = {
             ModularDrawSheet(items, scope, drawerState) { item ->
                 navController.navigate(item.route)
-                bottomNavState = item.route == "home"
+                bottomNavState = !showMainHubAnimation
             }
         }) {
         MainHubNavigation(
@@ -123,7 +123,8 @@ fun MainHub(
             showMainHubAnimation = showMainHubAnimation,
             destinations = destinations,
             scope = scope,
-            drawerState = drawerState
+            drawerState = drawerState,
+            navController = navController
         )
     }
 }
@@ -136,7 +137,7 @@ fun MainHubNavigation(
     destinations: Destinations,
     scope: CoroutineScope,
     drawerState: DrawerState,
-    navController: NavHostController = rememberNavController(),
+    navController: NavHostController,
 ) {
     Scaffold(
         topBar = { TopAppBar(title = {}, navigationIcon = { NavDrawerIcon(scope, drawerState) }) },
@@ -149,7 +150,7 @@ fun MainHubNavigation(
 
         val welcome = destinations.find<WelcomeEntry>()
         val dashboard = destinations.find<DashboardEntry>()
-
+        val signout = destinations.find<SignOutEntry>()
         val startDestination = if(showMainHubAnimation) welcome else dashboard
         NavHost(navController = navController, startDestination = startDestination.featureRoute, modifier = Modifier.padding(innerPadding)) {
             with(welcome){
@@ -157,6 +158,10 @@ fun MainHubNavigation(
             }
 
             with(dashboard){
+                composable(navController, destinations)
+            }
+
+            with(signout){
                 composable(navController, destinations)
             }
         }
@@ -207,10 +212,8 @@ fun AuthenticationHub(
     destinations: Destinations,
     navController: NavHostController = rememberNavController(),
 ) {
-
     val welcomeEntry = destinations.find<WelcomeEntry>()
     val authEntry = destinations.find<AuthEntry>()
-    val signOutEntry = destinations.find<SignOutEntry>()
 
     NavHost(navController, startDestination = authEntry.featureRoute) {
 
@@ -221,10 +224,6 @@ fun AuthenticationHub(
         with(authEntry) {
             navController.popBackStack(welcomeEntry.featureRoute, false)
             navigation(navController, destinations)
-        }
-
-        with(signOutEntry){
-            composable(navController, destinations)
         }
     }
 }

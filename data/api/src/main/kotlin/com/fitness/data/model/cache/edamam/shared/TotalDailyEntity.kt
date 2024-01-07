@@ -1,0 +1,31 @@
+package com.fitness.data.model.cache.edamam.shared
+
+data class TotalDailyEntity(
+    val id: String,
+    val fid: String,
+    val CalciumCa: NutrientsMetaDataEntity,
+    val CarbohydrateDifference: NutrientsMetaDataEntity,
+    val Cholesterol: NutrientsMetaDataEntity,
+    val Energy: NutrientsMetaDataEntity,
+    val FattyAcidsSaturated: NutrientsMetaDataEntity,
+    val Fat: NutrientsMetaDataEntity,
+    val Iron: NutrientsMetaDataEntity,
+    val FiberDietary: NutrientsMetaDataEntity,
+    val FolateDFE: NutrientsMetaDataEntity,
+    val Potassium: NutrientsMetaDataEntity,
+    val Magnesium: NutrientsMetaDataEntity,
+    val Sodium: NutrientsMetaDataEntity,
+    val Niacin: NutrientsMetaDataEntity,
+    val Phosphorus: NutrientsMetaDataEntity,
+    val Protein: NutrientsMetaDataEntity,
+    val Riboflavin: NutrientsMetaDataEntity,
+    val Thiamin: NutrientsMetaDataEntity,
+    val VitaminE: NutrientsMetaDataEntity,
+    val VitaminARAE: NutrientsMetaDataEntity,
+    val VitaminB12: NutrientsMetaDataEntity,
+    val VitaminB6: NutrientsMetaDataEntity,
+    val VitaminC: NutrientsMetaDataEntity,
+    val VitaminD: NutrientsMetaDataEntity,
+    val VitaminK: NutrientsMetaDataEntity,
+    val Zinc: NutrientsMetaDataEntity
+)

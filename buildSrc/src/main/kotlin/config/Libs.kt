@@ -24,6 +24,7 @@ private object Version {
     const val RETROFIT = "2.9.0"
     const val RETROFIT_COROUTINES = "0.9.2"
     const val OKHTTP = "4.9.0"
+    const val MOSHI = "1.14.0"
 }
 
 object CoreLibs{
@@ -97,7 +98,10 @@ object GlideLibs{
 
 object NetworkLibs{
     const val RETROFIT = "com.squareup.retrofit2:retrofit:${Version.RETROFIT}"
-    const val GSON = "com.squareup.retrofit2:converter-gson:${Version.RETROFIT}"
+    const val RETROFIT_MOSHI = "com.squareup.retrofit2:converter-moshi:${Version.RETROFIT}"
+    const val MOSHI_KOTLIN = "com.squareup.moshi:moshi-kotlin:${Version.MOSHI}"
+    const val MOSHI = "com.squareup.moshi:moshi:${Version.MOSHI}"
+    const val MOSHI_CODEGEN = "com.squareup.moshi:moshi-kotlin-codegen:${Version.MOSHI}"
     const val RETROFIT_COROUTINES = "com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:${Version.RETROFIT_COROUTINES}"
     const val OKHTTP = "com.squareup.okhttp3:okhttp:${Version.OKHTTP}"
     const val OKHTTP_INTERCEPTOR = "com.squareup.okhttp3:logging-interceptor:${Version.OKHTTP}"

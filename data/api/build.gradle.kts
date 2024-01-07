@@ -1,5 +1,6 @@
 plugins{
     id("commons.android-library")
+    id("kotlin-parcelize")
 }
 
 android{

@@ -80,6 +80,8 @@ val DependencyHandler.DASHBOARD get() = implementation(project(":features:dashbo
 val DependencyHandler.DASHBOARD_API get() = api(project(":features:dashboard:api"))
 val DependencyHandler.ONBOARD get() = implementation(project(":features:onboard:impl"))
 val DependencyHandler.ONBOARD_API get() = api(project(":features:onboard:api"))
+val DependencyHandler.SEARCH get() = implementation(project(":features:search:impl"))
+val DependencyHandler.SEARCH_API get() = api(project(":features:search:api"))
 val DependencyHandler.SIGN_OUT get() = implementation(project(":features:signout:impl"))
 val DependencyHandler.SIGN_OUT_API get() = api(project(":features:signout:api"))
 val DependencyHandler.USER_PROFILE get() = implementation(project(":features:user-profile:impl"))
@@ -159,6 +161,7 @@ fun DependencyHandler.addFeatureDependencies(){
     USER_PROFILE
     WELCOME
     SIGN_OUT
+    SEARCH
 }
 
 fun DependencyHandler.addFeatureAPIDependencies(){
@@ -168,6 +171,7 @@ fun DependencyHandler.addFeatureAPIDependencies(){
     USER_PROFILE_API
     WELCOME_API
     SIGN_OUT_API
+    SEARCH_API
 }
 
 
@@ -178,7 +182,10 @@ fun DependencyHandler.addMedia3Dependencies(){
 
 fun DependencyHandler.addNetworkDependencies(){
     api(NetworkLibs.RETROFIT)
-    api(NetworkLibs.GSON)
+    api(NetworkLibs.RETROFIT_MOSHI)
+    api(NetworkLibs.MOSHI)
+    api(NetworkLibs.MOSHI_KOTLIN)
+    kapt(NetworkLibs.MOSHI_CODEGEN)
     api(NetworkLibs.RETROFIT_COROUTINES)
     api(NetworkLibs.OKHTTP)
     api(NetworkLibs.OKHTTP_INTERCEPTOR)

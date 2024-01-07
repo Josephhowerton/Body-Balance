@@ -17,6 +17,7 @@ android{
 }
 
 dependencies {
+    addNetworkDependencies()
     addNavigationDependencies()
     addJetpackComposeDependencies()
     addCoroutineDependencies()

@@ -1,7 +1,7 @@
 package com.fitness.domain.usecase.cache
 
 import cache.Fields
-import com.fitness.data.repository.UserRepository
+import com.fitness.data.repository.user.UserRepository
 import enums.EDietaryRestrictions
 import enums.ENutritionPreferences
 import kotlinx.coroutines.flow.FlowCollector

@@ -32,6 +32,9 @@
             <option value="$PROJECT_DIR$/features/onboard" />
             <option value="$PROJECT_DIR$/features/onboard/api" />
             <option value="$PROJECT_DIR$/features/onboard/impl" />
+            <option value="$PROJECT_DIR$/features/search" />
+            <option value="$PROJECT_DIR$/features/search/api" />
+            <option value="$PROJECT_DIR$/features/search/impl" />
             <option value="$PROJECT_DIR$/features/signout" />
             <option value="$PROJECT_DIR$/features/signout/api" />
             <option value="$PROJECT_DIR$/features/signout/impl" />

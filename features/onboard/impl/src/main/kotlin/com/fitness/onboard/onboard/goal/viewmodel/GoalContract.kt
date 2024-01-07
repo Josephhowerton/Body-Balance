@@ -2,12 +2,13 @@ package com.fitness.onboard.onboard.goal.viewmodel
 
 import enums.EGoals
 
-data class GoalState(val step: GoalStep = GoalStep.GOALS)
+data class GoalState(val step: GoalStep = GoalStep.GOALS, val goals: List<EGoals> = emptyList())
 
 
 sealed class GoalEvent{
     data class Goals(val goals: List<EGoals>): GoalEvent()
     object SaveInfo: GoalEvent()
+    object DismissDialog: GoalEvent()
     object ForceComplete: GoalEvent()
 }
 

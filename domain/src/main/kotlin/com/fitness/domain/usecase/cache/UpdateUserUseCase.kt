@@ -1,12 +1,10 @@
 package com.fitness.domain.usecase.cache
 
 import cache.Fields
-import com.fitness.data.repository.UserRepository
-import extensions.update
+import com.fitness.data.repository.user.UserRepository
 import kotlinx.coroutines.flow.FlowCollector
 import state.DataState
 import usecase.DataStateUseCase
-import usecase.LocalUseCase
 import javax.inject.Inject
 
 class UpdateUserUseCase  @Inject constructor(

@@ -1,7 +1,9 @@
 package enums
 
 import com.fitness.resources.R
-enum class EGoals(val title: Int) {
+import extensions.Item
+
+enum class EGoals(override val title: Int, override val desc: Int? = null): Item {
     INCREASE_CARDIO_ENDURANCE(R.string.title_increase_cardio_endurance),
     BUILD_MUSCLE_STRENGTH(R.string.title_build_muscle_strength),
     ENHANCE_FLEXIBILITY(R.string.title_enhance_flexibility),

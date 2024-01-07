@@ -2,7 +2,7 @@ package com.fitness.domain.usecase.cache
 
 import com.fitness.data.extensions.toUserFitnessLevelCache
 import com.fitness.data.model.domain.user.UserFitnessLevelDomain
-import com.fitness.data.repository.UserRepository
+import com.fitness.data.repository.user.UserRepository
 import kotlinx.coroutines.flow.FlowCollector
 import state.DataState
 import usecase.DataStateUseCase

@@ -1,8 +1,9 @@
 package enums
 
 import com.fitness.resources.R
+import extensions.Item
 
-enum class EDishType(val titleResId: Int) {
+enum class EDishType(override val title: Int, override val desc: Int? = null): Item {
     ALCOHOL_COCKTAIL(R.string.title_alcohol_cocktail),
     BISCUITS_AND_COOKIES(R.string.title_biscuits_and_cookies),
     BREAD(R.string.title_bread),

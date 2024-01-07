@@ -1,5 +1,6 @@
 package com.fitness.onboard.onboard.fitness
 
+import com.fitness.onboard.onboard.fitness.viewmodel.FitnessStep
 import enums.EFitnessHabits
 import enums.EFitnessLevel
 
@@ -17,6 +18,7 @@ object FitnessStateHolder {
 }
 
 data class FitnessState(
+    val currentStep: FitnessStep = FitnessStep.FITNESS_LEVELS,
     val level: EFitnessLevel? = null,
-    val habits: List<EFitnessHabits>? = null
+    val habits: List<EFitnessHabits> = emptyList()
 )

@@ -1,7 +1,7 @@
 package com.fitness.domain.usecase.cache
 
 import cache.Fields
-import com.fitness.data.repository.UserRepository
+import com.fitness.data.repository.user.UserRepository
 import enums.EFitnessHabits
 import enums.EFitnessLevel
 import kotlinx.coroutines.flow.FlowCollector

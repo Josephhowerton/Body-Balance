@@ -52,7 +52,7 @@ object DrawerNavigationUtil{
 
     private const val AccountManagementRoute =  "account"
     private const val HomeRoute =  "home"
-    private const val LogOutRoute =  "logout"
+    private const val LogOutRoute =  "sign-out"
     private const val SettingsRoute =  "settings"
 
     private const val AccountManagementTitle =  "Account Management"

@@ -1,7 +1,9 @@
 package enums
 
 import com.fitness.resources.R
-enum class ECuisineType(val title: Int) {
+import extensions.Item
+
+enum class ECuisineType(override val title: Int, override val desc: Int? = null): Item {
     AMERICAN(R.string.title_american),
     ASIAN(R.string.title_asian),
     BRITISH(R.string.title_british),

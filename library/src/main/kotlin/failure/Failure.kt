@@ -25,8 +25,13 @@ data class AuthStateFailure(
     override val title: Int = R.string.login_status_changed
 ): Failure()
 
-
 data class TimeoutCancellationFailure(
     override val description: Int = R.string.desc_connection_timeout,
     override val title: Int = R.string.title_connection_timeout
+): Failure()
+
+data class MinimumNumberOfSelectionFailure(
+    override val description: Int = R.string.desc_error_min_items_required,
+    override val title: Int = R.string.title_error,
+    val minSelection: Int
 ): Failure()

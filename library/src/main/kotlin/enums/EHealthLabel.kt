@@ -1,7 +1,9 @@
 package enums
 
 import com.fitness.resources.R
-enum class EHealthLabel(val title: Int, val desc: Int) {
+import extensions.Item
+
+enum class EHealthLabel(override val title: Int, override val desc: Int?): Item {
     ALCOHOL_COCKTAIL(R.string.title_alcohol_cocktail, R.string.def_alcohol_cocktail),
     ALCOHOL_FREE(R.string.title_alcohol_free, R.string.def_alcohol_free),
     CELERY_FREE(R.string.title_celery_free, R.string.def_celery_free),

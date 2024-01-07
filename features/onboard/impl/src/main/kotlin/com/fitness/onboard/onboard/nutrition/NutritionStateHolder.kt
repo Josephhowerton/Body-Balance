@@ -1,5 +1,6 @@
 package com.fitness.onboard.onboard.nutrition
 
+import com.fitness.onboard.onboard.nutrition.viewmodel.NutritionStep
 import enums.ECuisineType
 import enums.EDietaryRestrictions
 import enums.EHealthLabel
@@ -20,7 +21,8 @@ object NutritionStateHolder {
 }
 
 data class NutritionState(
-    val labels: List<EHealthLabel>? = null,
-    val restrictions: List<EDietaryRestrictions>? = null,
-    val cuisineType: List<ECuisineType>? = null
+    val currentStep: NutritionStep = NutritionStep.NUTRITION_PREFERENCES,
+    val labels: List<EHealthLabel> = emptyList(),
+    val restrictions: List<EDietaryRestrictions> = emptyList(),
+    val cuisineType: List<ECuisineType> = emptyList()
 )

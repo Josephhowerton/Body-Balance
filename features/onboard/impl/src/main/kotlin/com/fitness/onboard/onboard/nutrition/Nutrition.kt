@@ -1,12 +1,16 @@
 package com.fitness.onboard.onboard.nutrition
 
+import androidx.compose.animation.Crossfade
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.res.stringResource
+import com.fitness.component.screens.ErrorDialog
 import com.fitness.component.screens.ErrorScreen
 import com.fitness.component.screens.LoadingScreen
 import com.fitness.component.screens.MessageScreen
+import com.fitness.onboard.onboard.goal.viewmodel.GoalEvent
 import com.fitness.onboard.onboard.nutrition.view.CuisineType
 import com.fitness.onboard.onboard.nutrition.view.DietaryRestrictions
 import com.fitness.onboard.onboard.nutrition.view.HealthLabels
@@ -20,6 +24,7 @@ import extensions.Light
 import extensions.cast
 import failure.AuthStateFailure
 import failure.Failure
+import failure.MinimumNumberOfSelectionFailure
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import state.BaseViewState
@@ -54,12 +59,21 @@ fun NutritionScreen(
         is BaseViewState.Error -> {
             val failure = uiState.cast<BaseViewState.Error>().throwable as Failure
 
-            ErrorScreen(title = failure.title, description = failure.description) {
-                if(failure is AuthStateFailure){
-                    onForceSignOut()
-                }
-                else{
-                    onComplete()
+            if(failure is MinimumNumberOfSelectionFailure){
+                ErrorDialog(
+                    title = stringResource(id = failure.title),
+                    description = stringResource(id = failure.description, failure.minSelection),
+                    onDismiss = { onTriggerEvent(NutritionEvent.DismissDialog) }
+                )
+            }
+            else{
+                ErrorScreen(title = failure.title, description = failure.description) {
+                    if(failure is AuthStateFailure){
+                        onForceSignOut()
+                    }
+                    else{
+                        onComplete()
+                    }
                 }
             }
         }
@@ -80,11 +94,13 @@ private fun Nutrition(
     onTriggerEvent: (NutritionEvent) -> Unit = {},
     onComplete: () ->  Unit = {}
 ) {
-    when(state.step){
-        NutritionStep.NUTRITION_PREFERENCES -> HealthLabels(onTriggerEvent = onTriggerEvent)
-        NutritionStep.DIETARY_RESTRICTIONS -> DietaryRestrictions(onTriggerEvent = onTriggerEvent)
-        NutritionStep.CUISINE_TYPE -> CuisineType(onTriggerEvent = onTriggerEvent)
-        NutritionStep.SAVE_INFO -> onTriggerEvent(NutritionEvent.SaveFitnessInfo)
-        NutritionStep.COMPLETE -> onComplete()
+    Crossfade(targetState = state.step, label = "Nutrition") {
+        when(it){
+            NutritionStep.NUTRITION_PREFERENCES -> HealthLabels(state, onTriggerEvent = onTriggerEvent)
+            NutritionStep.DIETARY_RESTRICTIONS -> DietaryRestrictions(state, onTriggerEvent = onTriggerEvent)
+            NutritionStep.CUISINE_TYPE -> CuisineType(state, onTriggerEvent = onTriggerEvent)
+            NutritionStep.SAVE_INFO -> onTriggerEvent(NutritionEvent.SaveFitnessInfo)
+            NutritionStep.COMPLETE -> onComplete()
+        }
     }
 }

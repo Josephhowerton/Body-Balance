@@ -3,15 +3,10 @@ package com.fitness.domain.usecase.cache
 import cache.cast
 import cache.firestore
 import com.fitness.data.extensions.toUserBasicNutritionInfoDomain
-import com.fitness.data.extensions.toUserDomain
 import com.fitness.data.model.cache.user.UserBasicNutritionInfoCache
-import com.fitness.data.model.cache.user.UserCache
 import com.fitness.data.model.domain.user.UserBasicNutritionInfoDomain
-import com.fitness.data.repository.UserRepository
-import com.fitness.data.model.domain.user.UserDomain
-import failure.AuthStateFailure
+import com.fitness.data.repository.user.UserRepository
 import kotlinx.coroutines.flow.FlowCollector
-import kotlinx.coroutines.tasks.await
 import state.DataState
 import usecase.DataStateUseCase
 import javax.inject.Inject

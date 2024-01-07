@@ -1,8 +1,9 @@
 package enums
 
 import com.fitness.resources.R
+import extensions.Item
 
-enum class EDietLabel(val titleResId: Int, val descriptionResId: Int) {
+enum class EDietLabel(override val title: Int, override val desc: Int?): Item {
     BALANCED(R.string.balanced_title, R.string.balanced_description),
     HIGH_FIBER(R.string.high_fiber_title, R.string.high_fiber_description),
     HIGH_PROTEIN(R.string.high_protein_title, R.string.high_protein_description),

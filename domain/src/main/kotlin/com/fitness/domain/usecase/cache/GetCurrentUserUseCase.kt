@@ -5,7 +5,7 @@ import cache.firestore
 import com.fitness.data.extensions.toUserDomain
 import com.fitness.data.model.cache.user.UserCache
 import com.fitness.data.model.domain.user.UserDomain
-import com.fitness.data.repository.UserRepository
+import com.fitness.data.repository.user.UserRepository
 import kotlinx.coroutines.flow.FlowCollector
 import state.DataState
 import usecase.DataStateUseCase

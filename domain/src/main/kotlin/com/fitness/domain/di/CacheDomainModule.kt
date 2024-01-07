@@ -1,6 +1,6 @@
 package com.fitness.domain.di
 
-import com.fitness.data.repository.UserRepository
+import com.fitness.data.repository.user.UserRepository
 import com.fitness.domain.usecase.cache.CreateBasicUserInfoUseCase
 import com.fitness.domain.usecase.cache.CreateUserBasicFitnessUseCase
 import com.fitness.domain.usecase.cache.CreateUserBasicGoalsInfoUseCase
