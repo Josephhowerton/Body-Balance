@@ -7,12 +7,12 @@ android {
 }
 
 dependencies {
-    addFirebaseDependencies()
-    DOMAIN
-    ONBOARD_API
-    AUTHENTICATION_API
-    SIGN_OUT_API
     THEME
     LIBRARY
     RESOURCES
+    DOMAIN_API
+    ONBOARD_API
+    SIGN_OUT_API
+    AUTHENTICATION_API
+    addFirebaseDependencies()
 }

@@ -87,3 +87,5 @@ val textOnBackgroundSpoke = Color(0xFF212121) // Dark Grey
 
  val Green = Color(0xFF32DE84)
  val Red = Color(0xFFB20710)
+ val Saffron = Color(0xFFF4C430)
+ val DeepOrange = Color(0xFFF04A00)

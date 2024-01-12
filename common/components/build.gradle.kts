@@ -22,5 +22,5 @@ dependencies {
     LIBRARY
     THEME
 
-    GLIDE
+    COIL
 }

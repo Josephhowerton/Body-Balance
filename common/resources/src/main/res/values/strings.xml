@@ -528,5 +528,17 @@
     <string name="title_omelet">Omelet</string>
     <string name="title_error">Error</string>
     <string name="title_dismiss">Dismiss</string>
+    <string name="content_description_search">icon search</string>
     <string name="desc_error_min_items_required">We need at least %1$d items to make things happen. Mind adding more?</string>
+    <string name="content_description_share">icon share</string>
+    <string name="title_planner">Planner</string>
+    <string name="title_nutritional_summary">Nutritional Summary</string>
+    <string name="content_description_icon_energy">icon energy</string>
+    <string name="content_description_icon_fat">icon fat</string>
+    <string name="content_description_icon_carbs">icon carbs</string>
+    <string name="content_description_icon_protein">icon protein</string>
+    <string name="content_description_icon_fiber">icon fiber</string>
+    <string name="content_description_icon_net_carbs">icon net carbs</string>
+    <string name="content_description_icon_plate">icon plate</string>
+    <string name="content_description_icon_add">icon add</string>
 </resources>

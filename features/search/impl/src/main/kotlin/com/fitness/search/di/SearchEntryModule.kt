@@ -13,7 +13,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-internal interface SearchEntryModule {
+interface SearchEntryModule {
     @Binds
     @Singleton
     @IntoMap

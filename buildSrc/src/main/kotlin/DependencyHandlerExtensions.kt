@@ -58,6 +58,9 @@ fun DependencyHandler.debugImplementation(dependencyNotation: Any): Dependency? 
     add("debugImplementation", dependencyNotation)
 
 
+fun DependencyHandler.annotationProcessor(dependencyNotation: Any): Dependency? =
+    add("annotationProcessor", dependencyNotation)
+
 
 //Common
 val DependencyHandler.AUTHENTICATION_MANAGER get() = api(project(":common:authentication"))
@@ -67,11 +70,12 @@ val DependencyHandler.RESOURCES get() = implementation(project(":common:resource
 val DependencyHandler.THEME get() = implementation(project(":common:theme"))
 
 //Data
-val DependencyHandler.DATA_IMPL get() = api(project(":data:impl"))
+val DependencyHandler.DATA_IMPL get() = implementation(project(":data:impl"))
 val DependencyHandler.DATA_API get() = api(project(":data:api"))
 
 //Domain
-val DependencyHandler.DOMAIN get() = api(project(":domain"))
+val DependencyHandler.DOMAIN_API  get() = api(project(":domain:api"))
+val DependencyHandler.DOMAIN_IMPL get() = implementation(project(":domain:impl"))
 
 //Feature
 val DependencyHandler.AUTHENTICATION get() = implementation(project(":features:authentication:impl"))
@@ -92,7 +96,7 @@ val DependencyHandler.WELCOME_API get() = api(project(":features:welcome:api"))
 //Library
 val DependencyHandler.LIBRARY get() = implementation(project(":library"))
 
-val DependencyHandler.GLIDE get() = implementation(GlideLibs.GLIDE)
+val DependencyHandler.COIL get() = implementation(CoilLibs.COIL)
 
 
 fun DependencyHandler.addCoreDependencies() {
@@ -110,6 +114,7 @@ fun DependencyHandler.addJetpackComposeDependencies(){
     implementation(ComposeLibs.COMPOSE_MATERIAL3)
     implementation(ComposeLibs.MATERIAL)
     implementation(ComposeLibs.COMPOSE_CONSTRAINT_LAYOUT)
+    implementation(ComposeLibs.COMPOSE_FOUNDATION)
     debugImplementation(ComposeLibs.DEBUG_COMPOSE_UI_TOOLING)
     debugImplementation(ComposeLibs.DEBUG_COMPOSE_UI_MANIFEST)
 }
@@ -189,4 +194,15 @@ fun DependencyHandler.addNetworkDependencies(){
     api(NetworkLibs.RETROFIT_COROUTINES)
     api(NetworkLibs.OKHTTP)
     api(NetworkLibs.OKHTTP_INTERCEPTOR)
+}
+
+fun DependencyHandler.addSerializationLib(){
+    api(SerializationLibs.KOTLINX_SERIALIZATION)
+}
+
+fun DependencyHandler.addRoomLib(){
+    api(RoomLibs.ROOM_RUNTIME)
+    api(RoomLibs.ROOM_KTX)
+    api(RoomLibs.GSON)
+    kapt(RoomLibs.ROOM_COMPILER)
 }

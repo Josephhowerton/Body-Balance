@@ -1,37 +1,23 @@
 package com.fitness.data.repository.edamam
 
-import com.fitness.data.model.network.edamam.recipe.RecipeResponse
+import com.fitness.data.model.cache.edamam.RecipeEntity
+import com.fitness.data.model.network.edamam.params.RecipeSearchParams
+import com.fitness.data.model.network.edamam.recipe.RecipeDto
+import kotlinx.coroutines.flow.Flow
 
 interface EdamamRecipeRepository {
-    suspend fun getRecipes(
-        type: String,
-        query: String,
-        ingredients: String?,
-        diet: ArrayList<String>?,
-        health: ArrayList<String>?,
-        cuisineType: ArrayList<String>?,
-        mealType: ArrayList<String>?,
-        dishType: ArrayList<String>?,
-        calories: String?,
-        time: String?,
-        imageSize: ArrayList<String>?,
-        glycemicIndex: String?,
-        excluded: ArrayList<String>?,
-        random: String?,
-        co2EmissionsClass: String?,
-        tag: ArrayList<String>?,
-        language: String?,
-    ): RecipeResponse
+    suspend fun search(params: RecipeSearchParams): List<RecipeDto>
+    suspend fun getRecipes(params: RecipeSearchParams): List<RecipeEntity>
 
-    suspend fun getRecipesByUri(
-        type: String,
-        uri: ArrayList<String>,
-        language: String?,
-    ): RecipeResponse
+    suspend fun fetchRecipesByUri(
+        type: String = "any",
+        uri: List<String>,
+        language: String? = null,
+    ): List<RecipeEntity>
 
-    suspend fun getRecipesById(
-        type: String,
+    suspend fun fetchRecipesById(
+        type: String = "any",
         id: String,
-        language: String?,
-    ): RecipeResponse
+        language: String? = null,
+    ): List<RecipeEntity>
 }

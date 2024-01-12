@@ -7,9 +7,9 @@ android {
 }
 
 dependencies {
+    LIBRARY
+    DOMAIN_API
     SIGN_OUT_API
     AUTHENTICATION_API
     AUTHENTICATION_MANAGER
-    LIBRARY
-    DOMAIN
 }

@@ -6,6 +6,7 @@ private object Version {
     const val ACTIVITY_COMPOSE = "1.8.1"
     const val COMPOSE_BOM = "2023.03.00"
     const val COMPOSE_NAVIGATION = "2.7.5"
+    const val COMPOSE_FOUNDATION = "1.5.1"
     const val COMPOSE_CONSTRAINT_LAYOUT = "1.0.1"
     const val JUNIT = "4.13.2"
     const val JUNIT_EXT = "1.1.5"
@@ -18,13 +19,15 @@ private object Version {
     const val FIREBASE_BOM = "32.6.0"
     const val EXO_PLAYER = "1.2.0"
     const val GOOGLE_PLAY_AUTH = "20.7.0"
-    const val MATERIAL = "1.4.0"
     const val LIB_PHONE_NUMBER = "8.12.39"
-    const val GLIDE = "2.2.13"
+    const val COIL = "2.2.13"
     const val RETROFIT = "2.9.0"
     const val RETROFIT_COROUTINES = "0.9.2"
     const val OKHTTP = "4.9.0"
     const val MOSHI = "1.14.0"
+    const val KOTLINX_SERIALIZATION = "1.2.1"
+    const val ROOM = "2.6.1"
+    const val GSON = "2.8.6"
 }
 
 object CoreLibs{
@@ -44,6 +47,7 @@ object ComposeLibs{
     const val DEBUG_COMPOSE_UI_MANIFEST = "androidx.compose.ui:ui-test-manifest"
     const val COMPOSE_CONSTRAINT_LAYOUT = "androidx.constraintlayout:constraintlayout-compose:${Version.COMPOSE_CONSTRAINT_LAYOUT}"
     const val MATERIAL = "com.google.android.material:material:1.4.0"
+    const val COMPOSE_FOUNDATION = "androidx.compose.foundation:foundation-layout-android:${Version.COMPOSE_FOUNDATION}"
 
 }
 
@@ -92,8 +96,8 @@ object ExoPlayerLibs{
     const val EXO_PLAYER_UI = "androidx.media3:media3-ui:${Version.EXO_PLAYER}"
 }
 
-object GlideLibs{
-    const val GLIDE = "com.github.skydoves:landscapist-glide:${Version.GLIDE}"
+object CoilLibs{
+    const val COIL = "com.github.skydoves:landscapist-coil:${Version.COIL}"
 }
 
 object NetworkLibs{
@@ -105,4 +109,15 @@ object NetworkLibs{
     const val RETROFIT_COROUTINES = "com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:${Version.RETROFIT_COROUTINES}"
     const val OKHTTP = "com.squareup.okhttp3:okhttp:${Version.OKHTTP}"
     const val OKHTTP_INTERCEPTOR = "com.squareup.okhttp3:logging-interceptor:${Version.OKHTTP}"
+}
+
+object SerializationLibs{
+    const val KOTLINX_SERIALIZATION = "org.jetbrains.kotlinx:kotlinx-serialization-json:${Version.KOTLINX_SERIALIZATION}"
+}
+
+object RoomLibs{
+    const val GSON = "com.google.code.gson:gson:${Version.GSON}"
+    const val ROOM_RUNTIME = "androidx.room:room-runtime:${Version.ROOM}"
+    const val ROOM_COMPILER = "androidx.room:room-compiler:${Version.ROOM}"
+    const val ROOM_KTX = "androidx.room:room-ktx:${Version.ROOM}"
 }

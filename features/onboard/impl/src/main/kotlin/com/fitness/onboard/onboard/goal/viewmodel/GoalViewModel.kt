@@ -2,9 +2,9 @@ package com.fitness.onboard.onboard.goal.viewmodel
 
 import com.fitness.authentication.manager.AuthenticationManager
 import com.fitness.authentication.manager.AuthenticationState
-import com.fitness.data.model.domain.user.UserBasicGoalsInfoDomain
-import com.fitness.domain.usecase.cache.CreateUserBasicGoalsInfoUseCase
-import com.fitness.domain.usecase.cache.GetCurrentUserIdUseCase
+import com.fitness.domain.model.user.UserBasicGoalsInfo
+import com.fitness.domain.usecase.user.CreateUserBasicGoalsInfoUseCase
+import com.fitness.domain.usecase.user.GetCurrentUserIdUseCase
 import com.fitness.onboard.onboard.goal.GoalStateHolder
 import com.fitness.onboard.util.GOALS_MIN_SELECTION
 import com.fitness.onboard.util.OnboardFailure
@@ -64,7 +64,7 @@ class GoalViewModel @Inject constructor(
         val holder = stateHolder.getState()
         val goals = holder.goals
         if(goals.isNotEmpty()){
-            val userGoalsInfo = UserBasicGoalsInfoDomain(userId = id, goals = goals)
+            val userGoalsInfo = UserBasicGoalsInfo(userId = id, goals = goals)
             onSaveFitnessLevelsInfo(userGoalsInfo)
         }
         else{
@@ -72,7 +72,7 @@ class GoalViewModel @Inject constructor(
         }
     }
 
-    private fun onSaveFitnessLevelsInfo(userGoalsInfo: UserBasicGoalsInfoDomain) = safeLaunch {
+    private fun onSaveFitnessLevelsInfo(userGoalsInfo: UserBasicGoalsInfo) = safeLaunch {
         val param = CreateUserBasicGoalsInfoUseCase.Params(userGoalsInfo)
         execute(createUserBasicNutritionInfoUseCase(param)){
             authenticationManager.update(AuthenticationState.Authenticated)

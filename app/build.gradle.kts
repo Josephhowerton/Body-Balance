@@ -78,6 +78,7 @@ dependencies {
     NAVIGATION
     RESOURCES
     DATA_IMPL
+    DOMAIN_IMPL
 }
 
 kapt {

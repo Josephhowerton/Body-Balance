@@ -1,5 +1,7 @@
 package network.nutrition
 
+import retrofit2.http.Header
+
 fun createNutritionInterceptor(): NutritionInterceptor = NutritionInterceptor()
 
 const val APP_ID = "app_id"
@@ -13,5 +15,3 @@ const val EDAMAM_RECIPE_KEY = "e8c5eb12c9a3bf152ddd572571147a9f"
 
 const val EDAMAM_FOOD_ID = "94526f7b"
 const val EDAMAM_FOOD_KEY = "68a3da668152e9aecc483299c5900fd3"
-
-const val NUTRITION_BASE_URL = "94526f7b"

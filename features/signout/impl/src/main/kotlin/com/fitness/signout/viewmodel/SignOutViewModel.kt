@@ -1,6 +1,5 @@
 package com.fitness.signout.viewmodel
 
-import android.util.Log
 import com.fitness.authentication.manager.AuthenticationManager
 import com.fitness.authentication.manager.AuthenticationState
 import com.fitness.domain.usecase.auth.SignOutUseCase

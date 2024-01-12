@@ -1,6 +1,6 @@
 package com.fitness.data.repository.edamam
 
-import com.fitness.data.model.network.edamam.nutrients.NutrientsResponse
+import com.fitness.data.model.network.edamam.NutrientsResponse
 import com.fitness.data.network.EdamamNutritionService
 import javax.inject.Inject
 

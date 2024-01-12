@@ -1,38 +1,15 @@
 package com.fitness.data.repository.edamam
 
-import com.fitness.data.model.network.edamam.food.FoodResponse
+import com.fitness.data.model.network.edamam.food.FoodData
+import com.fitness.data.model.network.edamam.params.FoodSearchBrandParams
+import com.fitness.data.model.network.edamam.params.FoodSearchIngredientParams
 
 interface EdamamFoodRepository {
-    suspend fun getAllFood(): FoodResponse
+    suspend fun getAllFood(): List<FoodData>
 
-    suspend fun getFoodByIngredient(
-        ingredient: String,
-        brand: String?,
-        nutritionType: String?,
-        health: String?,
-        calories: String?,
-        category: String?,
-        nutrients: HashMap<String, String>?
-    ): FoodResponse
+    suspend fun getFoodByIngredient(params: FoodSearchIngredientParams): List<FoodData>
 
-    suspend fun getFoodByBrand(
-        brand: String,
-        ingredient: String?,
-        nutritionType: String?,
-        health: String?,
-        calories: String?,
-        category: String?,
-        nutrients: HashMap<String, String>?
-    ): FoodResponse
+    suspend fun getFoodByBrand(params: FoodSearchBrandParams): List<FoodData>
 
-    suspend fun getFoodByUpc(
-        upc: String,
-        ingredient: String?,
-        brand: String?,
-        nutritionType: String?,
-        health: String?,
-        calories: String?,
-        category: String?,
-        nutrients: HashMap<String, String>?
-    ): FoodResponse
+    suspend fun getFoodByUpc(upc: String): List<FoodData>
 }

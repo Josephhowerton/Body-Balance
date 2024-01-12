@@ -2,7 +2,6 @@ package com.fitness.bodybalance.viewmodel
 
 import com.fitness.authentication.manager.AuthenticationManager
 import com.fitness.authentication.manager.AuthenticationState
-import com.fitness.domain.usecase.cache.GetCurrentUserUseCase
 import com.fitness.theme.AppTheme
 import com.fitness.theme.ThemeManager
 import dagger.hilt.android.lifecycle.HiltViewModel

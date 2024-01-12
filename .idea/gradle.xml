@@ -22,6 +22,8 @@
             <option value="$PROJECT_DIR$/data/api" />
             <option value="$PROJECT_DIR$/data/impl" />
             <option value="$PROJECT_DIR$/domain" />
+            <option value="$PROJECT_DIR$/domain/api" />
+            <option value="$PROJECT_DIR$/domain/impl" />
             <option value="$PROJECT_DIR$/features" />
             <option value="$PROJECT_DIR$/features/authentication" />
             <option value="$PROJECT_DIR$/features/authentication/api" />

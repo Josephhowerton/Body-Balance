@@ -1,11 +1,9 @@
 package com.fitness.onboard.onboard.fitness.viewmodel
 
-import com.fitness.data.model.domain.user.UserFitnessLevelDomain
-import com.fitness.domain.usecase.cache.CreateUserBasicFitnessUseCase
-import com.fitness.domain.usecase.cache.GetCurrentUserIdUseCase
+import com.fitness.domain.model.user.UserFitnessLevel
+import com.fitness.domain.usecase.user.CreateUserBasicFitnessUseCase
+import com.fitness.domain.usecase.user.GetCurrentUserIdUseCase
 import com.fitness.onboard.onboard.fitness.FitnessStateHolder
-import com.fitness.onboard.onboard.goal.viewmodel.GoalState
-import com.fitness.onboard.util.GOALS_MIN_SELECTION
 import com.fitness.onboard.util.HABITS_MIN_SELECTION
 import com.fitness.onboard.util.OnboardFailure
 import com.fitness.onboard.util.isMinSelection
@@ -71,14 +69,14 @@ class FitnessViewModel @Inject constructor(
         val level = fitness.level
         val habits = fitness.habits
         if(level != null && habits.isNotEmpty()){
-            val userBasicInfo = UserFitnessLevelDomain(id, level, habits)
+            val userBasicInfo = UserFitnessLevel(id, level, habits)
             onSaveFitnessLevelsInfo(userBasicInfo)
         }else{
             setState(BaseViewState.Error(OnboardFailure.UnknownFailure()))
         }
     }
 
-    private fun onSaveFitnessLevelsInfo(userBasicInfoDomain: UserFitnessLevelDomain) = safeLaunch {
+    private fun onSaveFitnessLevelsInfo(userBasicInfoDomain: UserFitnessLevel) = safeLaunch {
         val param = CreateUserBasicFitnessUseCase.Params(userBasicInfoDomain)
         execute(createUserBasicFitnessUseCase(param)){
             setState(BaseViewState.Data(FitnessState(FitnessStep.COMPLETE)))

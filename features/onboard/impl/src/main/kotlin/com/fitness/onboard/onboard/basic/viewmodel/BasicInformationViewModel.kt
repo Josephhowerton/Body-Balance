@@ -1,8 +1,8 @@
 package com.fitness.onboard.onboard.basic.viewmodel
 
-import com.fitness.data.model.domain.user.UserBasicInfoDomain
-import com.fitness.domain.usecase.cache.CreateBasicUserInfoUseCase
-import com.fitness.domain.usecase.cache.GetCurrentUserIdUseCase
+import com.fitness.domain.model.user.UserBasicInfo
+import com.fitness.domain.usecase.user.CreateBasicUserInfoUseCase
+import com.fitness.domain.usecase.user.GetCurrentUserIdUseCase
 import com.fitness.onboard.onboard.basic.BasicInformationStateHolder
 import com.fitness.onboard.util.OnboardFailure
 import com.fitness.onboard.util.toOnboardFailure
@@ -63,14 +63,14 @@ class BasicInformationViewModel @Inject constructor(
         val height = basicInformation.height
         val weight = basicInformation.weight
         if (age != null && gender != null && height != null && weight != null) {
-            val userBasicInfo = UserBasicInfoDomain(id, age, gender, height, weight)
+            val userBasicInfo = UserBasicInfo(id, age, gender, height, weight)
             onSaveBasicInformation(userBasicInfo)
         } else {
             setState(BaseViewState.Error(OnboardFailure.UnknownFailure()))
         }
     }
 
-    private fun onSaveBasicInformation(userBasicInfoDomain: UserBasicInfoDomain) = safeLaunch {
+    private fun onSaveBasicInformation(userBasicInfoDomain: UserBasicInfo) = safeLaunch {
         val param = CreateBasicUserInfoUseCase.Params(userBasicInfoDomain)
         execute(createBasicUserInfoUseCase(param)) {
             setState(BaseViewState.Data(BasicInformationState(step = BasicInformationStep.COMPLETE)))

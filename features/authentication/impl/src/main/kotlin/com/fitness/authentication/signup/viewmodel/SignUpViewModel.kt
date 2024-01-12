@@ -14,11 +14,11 @@ import com.fitness.authentication.util.verifyName
 import com.fitness.authentication.util.verifyPassword
 import com.fitness.authentication.util.verifyPhone
 import auth.PhoneAuthState
-import com.fitness.data.model.domain.user.UserDomain
+import com.fitness.domain.model.user.User
 import com.fitness.domain.usecase.auth.EmailPasswordSignUpUseCase
 import com.fitness.domain.usecase.auth.SendVerificationCodeUseCase
 import com.fitness.domain.usecase.auth.VerifyPhoneNumberUseCase
-import com.fitness.domain.usecase.cache.CreateUserUseCase
+import com.fitness.domain.usecase.user.CreateUserUseCase
 import com.fitness.resources.R
 import dagger.hilt.android.lifecycle.HiltViewModel
 import extensions.TextFieldState
@@ -234,7 +234,7 @@ class SignUpViewModel @Inject constructor(
         )
     }
 
-    private fun onCreateUser(userDomain: UserDomain) = safeLaunch {
+    private fun onCreateUser(userDomain: User) = safeLaunch {
         val params = CreateUserUseCase.Params(userDomain)
         call(createUserUseCase(params)) {
             authManager.update(AuthenticationState.OnBoard)

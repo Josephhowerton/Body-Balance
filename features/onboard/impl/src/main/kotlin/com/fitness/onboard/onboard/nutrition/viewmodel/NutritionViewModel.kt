@@ -1,13 +1,11 @@
 package com.fitness.onboard.onboard.nutrition.viewmodel
 
-import com.fitness.data.model.domain.user.UserBasicNutritionInfoDomain
-import com.fitness.domain.usecase.cache.CreateUserBasicNutritionInfoUseCase
-import com.fitness.domain.usecase.cache.GetCurrentUserIdUseCase
-import com.fitness.onboard.onboard.fitness.viewmodel.FitnessState
+import com.fitness.domain.model.user.UserBasicNutritionInfo
+import com.fitness.domain.usecase.user.CreateUserBasicNutritionInfoUseCase
+import com.fitness.domain.usecase.user.GetCurrentUserIdUseCase
 import com.fitness.onboard.onboard.nutrition.NutritionStateHolder
 import com.fitness.onboard.util.CUISINE_TYPE_MIN_SELECTION
 import com.fitness.onboard.util.DIETARY_RESTRICTIONS_MIN_SELECTION
-import com.fitness.onboard.util.GOALS_MIN_SELECTION
 import com.fitness.onboard.util.HEALTH_LABELS_MIN_SELECTION
 import com.fitness.onboard.util.OnboardFailure
 import com.fitness.onboard.util.isMinSelection
@@ -89,14 +87,19 @@ class NutritionViewModel @Inject constructor(
         val labels = fitness.labels
         val cuisineType = fitness.cuisineType
         if(restrictions.isNotEmpty() && labels.isNotEmpty() && cuisineType.isNotEmpty()){
-            val userBasicInfo = UserBasicNutritionInfoDomain(id, restrictions=restrictions, labels=labels, cuisineType = cuisineType)
+            val userBasicInfo = UserBasicNutritionInfo(
+                userId = id,
+                restrictions = restrictions,
+                healthLabels = labels,
+                cuisineType = cuisineType
+            )
             onSaveFitnessLevelsInfo(userBasicInfo)
         }else{
             setState(BaseViewState.Error(OnboardFailure.UnknownFailure()))
         }
     }
 
-    private fun onSaveFitnessLevelsInfo(userBasicInfoDomain: UserBasicNutritionInfoDomain) = safeLaunch {
+    private fun onSaveFitnessLevelsInfo(userBasicInfoDomain: UserBasicNutritionInfo) = safeLaunch {
         val param = CreateUserBasicNutritionInfoUseCase.Params(userBasicInfoDomain)
         execute(createUserBasicNutritionInfoUseCase(param)){
             setState(BaseViewState.Data(NutritionState(NutritionStep.COMPLETE)))

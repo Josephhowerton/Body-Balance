@@ -8,10 +8,10 @@ android {
 
 dependencies {
     addFirebaseDependencies()
+    LIBRARY
+    RESOURCES
+    DOMAIN_API
     ONBOARD_API
     DASHBOARD_API
     AUTHENTICATION_API
-    LIBRARY
-    RESOURCES
-    DOMAIN
 }

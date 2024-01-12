@@ -7,9 +7,9 @@ android {
 }
 
 dependencies {
-    DASHBOARD_API
     LIBRARY
     RESOURCES
-    DOMAIN
+    DASHBOARD_API
+    DOMAIN_API
     addFirebaseDependencies()
 }

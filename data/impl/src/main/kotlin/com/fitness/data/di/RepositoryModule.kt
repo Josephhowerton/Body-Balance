@@ -1,8 +1,15 @@
 package com.fitness.data.di
 
+import com.fitness.data.cache.RecipeDao
+import com.fitness.data.network.EdamamAutoCompleteService
+import com.fitness.data.network.EdamamFoodService
+import com.fitness.data.network.EdamamNutritionService
+import com.fitness.data.network.EdamamRecipeService
 import com.fitness.data.repository.auth.AuthRepositoryImpl
 import com.fitness.data.repository.user.UserRepositoryImpl
 import com.fitness.data.repository.auth.AuthRepository
+import com.fitness.data.repository.edamam.EdamamAutoCompleteRepository
+import com.fitness.data.repository.edamam.EdamamAutoCompleteRepositoryImpl
 import com.fitness.data.repository.edamam.EdamamFoodRepository
 import com.fitness.data.repository.edamam.EdamamFoodRepositoryImpl
 import com.fitness.data.repository.edamam.EdamamNutritionRepository
@@ -32,14 +39,18 @@ class DataModule {
 
     @Provides
     @Singleton
-    fun provideEdamamFoodRepository(): EdamamFoodRepository = EdamamFoodRepositoryImpl()
+    fun provideEdamamAutoCompleteRepository(service: EdamamAutoCompleteService): EdamamAutoCompleteRepository = EdamamAutoCompleteRepositoryImpl(service = service)
 
     @Provides
     @Singleton
-    fun provideEdamamNutritionRepository(): EdamamNutritionRepository = EdamamNutritionRepositoryImpl()
+    fun provideEdamamFoodRepository(service: EdamamFoodService): EdamamFoodRepository = EdamamFoodRepositoryImpl(service = service)
 
     @Provides
     @Singleton
-    fun provideEdamamRecipeRepository(): EdamamRecipeRepository = EdamamRecipeRepositoryImpl()
+    fun provideEdamamNutritionRepository(service: EdamamNutritionService): EdamamNutritionRepository = EdamamNutritionRepositoryImpl(service = service)
+
+    @Provides
+    @Singleton
+    fun provideEdamamRecipeRepository(recipeDao: RecipeDao, service: EdamamRecipeService): EdamamRecipeRepository = EdamamRecipeRepositoryImpl(cache = recipeDao, service = service)
 
 }

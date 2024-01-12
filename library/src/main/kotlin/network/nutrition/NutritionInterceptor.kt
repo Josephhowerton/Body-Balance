@@ -28,24 +28,26 @@ class NutritionInterceptor : Interceptor {
     }
 
     private fun buildRequest(chain: Interceptor.Chain, source: NutritionSource): Request {
-        val requestBuilder = chain.request().newBuilder()
+        val urlBuilder = chain.request().url.newBuilder()
         when (source) {
-            NutritionSource.FOOD -> {
-                requestBuilder
-                    .addHeader(APP_ID, EDAMAM_RECIPE_ID)
-                    .addHeader(APP_KEY, EDAMAM_RECIPE_KEY)
+            NutritionSource.RECIPE -> {
+                urlBuilder
+                    .addQueryParameter(APP_ID, EDAMAM_RECIPE_ID)
+                    .addQueryParameter(APP_KEY, EDAMAM_RECIPE_KEY)
             }
             NutritionSource.NUTRITION -> {
-                requestBuilder
-                    .addHeader(APP_ID, EDAMAM_NUTRITION_ID)
-                    .addHeader(APP_KEY, EDAMAM_NUTRITION_KEY)
+                urlBuilder
+                    .addQueryParameter(APP_ID, EDAMAM_NUTRITION_ID)
+                    .addQueryParameter(APP_KEY, EDAMAM_NUTRITION_KEY)
             }
-            NutritionSource.RECIPE -> {
-                requestBuilder
-                    .addHeader(APP_ID, EDAMAM_FOOD_ID)
-                    .addHeader(APP_KEY, EDAMAM_FOOD_KEY)
+            NutritionSource.FOOD -> {
+                urlBuilder
+                    .addQueryParameter(APP_ID, EDAMAM_FOOD_ID)
+                    .addQueryParameter(APP_KEY, EDAMAM_FOOD_KEY)
             }
         }
-        return requestBuilder.build()
+        return chain.request().newBuilder().url(urlBuilder.build()).build()
     }
+
+
 }

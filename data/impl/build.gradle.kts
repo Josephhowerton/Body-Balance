@@ -8,8 +8,9 @@ android{
 }
 
 dependencies {
-    addHiltDependencies()
-    addFirebaseDependencies()
     DATA_API
     LIBRARY
+    addRoomLib()
+    addHiltDependencies()
+    addFirebaseDependencies()
 }

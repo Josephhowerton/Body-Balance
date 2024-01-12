@@ -33,7 +33,6 @@ fun StandardTextFieldPreview() {
 }
 
 @Composable
-@OptIn(ExperimentalMaterial3Api::class)
 fun StandardTextField(
     value: String,
     hint: Int,
@@ -70,3 +69,4 @@ fun StandardTextField(
         )
     )
 }
+

@@ -1,6 +1,6 @@
 package com.fitness.data.network
 
-import com.fitness.data.model.network.edamam.nutrients.NutrientsResponse
+import com.fitness.data.model.network.edamam.NutrientsResponse
 import network.nutrition.Nutrition
 import network.nutrition.NutritionSource
 import retrofit2.http.POST

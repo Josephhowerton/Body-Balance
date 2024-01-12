@@ -26,7 +26,8 @@ include(":common:theme")
 
 include(":data:api")
 include(":data:impl")
-include(":domain")
+include(":domain:api")
+include(":domain:impl")
 
 include(":features")
 include(":features:authentication:impl")

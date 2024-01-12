@@ -7,6 +7,10 @@ android {
 }
 
 dependencies {
-    SEARCH_API
+    COIL
     LIBRARY
+    RESOURCES
+    DOMAIN_API
+    SEARCH_API
+    addJetpackComposeDependencies()
 }
