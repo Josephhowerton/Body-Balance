@@ -2,7 +2,7 @@ package com.fitness.onboard.onboard.nutrition.view
 
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
-import com.fitness.component.components.BalanceLazyColumn
+import com.fitness.component.screens.BalanceLazyColumn
 import com.fitness.onboard.onboard.nutrition.viewmodel.NutritionEvent
 import com.fitness.onboard.onboard.nutrition.viewmodel.NutritionState
 import com.fitness.resources.R

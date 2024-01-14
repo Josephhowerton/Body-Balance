@@ -1,9 +1,9 @@
 package enums
 
 import com.fitness.resources.R
-import extensions.Item
+import extensions.GeneralItem
 
-enum class EFitnessHabits(override val title: Int, override val desc: Int? = null, override val apiParameter: String? = null): Item {
+enum class EFitnessHabits(override val title: Int, override val desc: Int? = null, override val apiParameter: String? = null): GeneralItem {
     CARDIO(R.string.fitness_habit_cardio),
     STRENGTH_TRAINING(R.string.fitness_habit_strength),
     WEIGHTLIFTING(R.string.fitness_habit_weightlifting),

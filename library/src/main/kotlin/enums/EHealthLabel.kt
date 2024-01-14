@@ -1,10 +1,10 @@
 package enums
 
 import com.fitness.resources.R
-import extensions.Item
+import extensions.GeneralItem
 import network.nutrition.RecipeParameters
 
-enum class EHealthLabel(override val title: Int, override val desc: Int?, override val apiParameter: String?): Item {
+enum class EHealthLabel(override val title: Int, override val desc: Int?, override val apiParameter: String?): GeneralItem {
     ALCOHOL_COCKTAIL(title = R.string.title_alcohol_cocktail, desc = R.string.def_alcohol_cocktail, apiParameter = RecipeParameters.ALCOHOL_COCKTAIL),
     ALCOHOL_FREE(title = R.string.title_alcohol_free, desc = R.string.def_alcohol_free, apiParameter = RecipeParameters.ALCOHOL_FREE),
     CELERY_FREE(title = R.string.title_celery_free, desc = R.string.def_celery_free, apiParameter = RecipeParameters.CELERY_FREE),

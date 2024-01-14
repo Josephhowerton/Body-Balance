@@ -1,6 +1,6 @@
 package com.fitness.search.di
 
-import com.fitness.search.nutrition.NutritionStateHolder
+import com.fitness.search.nutrition.SearchStateHolder
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -13,6 +13,6 @@ class SearchModule {
 
     @Provides
     @Singleton
-    fun nutritionStateHolder(): NutritionStateHolder = NutritionStateHolder
+    fun searchStateHolder(): SearchStateHolder = SearchStateHolder
 
 }

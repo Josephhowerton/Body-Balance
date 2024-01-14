@@ -1,6 +1,5 @@
 package com.fitness.domain.usecase.search
 
-import com.fitness.data.model.network.edamam.food.FoodData
 import usecase.DataStateUseCase
 
 abstract class EdamamFoodSearchUseCase: DataStateUseCase<EdamamFoodSearchUseCase.Params, List<FoodData>>(){

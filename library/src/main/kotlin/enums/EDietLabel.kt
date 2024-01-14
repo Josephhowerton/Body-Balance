@@ -1,10 +1,10 @@
 package enums
 
 import com.fitness.resources.R
-import extensions.Item
+import extensions.GeneralItem
 import network.nutrition.RecipeParameters
 
-enum class EDietLabel(override val title: Int, override val desc: Int?, override val apiParameter: String?): Item {
+enum class EDietLabel(override val title: Int, override val desc: Int?, override val apiParameter: String?): GeneralItem {
     BALANCED(title = R.string.balanced_title, desc = R.string.balanced_description, apiParameter = RecipeParameters.BALANCED),
     HIGH_FIBER(title = R.string.high_fiber_title, desc = R.string.high_fiber_description, apiParameter = RecipeParameters.HIGH_FIBER),
     HIGH_PROTEIN(title = R.string.high_protein_title, desc = R.string.high_protein_description, apiParameter = RecipeParameters.HIGH_PROTEIN),

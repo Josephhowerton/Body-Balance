@@ -1,6 +1,6 @@
 package extensions
 
-interface Item {
+interface GeneralItem {
     val title: Int
     val desc: Int?
     val apiParameter: String?

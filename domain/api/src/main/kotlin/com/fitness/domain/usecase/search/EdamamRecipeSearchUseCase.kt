@@ -2,7 +2,6 @@ package com.fitness.domain.usecase.search
 
 
 import com.fitness.data.model.network.edamam.params.RecipeSearchParams
-import com.fitness.domain.model.edamam.Recipe
 import usecase.DataStateUseCase
 
 abstract class EdamamRecipeSearchUseCase : DataStateUseCase<EdamamRecipeSearchUseCase.Params, List<Recipe>>() {

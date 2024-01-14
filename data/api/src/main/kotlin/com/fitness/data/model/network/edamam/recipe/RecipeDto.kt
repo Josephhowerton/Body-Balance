@@ -1,8 +1,9 @@
 package com.fitness.data.model.network.edamam.recipe
 
 
+import com.fitness.data.model.network.edamam.shared.TotalDailyDto
+import com.fitness.data.model.network.edamam.shared.TotalNutrientsDto
 import com.squareup.moshi.JsonClass
-import network.NaNToNull
 
 @JsonClass(generateAdapter = true)
 data class RecipeDto(

@@ -1,10 +1,10 @@
 package enums
 
 import com.fitness.resources.R
-import extensions.Item
+import extensions.GeneralItem
 import network.nutrition.RecipeParameters
 
-enum class ECuisineType(override val title: Int, override val desc: Int? = null, override val apiParameter: String?): Item {
+enum class ECuisineType(override val title: Int, override val desc: Int? = null, override val apiParameter: String?): GeneralItem {
     AMERICAN(title = R.string.title_american, apiParameter = RecipeParameters.AMERICAN),
     ASIAN(title = R.string.title_asian, apiParameter =  RecipeParameters.ASIAN),
     BRITISH(title = R.string.title_british, apiParameter =  RecipeParameters.BRITISH),

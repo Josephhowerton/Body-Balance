@@ -6,7 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.res.stringResource
-import com.fitness.component.components.BalanceLazyColumn
+import com.fitness.component.screens.BalanceLazyColumn
 import com.fitness.component.screens.ErrorDialog
 import com.fitness.component.screens.ErrorScreen
 import com.fitness.component.screens.LoadingScreen

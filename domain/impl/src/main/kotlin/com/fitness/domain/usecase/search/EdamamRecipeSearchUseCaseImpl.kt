@@ -1,11 +1,8 @@
 package com.fitness.domain.usecase.search
 
 import com.fitness.data.repository.edamam.EdamamRecipeRepository
-import com.fitness.domain.model.edamam.Recipe
 import com.fitness.domain.model.toDomainModel
 import kotlinx.coroutines.flow.FlowCollector
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.debounce
 import state.DataState
 import javax.inject.Inject
 

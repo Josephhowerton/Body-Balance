@@ -1,9 +1,9 @@
 package enums
 
 import com.fitness.resources.R
-import extensions.Item
+import extensions.GeneralItem
 
-enum class ENutritionPreferences(override val title: Int, override val desc: Int? = null, override val apiParameter: String? = null): Item {
+enum class ENutritionPreferences(override val title: Int, override val desc: Int? = null, override val apiParameter: String? = null): GeneralItem {
     BALANCED_DIET(R.string.title_balanced_diet),
     VEGAN_DIET(R.string.title_vegan),
     VEGETARIAN_DIET(R.string.title_vegetarian),

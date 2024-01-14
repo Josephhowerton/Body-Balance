@@ -1,9 +1,8 @@
 package com.fitness.data.repository.edamam
 
-import com.fitness.data.model.cache.edamam.RecipeEntity
+import com.fitness.data.model.cache.nutrition.RecipeEntity
 import com.fitness.data.model.network.edamam.params.RecipeSearchParams
 import com.fitness.data.model.network.edamam.recipe.RecipeDto
-import kotlinx.coroutines.flow.Flow
 
 interface EdamamRecipeRepository {
     suspend fun search(params: RecipeSearchParams): List<RecipeDto>

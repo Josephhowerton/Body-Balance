@@ -1,7 +1,6 @@
 package com.fitness.data.repository.edamam
 
-import com.fitness.data.model.network.edamam.food.FoodData
-import com.fitness.data.model.network.edamam.params.FoodSearchBrandParams
+import com.fitness.data.model.network.edamam.params.IngredientBrandParams
 import com.fitness.data.model.network.edamam.params.FoodSearchIngredientParams
 import com.fitness.data.network.EdamamFoodService
 import javax.inject.Inject
@@ -31,7 +30,7 @@ class EdamamFoodRepositoryImpl @Inject constructor(
         } ?: emptyList()
     }
 
-    override suspend fun getFoodByBrand(params: FoodSearchBrandParams): List<FoodData> {
+    override suspend fun getFoodByBrand(params: IngredientBrandParams): List<FoodData> {
         return service.getFoodByBrand(
             brand = params.brand,
             health = params.health,

@@ -55,7 +55,7 @@ import com.fitness.navigation.find
 import com.fitness.onboard.OnboardEntry
 import com.fitness.welcome.WelcomeEntry
 import com.fitness.resources.R
-import com.fitness.search.NutritionSearchEntry
+import com.fitness.search.SearchEntry
 import com.fitness.signout.SignOutEntry
 import com.fitness.theme.AppTheme
 import kotlinx.coroutines.CoroutineScope
@@ -152,7 +152,7 @@ fun MainHubNavigation(
         val welcome = destinations.find<WelcomeEntry>()
         val dashboard = destinations.find<DashboardEntry>()
         val signout = destinations.find<SignOutEntry>()
-        val search = destinations.find<NutritionSearchEntry>()
+        val search = destinations.find<SearchEntry>()
         val startDestination = if(showMainHubAnimation) welcome else dashboard
         NavHost(navController = navController, startDestination = search.featureRoute, modifier = Modifier.padding(innerPadding)) {
             with(welcome){

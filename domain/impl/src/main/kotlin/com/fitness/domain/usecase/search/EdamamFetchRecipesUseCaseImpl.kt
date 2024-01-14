@@ -1,7 +1,6 @@
 package com.fitness.domain.usecase.search
 
 import com.fitness.data.repository.edamam.EdamamRecipeRepository
-import com.fitness.domain.model.edamam.Recipe
 import com.fitness.domain.model.toDomainModel
 import kotlinx.coroutines.flow.FlowCollector
 import state.DataState

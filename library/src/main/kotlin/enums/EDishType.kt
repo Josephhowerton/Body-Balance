@@ -1,10 +1,10 @@
 package enums
 
 import com.fitness.resources.R
-import extensions.Item
+import extensions.GeneralItem
 import network.nutrition.RecipeParameters
 
-enum class EDishType(override val title: Int, override val desc: Int? = null, override val apiParameter: String?): Item {
+enum class EDishType(override val title: Int, override val desc: Int? = null, override val apiParameter: String?): GeneralItem {
     ALCOHOL_COCKTAIL(title = R.string.title_alcohol_cocktail, apiParameter = RecipeParameters.ALCOHOL_COCKTAIL),
     BISCUITS_AND_COOKIES(title = R.string.title_biscuits_and_cookies, apiParameter = RecipeParameters.BISCUITS_AND_COOKIES),
     BREAD(title = R.string.title_bread, apiParameter = RecipeParameters.BREAD),

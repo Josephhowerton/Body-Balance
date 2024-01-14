@@ -1,0 +1,5 @@
+package com.fitness.recipebuilder
+
+import com.fitness.navigation.ComposableFeatureEntry
+
+interface RecipeBuilderEntry: ComposableFeatureEntry

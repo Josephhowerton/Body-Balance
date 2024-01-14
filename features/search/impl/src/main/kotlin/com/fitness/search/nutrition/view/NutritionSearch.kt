@@ -43,12 +43,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import com.fitness.component.ItemState
 import com.fitness.component.components.NutritionItemWithImage
 import com.fitness.component.properties.GuidelineProperties
+import com.fitness.component.screens.BalanceDatePicker
 import com.fitness.component.screens.ErrorScreen
 import com.fitness.component.screens.LoadingScreen
 import com.fitness.component.screens.MessageScreen
 import com.fitness.resources.R
+import com.fitness.search.nutrition.RecipeStep
 import com.fitness.search.nutrition.viewmodel.NutritionSearchEvent
 import com.fitness.search.nutrition.viewmodel.NutritionSearchState
 import com.fitness.theme.ui.BodyBalanceTheme
@@ -80,7 +83,7 @@ fun NutritionSearch(
 
     when (uiState) {
         is BaseViewState.Data -> {
-            NutritionSearchContent(
+            RecipeStep(
                 uiState.cast<BaseViewState.Data<NutritionSearchState>>().value,
                 onTriggerEvent
             )
@@ -106,6 +109,20 @@ fun NutritionSearch(
 }
 
 @Composable
+private fun RecipeStep(
+    state: NutritionSearchState,
+    onTriggerEvent: (NutritionSearchEvent) -> Unit
+) {
+    when(state.step){
+        RecipeStep.PENDING -> NutritionSearchContent(state = state, onTriggerEvent = onTriggerEvent)
+        RecipeStep.SELECT_DATE ->  BalanceDatePicker(onDatesPicked = { onTriggerEvent(NutritionSearchEvent.DateSelected(it)) })
+        RecipeStep.SELECT_MEAL_TYPE -> {}
+        RecipeStep.SAVE -> onTriggerEvent(NutritionSearchEvent.SaveRecipe(state.recipeToSave))
+    }
+}
+
+
+@Composable
 @OptIn(ExperimentalLayoutApi::class, ExperimentalComposeUiApi::class)
 private fun NutritionSearchContent(
     state: NutritionSearchState,
@@ -122,7 +139,7 @@ private fun NutritionSearchContent(
             .fillMaxSize()
             .padding(bottom = if (isImeVisible) insets else 0.dp)
             .pointerInput(Unit) {
-                detectTapGestures(onPress = { }) {
+                detectTapGestures(onPress = {}) {
                     focusManager.clearFocus()
                     keyboardController?.hide()
                 }
@@ -130,6 +147,7 @@ private fun NutritionSearchContent(
     ) {
 
         val (searchField, autoComplete) = createRefs()
+
         var search by remember { mutableStateOf("") }
         var isFocused by remember { mutableStateOf(false) }
 
@@ -137,42 +155,32 @@ private fun NutritionSearchContent(
         val endGuide = createGuidelineFromEnd(GuidelineProperties.END)
         val bottomGuide = createGuidelineFromBottom(GuidelineProperties.BOTTOM)
 
-        LazyColumn(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.spacedBy(40.dp)) {
+        LazyColumn(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.spacedBy(40.dp)
+        ) {
 
-            items(state.food) { data ->
-                val image = data.food?.image
-                val title = data.food?.label
-                val nutrients = data.food?.nutrients
-                val energy = nutrients?.enerckcal
-                val fat = nutrients?.fat
-                val fiber = nutrients?.fibtg
-                val carbs = nutrients?.chocdf
-                val net: Double = (carbs ?: 0.0) - (fiber ?: 0.0)
-                if (image != null && title != null) {
-                    NutritionItemWithImage(
-                        title = title,
-                        imageModel = image,
-                        energy = energy,
-                        fat = fat,
-                        net = net
-                    )
-                }
-            }
+            items(state.searchResults) { recipe ->
+                val itemState by remember { mutableStateOf(ItemState.UNSELECTED) }
 
-            items(state.recipes) { recipe ->
                 val image = recipe.images?.regular?.url
                 val title = recipe.label
                 val nutrients = recipe.totalNutrients
                 val energy = nutrients?.enerckcal
                 val fat = nutrients?.fat
                 val net = nutrients?.chocdfnet
+
                 if (image != null && title != null) {
                     NutritionItemWithImage(
                         title = title,
                         imageModel = image,
+                        itemState = itemState,
                         energy = energy?.quantity,
                         fat = fat?.quantity,
-                        net = net?.quantity
+                        net = net?.quantity,
+                        onClickAdd = {
+                            onTriggerEvent(NutritionSearchEvent.RecipeSelected(recipe))
+                        }
                     )
                 }
             }
@@ -251,6 +259,5 @@ private fun NutritionSearchContent(
                 onTriggerEvent(NutritionSearchEvent.AutoComplete(search))
             }
         }
-
     }
 }

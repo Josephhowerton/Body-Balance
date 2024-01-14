@@ -1,0 +1,30 @@
+package com.fitness.domain.model.nutrition
+
+data class Recipe(
+    val recipeId: String,
+    val calories: Double? = null,
+    val large: String? = null,
+    val regular: String? = null,
+    val small: String? = null,
+    val thumbnail: String? = null,
+    val label: String? = null,
+    val mealType: List<String>? = null,
+    val shareAs: String? = null,
+    val source: String? = null,
+    val tags: List<String>? = null,
+    val totalTime: Double? = null,
+    val totalWeight: Double? = null,
+    val uri: String? = null,
+    val url: String? = null,
+    val yield: Double? = null,
+    val cautions: List<String>? = null,
+    val cuisineType: List<String>? = null,
+    val dietLabels: List<String>? = null,
+    val dishType: List<String>? = null,
+    val healthLabels: List<String>? = null,
+    val standardImage: String? = null,
+    val ingredientLines: List<String>? = null,
+    val instructionLines: List<String>? = null,
+    val ingredients: List<Ingredient>? = null,
+    val totalNutrients: TotalNutrients? = null
+)
