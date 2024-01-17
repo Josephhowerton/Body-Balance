@@ -24,5 +24,5 @@ data class IngredientEntity(
     val measureLabel: String? = null,
     val measureUri: String? = null,
     val measureWeight: Double? = null,
-    val nutrients: TotalNutrientsEntity? = null,
+    val nutrients: Map<String, NutrientEntity>? = null
 )

@@ -20,16 +20,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.fitness.resources.R
-
 import com.fitness.theme.ui.BodyBalanceTheme
 import extensions.Dark
 import extensions.Light
 
-
 @Light
 @Dark
 @Composable
-fun PreviewSimpleCalendar() = BodyBalanceTheme {
+private fun PreviewSimpleCalendar() = BodyBalanceTheme {
     Surface {
         BalanceDatePicker(onDatesPicked = { Log.e("PreviewSimpleCalendar", it.toString()) })
     }
@@ -66,6 +64,7 @@ fun BalanceDatePicker(modifier: Modifier = Modifier, onDatesPicked: (Long) -> Un
                 onDismiss = {showErrorDialog = false}
             )
         }
+
     }
 }
 

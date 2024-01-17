@@ -26,5 +26,5 @@ data class RecipeEntity(
     val recipeUrl: String? = null,
     val yield: Double? = null,
     val ingredients: List<IngredientEntity>? = null,
-    val totalNutrients: TotalNutrientsEntity? = null
+    val nutrients: Map<String, NutrientEntity>? = null
 )

@@ -2,7 +2,6 @@ package com.fitness.domain.model.nutrition
 
 data class Ingredient(
     val foodId: String? = null,
-    val recipeId: String? = null,
     val food: String? = null,
     val foodCategory: String? = null,
     val image: String? = null,
@@ -21,11 +20,9 @@ data class Ingredient(
     val healthLabels: List<String>? = null,
     val totalWeight: Double? = 0.0,
     val measureLabel: String? = null,
-    val qualifiedWeight: Double? = null,
     val qualifierLabel: String? = null,
     val qualifierUri: String? = null,
     val measureUri: String? = null,
     val measureWeight: Double? = null,
-    val measureFoodId: String? = null,
-    val totalNutrients: TotalNutrients? = null
+    val nutrients: Map<String, Nutrient>? = null
 )

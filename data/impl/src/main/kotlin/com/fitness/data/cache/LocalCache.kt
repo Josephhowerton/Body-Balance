@@ -5,7 +5,7 @@ import androidx.room.RoomDatabase
 
 @Database(
     entities = [RecipeCache::class],
-    version = 1
+    version = 2
 )
 abstract class LocalCache : RoomDatabase() {
     abstract fun recipeDao(): RecipeDao

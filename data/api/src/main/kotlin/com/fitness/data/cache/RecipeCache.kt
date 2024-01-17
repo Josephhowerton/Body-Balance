@@ -4,4 +4,4 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity
-data class RecipeCache(@PrimaryKey val id: String, val created: Long, val json: String)
+data class RecipeCache(@PrimaryKey(autoGenerate = true) val id: Int? = null, val created: Long, val json: String)

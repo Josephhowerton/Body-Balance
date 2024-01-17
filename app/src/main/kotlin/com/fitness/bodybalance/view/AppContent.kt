@@ -53,9 +53,10 @@ import com.fitness.navigation.DrawerItem
 import com.fitness.navigation.DrawerNavigationUtil
 import com.fitness.navigation.find
 import com.fitness.onboard.OnboardEntry
+import com.fitness.recipebuilder.RecipeBuilderEntry
 import com.fitness.welcome.WelcomeEntry
 import com.fitness.resources.R
-import com.fitness.search.SearchEntry
+import com.fitness.search.RecipeSearchEntry
 import com.fitness.signout.SignOutEntry
 import com.fitness.theme.AppTheme
 import kotlinx.coroutines.CoroutineScope
@@ -152,9 +153,10 @@ fun MainHubNavigation(
         val welcome = destinations.find<WelcomeEntry>()
         val dashboard = destinations.find<DashboardEntry>()
         val signout = destinations.find<SignOutEntry>()
-        val search = destinations.find<SearchEntry>()
+        val recipeSearch = destinations.find<RecipeSearchEntry>()
+        val recipeBuilder = destinations.find<RecipeBuilderEntry>()
         val startDestination = if(showMainHubAnimation) welcome else dashboard
-        NavHost(navController = navController, startDestination = search.featureRoute, modifier = Modifier.padding(innerPadding)) {
+        NavHost(navController = navController, startDestination = recipeSearch.featureRoute, modifier = Modifier.padding(innerPadding)) {
             with(welcome){
                 composable(navController, destinations)
             }
@@ -167,8 +169,12 @@ fun MainHubNavigation(
                 composable(navController, destinations)
             }
 
-            with(search){
-                composable(navController, destinations)
+            with(recipeSearch){
+                navigation(navController, destinations)
+            }
+
+            with(recipeBuilder){
+                navigation(navController, destinations)
             }
         }
     }

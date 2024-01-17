@@ -18,6 +18,7 @@ class LocalCacheModule {
     @Singleton
     fun provideLocalDB(application: Application): LocalCache =
         Room.databaseBuilder(application, LocalCache::class.java, "local-cache")
+            .fallbackToDestructiveMigration()
             .build()
 
     @Provides

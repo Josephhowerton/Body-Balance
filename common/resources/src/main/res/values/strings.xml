@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Balance</string>
     <string name="activity_home">HomeActivity</string>
     <string name="welcome_to_body_balance">Welcome to Balance</string>
@@ -387,7 +387,7 @@
     <string name="ntr_fatty_acids_sat">Fatty acids, total saturated</string>
     <string name="ntr_fatty_acids_sat_code">FASAT</string>
     <string name="ntr_vitamin_k">Vitamin K (phylloquinone)</string>
-    <string name="ntr_vitamin_k_code">VITK1</string>
+    <string name="ntr_vitamin_k_code" tools:ignore="Typos">VITK1</string>
     <string name="ntr_water">Water</string>
     <string name="ntr_water_code">WATER</string>
     <string name="ntr_zinc">Zinc, Zn</string>
@@ -543,6 +543,17 @@
     <string name="content_description_icon_add">icon add</string>
     <string name="title_date_selection">Select a Date</string>
     <string name="error_no_date">Looks like a date is still on the waiting list. Mind picking one?</string>
-
-
+    <string name="title_time_selection">Select a Time</string>
+    <string name="error_no_time">Seems like you haven\'t set the time yet. Could you specify when?</string>
+    <string name="confirmation_dialog_title">Just Checking!</string>
+    <string name="confirmation_dialog_description">Looks like you have selected %1$s. Are you all set with this?</string>
+    <string name="select_meal_type_dialog_title">Meal Selection</string>
+    <string name="select_meal_type_description">Whether it\'s a bright morning breakfast, or a cozy tea time, make sure it\'s what you\'re craving!</string>
+    <string name="meal_success_message">Awesome! You\'re all set for a flavorful fitness journey. Your meal is ready for %1$s at %2$s. Fuel up and enjoy every bite on your path to wellness. Keep up the great work!</string>
+    <string name="title_pick_date">Select Your Plan Date</string>
+    <string name="description_pick_date">Choose the date for starting your diet plan. This helps us tailor your meal schedule and recommendations to align with your personal timeline. Pick a date that marks the beginning of your journey to healthier eating habits.</string>
+    <string name="title_pick_time">Set Your Preferred Meal Time</string>
+    <string name="description_pick_time">Select a convenient time for your meals. This helps us organize your daily diet schedule at times that best fit your lifestyle. Your chosen time will guide us in planning your meals, ensuring they are aligned with your daily routine for optimal health and enjoyment.</string>
+    <string name="create_recipe_name_title">🍳 Chef\'s Corner!</string>
+    <string name="create_recipe_name_prompt">What\'s the name of your culinary masterpiece?</string>
 </resources>

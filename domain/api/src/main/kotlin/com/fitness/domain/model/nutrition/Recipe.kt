@@ -1,7 +1,8 @@
 package com.fitness.domain.model.nutrition
 
+import cache.generateUniqueId
+
 data class Recipe(
-    val recipeId: String,
     val calories: Double? = null,
     val large: String? = null,
     val regular: String? = null,
@@ -14,8 +15,8 @@ data class Recipe(
     val tags: List<String>? = null,
     val totalTime: Double? = null,
     val totalWeight: Double? = null,
-    val uri: String? = null,
-    val url: String? = null,
+    val recipeUri: String? = null,
+    val recipeUrl: String? = null,
     val yield: Double? = null,
     val cautions: List<String>? = null,
     val cuisineType: List<String>? = null,
@@ -26,5 +27,15 @@ data class Recipe(
     val ingredientLines: List<String>? = null,
     val instructionLines: List<String>? = null,
     val ingredients: List<Ingredient>? = null,
-    val totalNutrients: TotalNutrients? = null
+    val nutrients: Map<String, Nutrient>? = null,
+    val recipeId: String = generateRecipeId("$recipeUri-$recipeUrl", ingredients)
 )
+
+fun generateRecipeId(input: String, ingredients: List<Ingredient>?): String {
+    var foodId = ""
+    ingredients?.forEach {
+        foodId += it.foodId
+    }
+
+    return generateUniqueId("$input-$foodId")
+}

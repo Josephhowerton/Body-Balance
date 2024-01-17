@@ -108,8 +108,8 @@ fun <T : GeneralItem> List<GeneralItem>.isSelected(t: T) =
     }
 
 
-fun selectPlate(): Int =
-    when (EMealType.values().random()) {
+fun selectPlate(type: EMealType = EMealType.BREAKFAST): Int =
+    when (type) {
         EMealType.BRUNCH -> R.drawable.ic_blue_plate
         EMealType.LUNCH_DINNER -> R.drawable.ic_cast_iron
         else -> R.drawable.ic_plate

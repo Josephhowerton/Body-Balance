@@ -3,7 +3,8 @@ package com.fitness.bodybalance.di
 import com.fitness.authentication.di.AuthEntryModule
 import com.fitness.dashboard.di.DashboardEntryModule
 import com.fitness.onboard.di.OnboardEntryModule
-import com.fitness.search.di.SearchEntryModule
+import com.fitness.recipebuilder.di.RecipeBuilderEntryModule
+import com.fitness.search.di.RecipeSearchEntryModule
 import com.fitness.signout.di.SignOutEntryModule
 import com.fitness.userprofile.di.UserProfileEntryModule
 import com.fitness.welcome.di.WelcomeEntryModule
@@ -20,7 +21,8 @@ import dagger.hilt.components.SingletonComponent
         DashboardEntryModule::class,
         UserProfileEntryModule::class,
         WelcomeEntryModule::class,
-        SearchEntryModule::class
+        RecipeSearchEntryModule::class,
+        RecipeBuilderEntryModule::class
     ]
 )
 @InstallIn(SingletonComponent::class)

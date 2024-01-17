@@ -16,7 +16,9 @@ abstract class BaseViewModel : ViewModel() {
         handleError(exception)
     }
 
-    open fun handleError(exception: Throwable) {}
+    open fun handleError(exception: Throwable) {
+        exception.printStackTrace()
+    }
     open fun startLoading() {}
 
     protected fun safeLaunch(block: suspend CoroutineScope.() -> Unit) =

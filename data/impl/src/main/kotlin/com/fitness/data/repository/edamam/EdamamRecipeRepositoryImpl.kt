@@ -5,8 +5,6 @@ import com.fitness.data.cache.RecipeDao
 import com.fitness.data.cache.RecipeFreshnessThreshold
 import com.fitness.data.cache.deserializeRecipeEntity
 import com.fitness.data.cache.serializeRecipeEntity
-import com.fitness.data.extensions.toCacheModel
-import com.fitness.data.model.cache.nutrition.RecipeEntity
 import com.fitness.data.model.network.edamam.RecipeResponse
 import com.fitness.data.model.network.edamam.params.RecipeSearchParams
 import com.fitness.data.model.network.edamam.shared.PaginationDto
@@ -25,8 +23,8 @@ class EdamamRecipeRepositoryImpl @Inject constructor(
 
     private var pagination: PaginationDto? = null
 
-    override suspend fun getRecipes(params: RecipeSearchParams): List<RecipeEntity> = coroutineScope{
-        val local = getAll()
+    override suspend fun fetchRecipes(params: RecipeSearchParams): List<RecipeDto> = coroutineScope{
+        val local = getResultsFromCache()
         val currentTime = System.currentTimeMillis()
 
         val isFresh = local.run { isNotEmpty() && all { currentTime - it.created <= RecipeFreshnessThreshold } }
@@ -36,20 +34,20 @@ class EdamamRecipeRepositoryImpl @Inject constructor(
                 deserializeRecipeEntity(it.json)
             }
         } else {
-            fetchRecipes(params)
+            this@EdamamRecipeRepositoryImpl.fetchRecipesFromBackend(params)
                 .hits?.mapNotNull {
-                    it.recipe?.toCacheModel()
+                    it.recipe
                 }?.also {
                     launch {
                         clearAll()
-                        insertAll(it)
+                        cacheAutoSearchResults(it)
                     }
                 } ?: emptyList()
         }
     }
 
     override suspend fun search(params: RecipeSearchParams): List<RecipeDto> =
-        fetchRecipes(params).run {
+        this.fetchRecipesFromBackend(params).run {
             pagination = links
             hits?.let {
                 val recipes = it.mapNotNull { hit ->
@@ -59,8 +57,7 @@ class EdamamRecipeRepositoryImpl @Inject constructor(
             } ?: emptyList()
         }
 
-
-    private suspend fun fetchRecipes(params: RecipeSearchParams): RecipeResponse =
+    private suspend fun fetchRecipesFromBackend(params: RecipeSearchParams): RecipeResponse =
         service.getRecipes(
             type = params.type,
             query = params.query,
@@ -86,20 +83,19 @@ class EdamamRecipeRepositoryImpl @Inject constructor(
         type: String,
         uri: List<String>,
         language: String?,
-    ): List<RecipeEntity> = TODO()
+    ): List<RecipeDto> = TODO()
 
     override suspend fun fetchRecipesById(
         type: String,
         id: String,
         language: String?,
-    ): List<RecipeEntity> = TODO()
+    ): List<RecipeDto> = TODO()
 
-    private suspend fun getAll(): List<RecipeCache> = withContext(IO) { cache.getAll() }
+    private suspend fun getResultsFromCache(): List<RecipeCache> = withContext(IO) { cache.getAll() }
 
-    private suspend fun insertAll(recipes: List<RecipeEntity>) = withContext(IO) {
+    private suspend fun cacheAutoSearchResults(recipes: List<RecipeDto>) = withContext(IO) {
         recipes.forEach {
             val recipeCache = RecipeCache(
-                id = it.id,
                 created = System.currentTimeMillis(),
                 json = serializeRecipeEntity(it)
             )

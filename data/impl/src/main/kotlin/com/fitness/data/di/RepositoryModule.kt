@@ -16,6 +16,8 @@ import com.fitness.data.repository.edamam.EdamamNutritionRepository
 import com.fitness.data.repository.edamam.EdamamNutritionRepositoryImpl
 import com.fitness.data.repository.edamam.EdamamRecipeRepository
 import com.fitness.data.repository.edamam.EdamamRecipeRepositoryImpl
+import com.fitness.data.repository.nutrition.NutritionRecordRepository
+import com.fitness.data.repository.nutrition.NutritionRecordRepositoryImpl
 import com.fitness.data.repository.user.UserRepository
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -27,7 +29,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-class DataModule {
+class RepositoryModule {
 
     @Provides
     @Singleton
@@ -52,5 +54,10 @@ class DataModule {
     @Provides
     @Singleton
     fun provideEdamamRecipeRepository(recipeDao: RecipeDao, service: EdamamRecipeService): EdamamRecipeRepository = EdamamRecipeRepositoryImpl(cache = recipeDao, service = service)
+
+    @Provides
+    @Singleton
+    fun provideNutritionRecordRepository(firestore: FirebaseFirestore): NutritionRecordRepository = NutritionRecordRepositoryImpl(firestore = firestore)
+
 
 }

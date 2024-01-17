@@ -12,5 +12,6 @@ dependencies {
     RESOURCES
     DOMAIN_API
     SEARCH_API
+    DASHBOARD_API
     addJetpackComposeDependencies()
 }

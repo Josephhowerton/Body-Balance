@@ -10,6 +10,7 @@ dependencies {
     COIL
     LIBRARY
     RESOURCES
+    COMPONENTS
     DOMAIN_API
     RECIPE_BUILDER_API
     addJetpackComposeDependencies()

@@ -8,9 +8,6 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class RecipeResponse(
-    val count: Int?,
-    val from: Int?,
     val hits: List<HitDto>?,
-    @Json(name = "_links") val links: PaginationDto?,
-    val to: Int?
+    @Json(name = "_links") val links: PaginationDto?
 )

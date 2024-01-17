@@ -169,6 +169,7 @@ fun DependencyHandler.addFeatureDependencies(){
     WELCOME
     SIGN_OUT
     SEARCH
+    RECIPE_BUILDER
 }
 
 fun DependencyHandler.addFeatureAPIDependencies(){
@@ -179,6 +180,7 @@ fun DependencyHandler.addFeatureAPIDependencies(){
     WELCOME_API
     SIGN_OUT_API
     SEARCH_API
+    RECIPE_BUILDER_API
 }
 
 
