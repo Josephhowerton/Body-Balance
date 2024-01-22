@@ -8,10 +8,10 @@ import usecase.DataStateUseCase
 abstract class CreateNutritionRecordUseCase: DataStateUseCase<CreateNutritionRecordUseCase.Params, Unit>() {
     data class Params(
         val userId: String,
-        val recipe: Recipe,
         val date: Long,
         val hour: Int,
         val minute: Int,
-        val mealType: EMealType
+        val mealType: EMealType,
+        val recipe: Recipe,
     )
 }

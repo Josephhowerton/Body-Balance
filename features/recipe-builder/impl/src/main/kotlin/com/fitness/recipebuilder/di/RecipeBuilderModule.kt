@@ -14,6 +14,4 @@ class RecipeBuilderModule {
     @Provides
     @Singleton
     fun provideRecipeBuilderStateHolder(): RecipeBuilderStateHolder = RecipeBuilderStateHolder
-
-
 }

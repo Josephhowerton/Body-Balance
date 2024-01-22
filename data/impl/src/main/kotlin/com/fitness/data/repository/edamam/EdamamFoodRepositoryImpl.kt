@@ -12,8 +12,7 @@ class EdamamFoodRepositoryImpl @Inject constructor(
     private val service: EdamamFoodService
 ) : EdamamFoodRepository {
 
-    override suspend fun getAllFood(): List<IngredientEntity> =
-        service.getAllFood().hints?.toIngredientEntity() ?: emptyList()
+    override suspend fun getAllFood(): List<IngredientEntity> = service.getAllFood().hints?.toIngredientEntity() ?: emptyList()
 
     override suspend fun getFoodByIngredient(params: IngredientSearchParams): List<IngredientEntity> =
         service.getFoodByIngredient(
@@ -32,16 +31,7 @@ class EdamamFoodRepositoryImpl @Inject constructor(
 
 }
 
-fun List<FoodDataDto>.toIngredientEntity(): List<IngredientEntity> = map {
-    val ingredientEntities = mutableListOf<IngredientEntity>()
-    it.measures?.forEach { measureDto ->
-        measureDto?.qualified?.forEach { qualifiedDto ->
-            qualifiedDto?.qualifiers?.forEach { qualifierDto ->
-                it.food?.toIngredientEntity(measureDto, qualifierDto)?.let { ingredientEntity ->
-                    ingredientEntities.add(ingredientEntity)
-                }
-            }
-        }
-    }
-    return ingredientEntities
+fun List<FoodDataDto>.toIngredientEntity(): List<IngredientEntity> = mapNotNull {
+    it.food?.toIngredientEntity(it.measures)
 }
+

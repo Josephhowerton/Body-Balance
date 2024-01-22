@@ -20,4 +20,13 @@ class NutritionRecordRepositoryImpl(private val firestore: FirebaseFirestore): N
                 .onSuccessTask { Tasks.forResult(Unit) }
         }
 
+    override suspend fun getEditableNutritionRecord(userId: String): DataState<List<NutritionEntity>> =
+        firestore {
+            firestore.collection(NUTRITION_RECORD)
+                .whereEqualTo("userId", userId)
+                .get()
+                .onSuccessTask {
+                    Tasks.forResult(it.toObjects(NutritionEntity::class.java))
+                }
+        }
 }

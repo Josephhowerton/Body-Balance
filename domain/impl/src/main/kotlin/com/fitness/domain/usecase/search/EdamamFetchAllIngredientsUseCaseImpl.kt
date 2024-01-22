@@ -9,7 +9,7 @@ import javax.inject.Inject
 
 class EdamamFetchAllIngredientsUseCaseImpl @Inject constructor(private val repository: EdamamFoodRepository): EdamamFetchAllIngredientsUseCase(){
 
-    override suspend fun FlowCollector<DataState<List<Ingredient>>>.execute(params: EdamamIngredientSearchUseCase.Params) {
+    override suspend fun FlowCollector<DataState<List<Ingredient>>>.execute(params: Params) {
         val results = repository.getAllFood().map { it.toIngredient() }
         emit(DataState.Success(results))
     }

@@ -156,7 +156,7 @@ fun MainHubNavigation(
         val recipeSearch = destinations.find<RecipeSearchEntry>()
         val recipeBuilder = destinations.find<RecipeBuilderEntry>()
         val startDestination = if(showMainHubAnimation) welcome else dashboard
-        NavHost(navController = navController, startDestination = recipeSearch.featureRoute, modifier = Modifier.padding(innerPadding)) {
+        NavHost(navController = navController, startDestination = recipeBuilder.featureRoute, modifier = Modifier.padding(innerPadding)) {
             with(welcome){
                 composable(navController, destinations)
             }

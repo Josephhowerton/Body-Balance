@@ -75,7 +75,8 @@ private fun ConfirmationContent(
 ) {
     MessageScreen(
         message = stringResource(
-            id = R.string.meal_success_message, convertLongToDate(state.date),
+            id = R.string.meal_success_message,
+            convertLongToDate(state.date),
             formatTimeWithAmPm(state.hour, state.minute)
         ),
         onClick = onComplete

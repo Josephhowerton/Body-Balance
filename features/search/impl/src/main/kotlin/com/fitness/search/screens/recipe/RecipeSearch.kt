@@ -155,7 +155,7 @@ private fun NutritionSearchContent(
                 val itemState by remember { mutableStateOf(ItemState.UNSELECTED) }
 
                 val image = recipe.standardImage
-                val title = recipe.label
+                val title = recipe.name
                 val nutrients = recipe.nutrients
                 val energy = nutrients?.get(KEY_ENERGY)
                 val fat = nutrients?.get(KEY_TOTAL_FAT)

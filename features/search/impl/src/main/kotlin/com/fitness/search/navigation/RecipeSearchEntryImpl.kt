@@ -23,7 +23,7 @@ class RecipeSearchEntryImpl @Inject constructor() : RecipeSearchEntry {
     override val featureRoute: String get() = "recipe-search"
 
    private companion object{
-       private const val RECIPE: String = "recipe-search"
+       private const val RECIPE: String = "search"
        private const val DATE: String = "pick-date"
        private const val TIME: String = "pick-time"
        private const val CONFIRMATION: String = "confirmation"

@@ -1,6 +1,5 @@
 package com.fitness.recipebuilder.screens.search
 
-import com.fitness.domain.model.nutrition.Recipe
 import com.fitness.domain.model.user.UserBasicNutritionInfo
 import com.fitness.domain.usecase.search.EdamamAutoCompleteUseCase
 import com.fitness.domain.usecase.search.EdamamFetchAllIngredientsUseCase
@@ -30,7 +29,6 @@ class IngredientSearchViewModel @Inject constructor(
 
     override fun onTriggerEvent(event: IngredientSearchEvent) {
         when (event) {
-
             is IngredientSearchEvent.AutoComplete -> onAutoComplete(event)
 
             is IngredientSearchEvent.Search -> onIngredientSearch(event)
@@ -39,9 +37,7 @@ class IngredientSearchViewModel @Inject constructor(
 
             is IngredientSearchEvent.RemoveIngredient -> onRemoveIngredient(event)
 
-            is IngredientSearchEvent.CreateName -> onCreateName(event)
-
-            is IngredientSearchEvent.CloseRecipeBuilder -> onCloseRecipeBuilder()
+            is IngredientSearchEvent.CloseIngredientBuilder -> onCloseRecipeBuilder(event)
         }
     }
 
@@ -61,11 +57,11 @@ class IngredientSearchViewModel @Inject constructor(
         RecipeBuilderStateHolder.updateState(state)
         val params = GetUserBasicNutritionInfoUseCase.Params(id = id)
         execute(getNutritionalInfoUseCase(params)) {
-            onFetchContentFromCache(it)
+            onFetchContentFromCacheIfExist(it)
         }
     }
 
-    private fun onFetchContentFromCache(nutrition: UserBasicNutritionInfo) = safeLaunch {
+    private fun onFetchContentFromCacheIfExist(nutrition: UserBasicNutritionInfo) = safeLaunch {
         val param = EdamamFetchAllIngredientsUseCase.Params
         execute(getAllIngredientsUseCase(param)) {
             val state = stateHolder.state().copy(searchResults = it)
@@ -100,13 +96,15 @@ class IngredientSearchViewModel @Inject constructor(
     }
 
     private fun onAddIngredient(event: IngredientSearchEvent.AddIngredient) = safeLaunch {
-        val state = stateHolder.state().apply { ingredients += event.ingredient }
-        stateHolder.updateState(state)
+        val state = stateHolder.state()
+        val ingredient = event.ingredient
+        val ingredients = event.ingredients.toMutableList()
+        ingredients.add(ingredient)
         setState(
             BaseViewState.Data(
                 IngredientSearchState(
                     searchResults = state.searchResults,
-                    ingredients = state.ingredients
+                    ingredients = ingredients
                 )
             )
         )
@@ -114,34 +112,22 @@ class IngredientSearchViewModel @Inject constructor(
 
 
     private fun onRemoveIngredient(event: IngredientSearchEvent.RemoveIngredient) = safeLaunch {
-        val state = stateHolder.state().apply { ingredients -= event.ingredient }
-        stateHolder.updateState(state)
+        val state = stateHolder.state()
+        val ingredient = event.ingredient
+        val ingredients = event.ingredients.toMutableList()
+        ingredients.remove(ingredient)
         setState(
             BaseViewState.Data(
                 IngredientSearchState(
                     searchResults = state.searchResults,
-                    ingredients = state.ingredients
+                    ingredients = ingredients
                 )
             )
         )
     }
 
-    private fun onCreateName(event: IngredientSearchEvent.CreateName){
-        val state = stateHolder.state().copy(name = event.name)
-        stateHolder.updateState(state)
-        setState(
-            BaseViewState.Data(
-                IngredientSearchState(
-                    searchResults = state.searchResults,
-                    ingredients = state.ingredients
-                )
-            )
-        )
-    }
-
-    private fun onCloseRecipeBuilder() = safeLaunch {
-        val ingredients = stateHolder.state().ingredients
-        val state = stateHolder.state().copy(recipe = Recipe(ingredients = ingredients))
+    private fun onCloseRecipeBuilder(event: IngredientSearchEvent.CloseIngredientBuilder) = safeLaunch {
+        val state = stateHolder.state().copy(ingredients = event.ingredients)
         stateHolder.updateState(state)
         setState(BaseViewState.Data(IngredientSearchState(step = RecipeBuilderStep.COMPLETE)))
     }

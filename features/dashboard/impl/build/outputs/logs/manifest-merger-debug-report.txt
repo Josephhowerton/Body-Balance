@@ -1,16 +1,16 @@
 -- Merging decision tree log ---
 manifest
-ADDED from C:\Users\josep\AndroidStudioProjects\body-balance\features\dashboard\impl\build\intermediates\tmp\ProcessLibraryManifest\debug\tempAndroidManifest3504424051394117128.xml:2:13-83
-INJECTED from C:\Users\josep\AndroidStudioProjects\body-balance\features\dashboard\impl\build\intermediates\tmp\ProcessLibraryManifest\debug\tempAndroidManifest3504424051394117128.xml:2:13-83
+ADDED from C:\Users\josep\AndroidStudioProjects\body-balance\features\dashboard\impl\build\intermediates\tmp\ProcessLibraryManifest\debug\tempAndroidManifest9137178683385790948.xml:2:13-83
+INJECTED from C:\Users\josep\AndroidStudioProjects\body-balance\features\dashboard\impl\build\intermediates\tmp\ProcessLibraryManifest\debug\tempAndroidManifest9137178683385790948.xml:2:13-83
 	package
-		INJECTED from C:\Users\josep\AndroidStudioProjects\body-balance\features\dashboard\impl\build\intermediates\tmp\ProcessLibraryManifest\debug\tempAndroidManifest3504424051394117128.xml
+		INJECTED from C:\Users\josep\AndroidStudioProjects\body-balance\features\dashboard\impl\build\intermediates\tmp\ProcessLibraryManifest\debug\tempAndroidManifest9137178683385790948.xml
 	xmlns:android
-		ADDED from C:\Users\josep\AndroidStudioProjects\body-balance\features\dashboard\impl\build\intermediates\tmp\ProcessLibraryManifest\debug\tempAndroidManifest3504424051394117128.xml:2:23-81
+		ADDED from C:\Users\josep\AndroidStudioProjects\body-balance\features\dashboard\impl\build\intermediates\tmp\ProcessLibraryManifest\debug\tempAndroidManifest9137178683385790948.xml:2:23-81
 uses-sdk
-INJECTED from C:\Users\josep\AndroidStudioProjects\body-balance\features\dashboard\impl\build\intermediates\tmp\ProcessLibraryManifest\debug\tempAndroidManifest3504424051394117128.xml reason: use-sdk injection requested
-INJECTED from C:\Users\josep\AndroidStudioProjects\body-balance\features\dashboard\impl\build\intermediates\tmp\ProcessLibraryManifest\debug\tempAndroidManifest3504424051394117128.xml
-INJECTED from C:\Users\josep\AndroidStudioProjects\body-balance\features\dashboard\impl\build\intermediates\tmp\ProcessLibraryManifest\debug\tempAndroidManifest3504424051394117128.xml
+INJECTED from C:\Users\josep\AndroidStudioProjects\body-balance\features\dashboard\impl\build\intermediates\tmp\ProcessLibraryManifest\debug\tempAndroidManifest9137178683385790948.xml reason: use-sdk injection requested
+INJECTED from C:\Users\josep\AndroidStudioProjects\body-balance\features\dashboard\impl\build\intermediates\tmp\ProcessLibraryManifest\debug\tempAndroidManifest9137178683385790948.xml
+INJECTED from C:\Users\josep\AndroidStudioProjects\body-balance\features\dashboard\impl\build\intermediates\tmp\ProcessLibraryManifest\debug\tempAndroidManifest9137178683385790948.xml
 	android:targetSdkVersion
-		INJECTED from C:\Users\josep\AndroidStudioProjects\body-balance\features\dashboard\impl\build\intermediates\tmp\ProcessLibraryManifest\debug\tempAndroidManifest3504424051394117128.xml
+		INJECTED from C:\Users\josep\AndroidStudioProjects\body-balance\features\dashboard\impl\build\intermediates\tmp\ProcessLibraryManifest\debug\tempAndroidManifest9137178683385790948.xml
 	android:minSdkVersion
-		INJECTED from C:\Users\josep\AndroidStudioProjects\body-balance\features\dashboard\impl\build\intermediates\tmp\ProcessLibraryManifest\debug\tempAndroidManifest3504424051394117128.xml
+		INJECTED from C:\Users\josep\AndroidStudioProjects\body-balance\features\dashboard\impl\build\intermediates\tmp\ProcessLibraryManifest\debug\tempAndroidManifest9137178683385790948.xml

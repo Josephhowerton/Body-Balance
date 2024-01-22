@@ -8,7 +8,7 @@ data class Recipe(
     val regular: String? = null,
     val small: String? = null,
     val thumbnail: String? = null,
-    val label: String? = null,
+    val name: String? = null,
     val mealType: List<String>? = null,
     val shareAs: String? = null,
     val source: String? = null,
@@ -25,7 +25,7 @@ data class Recipe(
     val healthLabels: List<String>? = null,
     val standardImage: String? = null,
     val ingredientLines: List<String>? = null,
-    val instructionLines: List<String>? = null,
+    val instructions: List<String>? = null,
     val ingredients: List<Ingredient>? = null,
     val nutrients: Map<String, Nutrient>? = null,
     val recipeId: String = generateRecipeId("$recipeUri-$recipeUrl", ingredients)

@@ -5,4 +5,5 @@ import state.DataState
 
 interface NutritionRecordRepository {
     suspend fun createNutritionRecord(nutrition: NutritionEntity): DataState<Unit>
+    suspend fun getEditableNutritionRecord(userId: String): DataState<List<NutritionEntity>>
 }

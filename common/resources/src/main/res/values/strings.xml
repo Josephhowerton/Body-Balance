@@ -373,6 +373,7 @@
     <string name="ntr_calcium">Calcium, Ca</string>
     <string name="ntr_calcium_code">CA</string>
     <string name="ntr_net_carbohydrate">Carbohydrate (net)</string>
+    <string name="net_carbs">Carbs (net)</string>
     <string name="ntr_net_carbohydrate_code">CHOCDF.net</string>
     <string name="ntr_carbohydrate">Carbohydrate, by difference</string>
     <string name="ntr_carbohydrate_code">CHOCDF</string>
@@ -541,6 +542,8 @@
     <string name="content_description_icon_net_carbs">icon net carbs</string>
     <string name="content_description_icon_plate">icon plate</string>
     <string name="content_description_icon_add">icon add</string>
+    <string name="content_description_icon_edit">icon edit</string>
+    <string name="content_description_icon_remove">icon remove</string>
     <string name="title_date_selection">Select a Date</string>
     <string name="error_no_date">Looks like a date is still on the waiting list. Mind picking one?</string>
     <string name="title_time_selection">Select a Time</string>
@@ -554,6 +557,29 @@
     <string name="description_pick_date">Choose the date for starting your diet plan. This helps us tailor your meal schedule and recommendations to align with your personal timeline. Pick a date that marks the beginning of your journey to healthier eating habits.</string>
     <string name="title_pick_time">Set Your Preferred Meal Time</string>
     <string name="description_pick_time">Select a convenient time for your meals. This helps us organize your daily diet schedule at times that best fit your lifestyle. Your chosen time will guide us in planning your meals, ensuring they are aligned with your daily routine for optimal health and enjoyment.</string>
-    <string name="create_recipe_name_title">🍳 Chef\'s Corner!</string>
+    <string name="title_chefs_corner">Chef\'s Corner!</string>
+    <string name="title_recipe_builder">Design a Recipe</string>
+    <string name="title_ingredients">Ingredients</string>
+    <string name="ingredients_count">%1$d items</string>
+    <string name="title_instructions">Instructions</string>
+    <string name="title_generate">Generate</string>
     <string name="create_recipe_name_prompt">What\'s the name of your culinary masterpiece?</string>
+    <string name="empty_recipe_book_message">Looks like your recipe book is empty for now. Ready to jazz up your fitness journey? Tap the Add button to create your first recipe, or dive into our recipe search to find exciting meal ideas. Let\'s make your health journey deliciously fun!</string>
+    <string name="empty_instructions_message">Tap the Generate button to create a unique recipe with AI, or explore our recipe suggestions for creative cooking ideas.</string>
+    <string name="title_add_more">Add</string>
+    <string name="recipe_name_dialog_title">Let\'s Start With a Name!</string>
+    <string name="recipe_name_dialog_message">What\'s the name of your delicious creation? You can change it later.</string>
+    <string name="recipe_name_dialog_label">Recipe Name</string>
+    <string name="ingredient_metrics_prompt">Begin adding your ingredients and we will promptly provide a detailed metric analysis. Streamline your culinary process with precision!</string>
+    <string name="error_title_incomplete_data">Incomplete Data</string>
+    <string name="error_message_incomplete_data">The ingredient you\'re trying to add is missing some crucial measurement details. Without these, we can\'t quite calculate your user metrics accurately. Please choose a different item!</string>
+    <string name="select_qualified_measure">Select a qualified measure.</string>
+    <string name="select_base_measure">Select a base measure.</string>
+    <string name="enter_base_measure_amount">Enter %1$s Amount.</string>
+    <string name="please_enter_a_name">Please enter a name for your recipe.</string>
+    <string name="error_measure_not_selected">Measure not selected. Please select a measure.</string>
+    <string name="error_qualifier_not_selected">Qualifier not selected. Please select a qualifier.</string>
+    <string name="error_invalid_quantity">Invalid quantity. Please enter a valid number.</string>
+    <string name="error_unknown">Unknown error. Please double-check the information entered.</string>
+    <string name="title_remove">Remove</string>
 </resources>

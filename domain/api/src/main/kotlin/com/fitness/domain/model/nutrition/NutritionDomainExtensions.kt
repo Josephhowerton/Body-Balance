@@ -1,8 +1,11 @@
 package com.fitness.domain.model.nutrition
 
 import com.fitness.data.model.cache.nutrition.IngredientEntity
+import com.fitness.data.model.cache.nutrition.MeasureEntity
 import com.fitness.data.model.cache.nutrition.NutrientEntity
 import com.fitness.data.model.cache.nutrition.NutritionEntity
+import com.fitness.data.model.cache.nutrition.QualifiedEntity
+import com.fitness.data.model.cache.nutrition.QualifierEntity
 import com.fitness.data.model.cache.nutrition.RecipeEntity
 import com.fitness.data.model.network.edamam.recipe.IngredientDto
 import com.fitness.data.model.network.edamam.recipe.RecipeDto
@@ -42,8 +45,8 @@ fun Recipe.toRecipeEntity(): RecipeEntity =
         small = small,
         thumbnail = thumbnail,
         ingredientLines = ingredientLines,
-        instructionLines = instructionLines,
-        label = label,
+        instructionLines = instructions,
+        label = name,
         mealType = mealType,
         shareAs = shareAs,
         source = source,
@@ -72,8 +75,8 @@ fun RecipeEntity.toRecipe(): Recipe =
         small = small,
         thumbnail = thumbnail,
         ingredientLines = ingredientLines,
-        instructionLines = instructionLines,
-        label = label,
+        instructions = instructionLines,
+        name = label,
         mealType = mealType,
         shareAs = shareAs,
         source = source,
@@ -100,7 +103,7 @@ fun RecipeDto.toRecipeFromRecipeDto(): Recipe = Recipe(
     small = images?.small?.url,
     thumbnail = images?.thumbnail?.url,
     ingredientLines = ingredientLines,
-    label = label,
+    name = label,
     mealType = mealType,
     shareAs = shareAs,
     source = source,
@@ -117,67 +120,61 @@ fun RecipeDto.toRecipeFromRecipeDto(): Recipe = Recipe(
 
 fun Ingredient.toIngredientEntity(): IngredientEntity =
     IngredientEntity(
+        name = name,
         foodId = foodId,
-        food = food,
-        foodCategory = foodCategory,
         image = image,
-        measure = measure,
         quantity = quantity,
         detailed = detailed,
         weight = weight,
         uri = uri,
-        label = label,
-        knownAs = knownAs,
         category = category,
-        categoryLabel = categoryLabel,
-        calories = calories,
+        categoryName = categoryName,
         cautions = cautions,
         dietLabels = dietLabels,
         healthLabels = healthLabels,
         totalWeight = totalWeight,
-        measureLabel = measureLabel,
-        qualifierLabel = qualifierLabel,
-        qualifierUri = qualifierUri,
+        qualifiedUri = qualifiedUri,
+        qualifiedName = qualifiedName,
+        qualifiedWeight = qualifiedWeight,
         measureUri = measureUri,
+        measureName = measureName,
         measureWeight = measureWeight,
+        measures = measures?.map { it.toMeasureEntity() },
         nutrients = nutrients.toNutrientEntityMap()
     )
 
 fun IngredientEntity.toIngredient(): Ingredient =
     Ingredient(
+        name = name,
         foodId = foodId,
-        food = food,
-        foodCategory = foodCategory,
         image = image,
-        measure = measure,
         quantity = quantity,
         detailed = detailed,
         weight = weight,
         uri = uri,
-        label = label,
-        knownAs = knownAs,
         category = category,
-        categoryLabel = categoryLabel,
-        calories = calories,
+        categoryName = categoryName,
         cautions = cautions,
         dietLabels = dietLabels,
         healthLabels = healthLabels,
         totalWeight = totalWeight,
-        measureLabel = measureLabel,
-        qualifierLabel = qualifierLabel,
-        qualifierUri = qualifierUri,
+        qualifiedUri = qualifiedUri,
+        qualifiedName = qualifiedName,
+        qualifiedWeight = qualifiedWeight,
         measureUri = measureUri,
+        measureName = measureName,
         measureWeight = measureWeight,
+        measures = measures?.map { it.toMeasure() },
         nutrients = nutrients.toNutrientsMap()
     )
 
 fun IngredientDto.toIngredientFromIngredientDto(): Ingredient =
     Ingredient(
         foodId = foodId,
-        food = food,
-        foodCategory = foodCategory,
+        name = food,
+        category = foodCategory,
         image = image,
-        measure = measure,
+        measureName = measure,
         quantity = quantity,
         detailed = text,
         weight = weight,
@@ -205,42 +202,204 @@ fun NutrientEntity.toNutrient(): Nutrient =
         unit = unit
     )
 
-fun TotalNutrientsDto.toNutrientFromTotalNutrientsDto(): Map<String, Nutrient> =  mapOf(
-    TotalNutrientsKeys.KEY_CALCIUM to Nutrient(ca?.label ?: "", ca?.quantity ?: 0.0, ca?.unit ?: ""),
-    TotalNutrientsKeys.KEY_CARBOHYDRATES to Nutrient(chocdf?.label ?: "", chocdf?.quantity ?: 0.0, chocdf?.unit ?: ""),
-    TotalNutrientsKeys.KEY_NET_CARBS to Nutrient(chocdfnet?.label ?: "", chocdfnet?.quantity ?: 0.0, chocdfnet?.unit ?: ""),
-    TotalNutrientsKeys.KEY_CHOLESTEROL to Nutrient(chole?.label ?: "", chole?.quantity ?: 0.0, chole?.unit ?: ""),
-    TotalNutrientsKeys.KEY_ENERGY to Nutrient(enerckcal?.label ?: "", enerckcal?.quantity ?: 0.0, enerckcal?.unit ?: ""),
-    TotalNutrientsKeys.KEY_MONOUNSATURATED_FATS to Nutrient(fams?.label ?: "", fams?.quantity ?: 0.0, fams?.unit ?: ""),
-    TotalNutrientsKeys.KEY_POLYUNSATURATED_FATS to Nutrient(fapu?.label ?: "", fapu?.quantity ?: 0.0, fapu?.unit ?: ""),
-    TotalNutrientsKeys.KEY_SATURATED_FATS to Nutrient(fasat?.label ?: "", fasat?.quantity ?: 0.0, fasat?.unit ?: ""),
-    TotalNutrientsKeys.KEY_TOTAL_FAT to Nutrient(fat?.label ?: "", fat?.quantity ?: 0.0, fat?.unit ?: ""),
-    TotalNutrientsKeys.KEY_TRANS_FAT to Nutrient(fatrn?.label ?: "", fatrn?.quantity ?: 0.0, fatrn?.unit ?: ""),
+fun TotalNutrientsDto.toNutrientFromTotalNutrientsDto(): Map<String, Nutrient> = mapOf(
+    TotalNutrientsKeys.KEY_CALCIUM to Nutrient(
+        ca?.label ?: "",
+        ca?.quantity ?: 0.0,
+        ca?.unit ?: ""
+    ),
+    TotalNutrientsKeys.KEY_CARBOHYDRATES to Nutrient(
+        chocdf?.label ?: "",
+        chocdf?.quantity ?: 0.0,
+        chocdf?.unit ?: ""
+    ),
+    TotalNutrientsKeys.KEY_NET_CARBS to Nutrient(
+        chocdfnet?.label ?: "",
+        chocdfnet?.quantity ?: 0.0,
+        chocdfnet?.unit ?: ""
+    ),
+    TotalNutrientsKeys.KEY_CHOLESTEROL to Nutrient(
+        chole?.label ?: "",
+        chole?.quantity ?: 0.0,
+        chole?.unit ?: ""
+    ),
+    TotalNutrientsKeys.KEY_ENERGY to Nutrient(
+        enerckcal?.label ?: "",
+        enerckcal?.quantity ?: 0.0,
+        enerckcal?.unit ?: ""
+    ),
+    TotalNutrientsKeys.KEY_MONOUNSATURATED_FATS to Nutrient(
+        fams?.label ?: "",
+        fams?.quantity ?: 0.0,
+        fams?.unit ?: ""
+    ),
+    TotalNutrientsKeys.KEY_POLYUNSATURATED_FATS to Nutrient(
+        fapu?.label ?: "",
+        fapu?.quantity ?: 0.0,
+        fapu?.unit ?: ""
+    ),
+    TotalNutrientsKeys.KEY_SATURATED_FATS to Nutrient(
+        fasat?.label ?: "",
+        fasat?.quantity ?: 0.0,
+        fasat?.unit ?: ""
+    ),
+    TotalNutrientsKeys.KEY_TOTAL_FAT to Nutrient(
+        fat?.label ?: "",
+        fat?.quantity ?: 0.0,
+        fat?.unit ?: ""
+    ),
+    TotalNutrientsKeys.KEY_TRANS_FAT to Nutrient(
+        fatrn?.label ?: "",
+        fatrn?.quantity ?: 0.0,
+        fatrn?.unit ?: ""
+    ),
     TotalNutrientsKeys.KEY_IRON to Nutrient(fe?.label ?: "", fe?.quantity ?: 0.0, fe?.unit ?: ""),
-    TotalNutrientsKeys.KEY_FIBER to Nutrient(fibtg?.label ?: "", fibtg?.quantity ?: 0.0, fibtg?.unit ?: ""),
-    TotalNutrientsKeys.KEY_FOLIC_ACID to Nutrient(folac?.label ?: "", folac?.quantity ?: 0.0, folac?.unit ?: ""),
-    TotalNutrientsKeys.KEY_FOLATE_DFE to Nutrient(foldfe?.label ?: "", foldfe?.quantity ?: 0.0, foldfe?.unit ?: ""),
-    TotalNutrientsKeys.KEY_FOOD_FOLATE to Nutrient(folfd?.label ?: "", folfd?.quantity ?: 0.0, folfd?.unit ?: ""),
+    TotalNutrientsKeys.KEY_FIBER to Nutrient(
+        fibtg?.label ?: "",
+        fibtg?.quantity ?: 0.0,
+        fibtg?.unit ?: ""
+    ),
+    TotalNutrientsKeys.KEY_FOLIC_ACID to Nutrient(
+        folac?.label ?: "",
+        folac?.quantity ?: 0.0,
+        folac?.unit ?: ""
+    ),
+    TotalNutrientsKeys.KEY_FOLATE_DFE to Nutrient(
+        foldfe?.label ?: "",
+        foldfe?.quantity ?: 0.0,
+        foldfe?.unit ?: ""
+    ),
+    TotalNutrientsKeys.KEY_FOOD_FOLATE to Nutrient(
+        folfd?.label ?: "",
+        folfd?.quantity ?: 0.0,
+        folfd?.unit ?: ""
+    ),
     TotalNutrientsKeys.KEY_POTASSIUM to Nutrient(k?.label ?: "", k?.quantity ?: 0.0, k?.unit ?: ""),
-    TotalNutrientsKeys.KEY_MAGNESIUM to Nutrient(mg?.label ?: "", mg?.quantity ?: 0.0, mg?.unit ?: ""),
+    TotalNutrientsKeys.KEY_MAGNESIUM to Nutrient(
+        mg?.label ?: "",
+        mg?.quantity ?: 0.0,
+        mg?.unit ?: ""
+    ),
     TotalNutrientsKeys.KEY_SODIUM to Nutrient(na?.label ?: "", na?.quantity ?: 0.0, na?.unit ?: ""),
-    TotalNutrientsKeys.KEY_NIACIN to Nutrient(nia?.label ?: "", nia?.quantity ?: 0.0, nia?.unit ?: ""),
-    TotalNutrientsKeys.KEY_PHOSPHORUS to Nutrient(p?.label ?: "", p?.quantity ?: 0.0, p?.unit ?: ""),
-    TotalNutrientsKeys.KEY_PROTEIN to Nutrient(procnt?.label ?: "", procnt?.quantity ?: 0.0, procnt?.unit ?: ""),
-    TotalNutrientsKeys.KEY_RIBOFLAVIN to Nutrient(ribf?.label ?: "", ribf?.quantity ?: 0.0, ribf?.unit ?: ""),
-    TotalNutrientsKeys.KEY_SUGARS to Nutrient(sugar?.label ?: "", sugar?.quantity ?: 0.0, sugar?.unit ?: ""),
-    TotalNutrientsKeys.KEY_ADDED_SUGARS to Nutrient(sugaradded?.label ?: "", sugaradded?.quantity ?: 0.0, sugaradded?.unit ?: ""),
-    TotalNutrientsKeys.KEY_THIAMIN to Nutrient(thia?.label ?: "", thia?.quantity ?: 0.0, thia?.unit ?: ""),
-    TotalNutrientsKeys.KEY_VITAMIN_E to Nutrient(tocpaha?.label ?: "", tocpaha?.quantity ?: 0.0, tocpaha?.unit ?: ""),
-    TotalNutrientsKeys.KEY_VITAMIN_A to Nutrient(vitarAE?.label ?: "", vitarAE?.quantity ?: 0.0, vitarAE?.unit ?: ""),
-    TotalNutrientsKeys.KEY_VITAMIN_B12 to Nutrient(vitb12?.label ?: "", vitb12?.quantity ?: 0.0, vitb12?.unit ?: ""),
-    TotalNutrientsKeys.KEY_VITAMIN_B6 to Nutrient(vitb6a?.label ?: "", vitb6a?.quantity ?: 0.0, vitb6a?.unit ?: ""),
-    TotalNutrientsKeys.KEY_VITAMIN_C to Nutrient(vitc?.label ?: "", vitc?.quantity ?: 0.0, vitc?.unit ?: ""),
-    TotalNutrientsKeys.KEY_VITAMIN_D to Nutrient(vitd?.label ?: "", vitd?.quantity ?: 0.0, vitd?.unit ?: ""),
-    TotalNutrientsKeys.KEY_VITAMIN_K1 to Nutrient(vitk1?.label ?: "", vitk1?.quantity ?: 0.0, vitk1?.unit ?: ""),
-    TotalNutrientsKeys.KEY_WATER to Nutrient(water?.label ?: "", water?.quantity ?: 0.0, water?.unit ?: ""),
+    TotalNutrientsKeys.KEY_NIACIN to Nutrient(
+        nia?.label ?: "",
+        nia?.quantity ?: 0.0,
+        nia?.unit ?: ""
+    ),
+    TotalNutrientsKeys.KEY_PHOSPHORUS to Nutrient(
+        p?.label ?: "",
+        p?.quantity ?: 0.0,
+        p?.unit ?: ""
+    ),
+    TotalNutrientsKeys.KEY_PROTEIN to Nutrient(
+        procnt?.label ?: "",
+        procnt?.quantity ?: 0.0,
+        procnt?.unit ?: ""
+    ),
+    TotalNutrientsKeys.KEY_RIBOFLAVIN to Nutrient(
+        ribf?.label ?: "",
+        ribf?.quantity ?: 0.0,
+        ribf?.unit ?: ""
+    ),
+    TotalNutrientsKeys.KEY_SUGARS to Nutrient(
+        sugar?.label ?: "",
+        sugar?.quantity ?: 0.0,
+        sugar?.unit ?: ""
+    ),
+    TotalNutrientsKeys.KEY_ADDED_SUGARS to Nutrient(
+        sugaradded?.label ?: "",
+        sugaradded?.quantity ?: 0.0,
+        sugaradded?.unit ?: ""
+    ),
+    TotalNutrientsKeys.KEY_THIAMIN to Nutrient(
+        thia?.label ?: "",
+        thia?.quantity ?: 0.0,
+        thia?.unit ?: ""
+    ),
+    TotalNutrientsKeys.KEY_VITAMIN_E to Nutrient(
+        tocpaha?.label ?: "",
+        tocpaha?.quantity ?: 0.0,
+        tocpaha?.unit ?: ""
+    ),
+    TotalNutrientsKeys.KEY_VITAMIN_A to Nutrient(
+        vitarAE?.label ?: "",
+        vitarAE?.quantity ?: 0.0,
+        vitarAE?.unit ?: ""
+    ),
+    TotalNutrientsKeys.KEY_VITAMIN_B12 to Nutrient(
+        vitb12?.label ?: "",
+        vitb12?.quantity ?: 0.0,
+        vitb12?.unit ?: ""
+    ),
+    TotalNutrientsKeys.KEY_VITAMIN_B6 to Nutrient(
+        vitb6a?.label ?: "",
+        vitb6a?.quantity ?: 0.0,
+        vitb6a?.unit ?: ""
+    ),
+    TotalNutrientsKeys.KEY_VITAMIN_C to Nutrient(
+        vitc?.label ?: "",
+        vitc?.quantity ?: 0.0,
+        vitc?.unit ?: ""
+    ),
+    TotalNutrientsKeys.KEY_VITAMIN_D to Nutrient(
+        vitd?.label ?: "",
+        vitd?.quantity ?: 0.0,
+        vitd?.unit ?: ""
+    ),
+    TotalNutrientsKeys.KEY_VITAMIN_K1 to Nutrient(
+        vitk1?.label ?: "",
+        vitk1?.quantity ?: 0.0,
+        vitk1?.unit ?: ""
+    ),
+    TotalNutrientsKeys.KEY_WATER to Nutrient(
+        water?.label ?: "",
+        water?.quantity ?: 0.0,
+        water?.unit ?: ""
+    ),
     TotalNutrientsKeys.KEY_ZINC to Nutrient(zn?.label ?: "", zn?.quantity ?: 0.0, zn?.unit ?: "")
 )
+
+fun Measure.toMeasureEntity(): MeasureEntity =
+    MeasureEntity(
+        label = this.label,
+        qualified = this.qualified?.map { it.toQualifiedEntity() },
+        uri = this.uri,
+        weight = this.weight
+    )
+
+fun Qualified.toQualifiedEntity(): QualifiedEntity =
+    QualifiedEntity(
+        qualifiers = this.qualifiers?.map { it.toQualifierEntity() },
+        weight = this.weight
+    )
+
+fun Qualifier.toQualifierEntity(): QualifierEntity {
+    return QualifierEntity(
+        label = this.label,
+        uri = this.uri
+    )
+}
+
+fun MeasureEntity.toMeasure(): Measure =
+    Measure(
+        label = this.label,
+        qualified = this.qualified?.map { it.toQualified() },
+        uri = this.uri,
+        weight = this.weight
+    )
+
+fun QualifiedEntity.toQualified(): Qualified =
+    Qualified(
+        qualifiers = this.qualifiers?.map { it.toQualifier() },
+        weight = this.weight
+    )
+
+fun QualifierEntity.toQualifier(): Qualifier {
+    return Qualifier(
+        label = this.label,
+        uri = this.uri
+    )
+}
 
 
 

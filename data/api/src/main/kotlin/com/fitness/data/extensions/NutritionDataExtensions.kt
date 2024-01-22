@@ -2,13 +2,17 @@ package com.fitness.data.extensions
 
 import cache.generateUniqueId
 import com.fitness.data.model.cache.nutrition.IngredientEntity
+import com.fitness.data.model.cache.nutrition.MeasureEntity
 import com.fitness.data.model.cache.nutrition.NutrientEntity
+import com.fitness.data.model.cache.nutrition.QualifiedEntity
+import com.fitness.data.model.cache.nutrition.QualifierEntity
 import com.fitness.data.model.cache.nutrition.RecipeEntity
 import com.fitness.data.model.network.edamam.food.FoodDto
 import com.fitness.data.model.network.edamam.food.MeasureDto
 import com.fitness.data.model.network.edamam.food.NutrientsDto
-import com.fitness.data.model.network.edamam.food.QualifierDto
 import com.fitness.data.model.network.edamam.NutrientsResponse
+import com.fitness.data.model.network.edamam.food.QualifiedDto
+import com.fitness.data.model.network.edamam.food.QualifierDto
 import com.fitness.data.model.network.edamam.recipe.IngredientDto
 import com.fitness.data.model.network.edamam.recipe.RecipeDto
 import com.fitness.data.model.network.edamam.shared.TotalNutrientsDto
@@ -46,10 +50,10 @@ fun RecipeDto.toRecipeEntity(userId: String): RecipeEntity = RecipeEntity(
 
 fun IngredientDto.toIngredientEntity(): IngredientEntity = IngredientEntity(
     foodId = foodId,
-    food = food,
-    foodCategory = foodCategory,
+    name = food,
+    categoryName = foodCategory,
     image = image,
-    measure = measure,
+    measureName = measure,
     quantity = quantity,
     detailed = text,
     weight = weight,
@@ -93,25 +97,37 @@ fun TotalNutrientsDto.toTotalNutrientsEntity(): Map<String, NutrientEntity> =  m
     )
 
 
-fun FoodDto.toIngredientEntity(
-    measureDto: MeasureDto?,
-    qualifier: QualifierDto?
-): IngredientEntity = IngredientEntity(
-    foodId = foodId,
-    label = label,
-    food = label,
-    category = category,
-    categoryLabel = categoryLabel,
+fun FoodDto.toIngredientEntity(measures: List<MeasureDto?>?): IngredientEntity = IngredientEntity(
+    name = label,
     image = image,
-    knownAs = knownAs,
+    foodId = foodId,
+    category = category,
+    categoryName = categoryLabel,
+    measures = measures?.mapNotNull { it?.toMeasureEntity() },
     nutrients = nutrients?.toTotalNutrientsEntity(),
-    measureLabel = measureDto?.label,
-    measureUri = measureDto?.uri,
-    measureWeight = measureDto?.weight,
-    qualifierLabel = qualifier?.label,
-    qualifierUri = qualifier?.uri,
-    calories = nutrients?.enerckcal?.toInt(),
 )
+
+fun MeasureDto.toMeasureEntity(): MeasureEntity =
+    MeasureEntity(
+        label = this.label,
+        qualified = this.qualified?.mapNotNull { it?.toEntity() },
+        uri = this.uri,
+        weight = this.weight
+    )
+
+fun QualifiedDto.toEntity(): QualifiedEntity =
+    QualifiedEntity(
+        qualifiers = this.qualifiers?.mapNotNull { it?.toEntity() },
+        weight = this.weight
+    )
+
+fun QualifierDto.toEntity(): QualifierEntity {
+    return QualifierEntity(
+        label = this.label,
+        uri = this.uri
+    )
+}
+
 
 fun NutrientsDto.toTotalNutrientsEntity(): Map<String, NutrientEntity> = mapOf(
     TotalNutrientsKeys.KEY_CARBOHYDRATES to NutrientEntity(TotalNutrientsKeys.KEY_CARBOHYDRATES, chocdf ?: 0.0, ""),
@@ -123,7 +139,6 @@ fun NutrientsDto.toTotalNutrientsEntity(): Map<String, NutrientEntity> = mapOf(
 
 fun IngredientEntity.updateSelf(nutrients: NutrientsResponse?): IngredientEntity =
     copy(
-        calories = nutrients?.calories,
         cautions = nutrients?.cautions,
         dietLabels = nutrients?.dietLabels,
         healthLabels = nutrients?.healthLabels,

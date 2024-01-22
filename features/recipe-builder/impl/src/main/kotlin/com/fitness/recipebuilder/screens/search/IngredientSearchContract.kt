@@ -13,8 +13,7 @@ data class IngredientSearchState(
 sealed class IngredientSearchEvent{
     data class AutoComplete(val search: String): IngredientSearchEvent()
     data class Search(val search: String): IngredientSearchEvent()
-    data class AddIngredient(val ingredient: Ingredient): IngredientSearchEvent()
-    data class RemoveIngredient(val ingredient: Ingredient): IngredientSearchEvent()
-    data class CreateName(val name: String): IngredientSearchEvent()
-    object CloseRecipeBuilder: IngredientSearchEvent()
+    data class AddIngredient(val ingredient: Ingredient, val ingredients: List<Ingredient>): IngredientSearchEvent()
+    data class RemoveIngredient(val ingredient: Ingredient, val ingredients: List<Ingredient>): IngredientSearchEvent()
+    data class  CloseIngredientBuilder(val ingredients: List<Ingredient>): IngredientSearchEvent()
 }

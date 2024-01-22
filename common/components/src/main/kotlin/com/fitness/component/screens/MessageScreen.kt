@@ -1,6 +1,5 @@
 package com.fitness.component.screens
 
-import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -10,11 +9,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -22,20 +19,18 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.fitness.component.components.ContinueButton
-import com.fitness.theme.ui.BodyBalanceTheme
 import com.fitness.resources.R
-import com.fitness.theme.ui.Green
+import com.fitness.theme.ui.BodyBalanceTheme
+import com.fitness.theme.ui.Red
 import extensions.Dark
 import extensions.Light
 
-@Preview(showBackground = true, name = "Light")
-@Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES, name = "Dark")
+@Light
+@Dark
 @Composable
 private fun MessageScreenPreview() {
     BodyBalanceTheme {
@@ -55,12 +50,16 @@ fun MessageScreen(message: Int, modifier: Modifier = Modifier, onClick: () -> Un
         Text(
             text = stringResource(id = message),
             textAlign = TextAlign.Center,
-            modifier = modifier.fillMaxWidth().padding(50.dp)
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(50.dp)
         )
 
-        Spacer(modifier = Modifier
-            .fillMaxWidth()
-            .height(12.dp))
+        Spacer(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(12.dp)
+        )
 
         ContinueButton(onClick)
     }
@@ -76,12 +75,16 @@ fun MessageScreen(message: String, modifier: Modifier = Modifier, onClick: () ->
         Text(
             text = message,
             textAlign = TextAlign.Center,
-            modifier = modifier.fillMaxWidth().padding(50.dp)
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(50.dp)
         )
 
-        Spacer(modifier = Modifier
-            .fillMaxWidth()
-            .height(12.dp))
+        Spacer(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(12.dp)
+        )
 
         ContinueButton(onClick)
     }
@@ -91,9 +94,9 @@ fun MessageScreen(message: String, modifier: Modifier = Modifier, onClick: () ->
 @Dark
 @Composable
 fun MessageDialog(
-    title: String = stringResource(id =R.string.title_error),
-    description: String = stringResource(id =R.string.desc_error_min_items_required),
-    onContinue: () -> Unit =  {},
+    title: String = stringResource(id = R.string.title_error),
+    description: String = stringResource(id = R.string.desc_error_min_items_required),
+    onContinue: () -> Unit = {},
     onCancel: () -> Unit = {}
 ) {
     AlertDialog(
@@ -113,9 +116,9 @@ fun MessageDialog(
 @Dark
 @Composable
 fun MessageDialog(
-    title: String = stringResource(id =R.string.title_error),
-    description: String = stringResource(id =R.string.desc_error_min_items_required),
-    onContinue: () -> Unit =  {},
+    title: String = stringResource(id = R.string.title_error),
+    description: String = stringResource(id = R.string.desc_error_min_items_required),
+    onContinue: () -> Unit = {},
 ) {
     AlertDialog(
         onDismissRequest = onContinue,
@@ -131,14 +134,17 @@ fun MessageDialog(
 @Dark
 @Composable
 fun PromptUserDialog(
-    title: String = stringResource(id = R.string.create_recipe_name_title),
+    title: String = stringResource(id = R.string.title_chefs_corner),
     description: String = stringResource(id = R.string.create_recipe_name_prompt),
+    label: String = stringResource(id = R.string.recipe_name_dialog_label),
     onContinue: (String) -> Unit = {},
+    onCancel: () -> Unit = {}
 ) {
     var inputText by remember { mutableStateOf("") }
+    var showError by remember { mutableStateOf(false) }
 
     AlertDialog(
-        onDismissRequest = { onContinue(inputText) },
+        onDismissRequest = onCancel,
         title = { Text(text = title) },
         text = {
             Column {
@@ -146,18 +152,39 @@ fun PromptUserDialog(
 
                 OutlinedTextField(
                     value = inputText,
-                    onValueChange = { inputText = it },
-                    label = { Text("Recipe Name") }
+                    onValueChange = {
+                        inputText = it
+                        showError = false
+                    },
+                    label = { Text(label) },
+                    isError = showError,
+                    modifier = Modifier.fillMaxWidth()
                 )
+
+                if (showError) {
+                    Text(
+                        text = stringResource(id = R.string.please_enter_a_name),
+                        color = Red,
+                        modifier = Modifier.padding(top = 4.dp)
+                    )
+                }
             }
         },
         confirmButton = {
-            Button(onClick = { onContinue(inputText) }) {
-                Text(stringResource(id = R.string.title_dismiss))
+            Button(onClick = {
+                if (inputText.isBlank()) {
+                    showError = true
+                } else {
+                    onContinue(inputText)
+                }
+            }) {
+                Text(stringResource(id = R.string.title_continue))
             }
         },
+        dismissButton = {
+            Button(onClick = onCancel) {
+                Text(stringResource(id = R.string.title_dismiss))
+            }
+        }
     )
 }
-
-
-

@@ -1,10 +1,5 @@
 package com.fitness.recipebuilder.screens.builder
 
-import com.fitness.domain.usecase.search.EdamamAutoCompleteUseCase
-import com.fitness.domain.usecase.search.EdamamFetchAllIngredientsUseCase
-import com.fitness.domain.usecase.search.EdamamIngredientSearchUseCase
-import com.fitness.domain.usecase.user.GetCurrentUserIdUseCase
-import com.fitness.domain.usecase.user.GetUserBasicNutritionInfoUseCase
 import com.fitness.recipebuilder.util.RecipeBuilderStateHolder
 import dagger.hilt.android.lifecycle.HiltViewModel
 import state.BaseViewState
@@ -13,13 +8,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RecipeBuilderViewModel @Inject constructor(
-    private val stateHolder: RecipeBuilderStateHolder,
-    private val getCurrentUserIdUseCase: GetCurrentUserIdUseCase,
-    private val getNutritionalInfoUseCase: GetUserBasicNutritionInfoUseCase,
-    private val getAllIngredientsUseCase: EdamamFetchAllIngredientsUseCase,
-    private val edamamAutoCompleteUseCase: EdamamAutoCompleteUseCase,
-    private val edamamFoodSearchUseCase: EdamamIngredientSearchUseCase,
-) : IntentViewModel<BaseViewState<RecipeBuilderState>, RecipeBuilderEvent>() {
+    private val stateHolder: RecipeBuilderStateHolder
+) :
+    IntentViewModel<BaseViewState<RecipeBuilderState>, RecipeBuilderEvent>() {
 
     init {
         initialize()
@@ -27,13 +18,13 @@ class RecipeBuilderViewModel @Inject constructor(
 
     override fun onTriggerEvent(event: RecipeBuilderEvent) {
         when (event) {
-            is RecipeBuilderEvent.OpenRecipeBuilder -> onOpenRecipeBuilder()
-
             is RecipeBuilderEvent.EditName -> onEditName(event)
-
-            is RecipeBuilderEvent.AddIngredient -> onAddIngredient(event)
-
-            is RecipeBuilderEvent.CloseRecipeBuilder -> onCloseRecipeBuilder()
+            is RecipeBuilderEvent.GenerateInstructions -> onGenerateInstructions()
+            is RecipeBuilderEvent.EditDate -> {}
+            is RecipeBuilderEvent.EditType -> {}
+            is RecipeBuilderEvent.EditInstructions -> {}
+            is RecipeBuilderEvent.RemoveIngredient -> {}
+            is RecipeBuilderEvent.SaveNutritionRecord -> {}
         }
     }
 
@@ -42,19 +33,32 @@ class RecipeBuilderViewModel @Inject constructor(
         exception.printStackTrace()
     }
 
-    private fun initialize() = setState(BaseViewState.Data(RecipeBuilderState()))
+    private fun initialize() {
+        val state = stateHolder.state()
+        setState(
+            BaseViewState.Data(
+                RecipeBuilderState(
+                    name = state.name ?: "Create a name",
+                    date = state.date,
+                    hour = state.hour,
+                    minute = state.minute,
+                    type = state.type,
+                    ingredients = state.ingredients,
+                    instructions = state.instructions
+                )
+            )
+        )
+    }
 
-    private fun onOpenRecipeBuilder() = safeLaunch {
+    private fun verified() {
+
     }
 
     private fun onEditName(event: RecipeBuilderEvent.EditName) = safeLaunch {
 
     }
-    private fun onAddIngredient(event: RecipeBuilderEvent.AddIngredient) = safeLaunch {
 
-    }
-
-    private fun onCloseRecipeBuilder() = safeLaunch {
+    private fun onGenerateInstructions() = safeLaunch {
 
     }
 }

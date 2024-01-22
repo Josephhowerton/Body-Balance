@@ -13,6 +13,8 @@ import com.fitness.recipebuilder.screens.confirmation.SaveAndConfirm
 import com.fitness.recipebuilder.screens.confirmation.SaveConfirmViewModel
 import com.fitness.recipebuilder.screens.date.PickDate
 import com.fitness.recipebuilder.screens.date.PickDateViewModel
+import com.fitness.recipebuilder.screens.recipes.RecipeSelection
+import com.fitness.recipebuilder.screens.recipes.RecipeSelectionViewModel
 import com.fitness.recipebuilder.screens.search.IngredientSearch
 import com.fitness.recipebuilder.screens.search.IngredientSearchViewModel
 import com.fitness.recipebuilder.screens.time.PickTime
@@ -22,25 +24,37 @@ import javax.inject.Inject
 
 class RecipeBuilderEntryImpl @Inject constructor(): RecipeBuilderEntry {
     override val featureRoute: String get() = "recipe-builder"
-    private companion object{
-        private const val RECIPE_BUILDER: String = "recipe-builder"
-        private const val INGREDIENTS: String = "ingredient-search"
-        private const val DATE: String = "pick-date"
-        private const val TIME: String = "pick-time"
-        private const val MEAL_TYPE: String = "pick-meal-type"
-        private const val CONFIRMATION: String = "confirmation"
+    companion object{
+        const val MY_RECIPES: String = "recipes"
+        const val RECIPE_BUILDER: String = "builder"
+        const val INGREDIENTS: String = "search-ingredients"
+        const val DATE: String = "pick-date"
+        const val TIME: String = "pick-time"
+        const val MEAL_TYPE: String = "pick-meal-type"
+        const val CONFIRMATION: String = "confirmation"
 
     }
 
     override fun NavGraphBuilder.navigation(navController: NavHostController, destinations: Destinations) {
-        navigation(startDestination = RECIPE_BUILDER, route = featureRoute) {
+        navigation(startDestination = INGREDIENTS, route = featureRoute) {
+
+            composable(MY_RECIPES){
+                val viewModel: RecipeSelectionViewModel = hiltViewModel()
+                RecipeSelection(
+                    state = viewModel.uiState.cast(),
+                    onPopBack = { navController.popBackStack() },
+                    onTriggerEvent = { viewModel.onTriggerEvent(it) },
+                    onNavigate = { navController.navigate(it) }
+                )
+            }
 
             composable(RECIPE_BUILDER){
                 val viewModel: RecipeBuilderViewModel = hiltViewModel()
                 RecipeBuilder(
                     state = viewModel.uiState.cast(),
                     onPopBack = { navController.popBackStack() },
-                    onTriggerEvent = { viewModel.onTriggerEvent(it) }
+                    onTriggerEvent = { viewModel.onTriggerEvent(it) },
+                    onIngredientSearch = {navController.navigate(INGREDIENTS)}
                 )
             }
 
@@ -79,7 +93,7 @@ class RecipeBuilderEntryImpl @Inject constructor(): RecipeBuilderEntry {
                     state = viewModel.uiState.cast(),
                     onPopBack = { navController.popBackStack() },
                     onTriggerEvent = { viewModel.onTriggerEvent(it) },
-                    onConfirmation = { navController.navigate(CONFIRMATION) }
+                    onConfirmation = { navController.navigate(MY_RECIPES) }
                 )
             }
 
@@ -90,9 +104,7 @@ class RecipeBuilderEntryImpl @Inject constructor(): RecipeBuilderEntry {
                     onTriggerEvent = { viewModel.onTriggerEvent(it) },
                     onPopBack = { navController.popBackStack() },
                     onComplete = {
-                        navController.navigate(INGREDIENTS) {
-                            popUpTo(featureRoute) { inclusive = true }
-                        }
+                        navController.navigate(MY_RECIPES)
                     },
                 )
             }

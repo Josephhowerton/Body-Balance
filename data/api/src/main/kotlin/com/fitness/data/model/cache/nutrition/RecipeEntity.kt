@@ -1,7 +1,7 @@
 package com.fitness.data.model.cache.nutrition
 
 data class RecipeEntity(
-    val recipeId: String,
+    val recipeId: String = "",
     val calories: Double? = null,
     val cautions: List<String>? = null,
     val cuisineType: List<String>? = null,
