@@ -19,7 +19,7 @@ dependencies {
     addJetpackComposeDependencies()
 
     RESOURCES
-    LIBRARY
+    FRAMEWORK
     THEME
     COIL
     implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.3.1")

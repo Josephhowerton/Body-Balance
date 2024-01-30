@@ -9,14 +9,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.TextUnit
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.fitness.resources.R
 import com.fitness.component.properties.HEADLINE_TEXT_SIZE
 import com.fitness.component.properties.STANDARD_TEXT_SIZE
 import com.fitness.component.properties.STANDARD_TEXT_SIZE_SMALL
 import com.fitness.component.properties.TITLE_TEXT_SIZE
-import extensions.Dark
 import extensions.Light
 
 

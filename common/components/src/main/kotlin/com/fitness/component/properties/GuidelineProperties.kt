@@ -3,7 +3,7 @@ package com.fitness.component.properties
 import androidx.compose.ui.unit.dp
 
 object GuidelineProperties {
-    val TOP = 75.dp
+    val TOP = 25.dp
     val BOTTOM_100 = 100.dp
     val BOTTOM= 20.dp
     val SECOND_TOP = 175.dp

@@ -5,7 +5,6 @@ import cache.firestore
 import com.fitness.data.model.cache.user.UserBasicFitnessLevelCache
 import com.fitness.data.repository.user.UserRepository
 import com.fitness.domain.model.toUserFitnessLevel
-import com.fitness.domain.model.user.User
 import com.fitness.domain.model.user.UserFitnessLevel
 import kotlinx.coroutines.flow.FlowCollector
 import state.DataState

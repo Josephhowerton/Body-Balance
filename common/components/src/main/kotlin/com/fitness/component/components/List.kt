@@ -52,9 +52,11 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import com.fitness.component.ItemState
@@ -75,6 +77,35 @@ import extensions.Dark
 import extensions.GeneralItem
 import extensions.Light
 import kotlinx.coroutines.delay
+
+@Light
+@Dark
+@Composable
+fun SquareItem(
+    title: String = "Kreplach",
+    isSelected: Boolean = false,
+    onClick: () -> Unit = {},
+) = Card(
+    colors = CardDefaults.cardColors(containerColor = if(isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surfaceVariant),
+    elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
+    modifier = Modifier
+        .size(75.dp)
+        .clickable { onClick() }
+) {
+    Column(verticalArrangement = Arrangement.Center, modifier = Modifier.fillMaxSize()) {
+        Text(
+            text = title,
+            fontSize = 8.sp,
+            textAlign = TextAlign.Center,
+            overflow = TextOverflow.Ellipsis,
+            maxLines = 1,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(5.dp)
+        )
+    }
+}
+
 
 @Composable
 fun <T : GeneralItem> BalanceItem(

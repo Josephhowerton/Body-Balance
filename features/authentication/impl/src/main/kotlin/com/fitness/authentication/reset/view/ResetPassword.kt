@@ -21,7 +21,6 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import com.fitness.authentication.reset.viewmodel.ResetPasswordEvent
 import com.fitness.authentication.reset.viewmodel.ResetPasswordState
-import auth.AuthFailure
 import com.fitness.authentication.util.DisplayErrorMessage
 import com.fitness.authentication.util.DisplayFieldState
 import com.fitness.component.components.StandardButton

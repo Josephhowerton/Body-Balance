@@ -75,7 +75,8 @@ private fun PreviewGenderAge() = BodyBalanceTheme {
 @Composable
 fun GenderAge(onTriggerEvent: (BasicInformationEvent) -> Unit = {}) {
     ConstraintLayout(modifier = Modifier.fillMaxSize()) {
-        val (genderTitle,
+        val (
+            genderTitle,
             genderDesc,
             ageTitle,
             ageDesc,
@@ -86,7 +87,8 @@ fun GenderAge(onTriggerEvent: (BasicInformationEvent) -> Unit = {}) {
             genderToggle,
             agePicker,
             arrowUp,
-            continueButton) = createRefs()
+            continueButton
+        ) = createRefs()
 
         val topGuide = createGuidelineFromTop(GuidelineProperties.TOP)
         val secondTopGuide = createGuidelineFromTop(GuidelineProperties.SECOND_TOP)

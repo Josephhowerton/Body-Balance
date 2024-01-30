@@ -7,5 +7,6 @@ data class User(
     var phoneNumber: String?,
     var isTermAndPrivacyAccepted: Boolean,
     var profilePictureUrl: String?,
-    var isNewUser: Boolean?
+    var isNewUser: Boolean?,
+    val userPreferences: UserPreferences
 )

@@ -4,7 +4,6 @@ import auth.PhoneAuthState
 import com.fitness.data.repository.auth.AuthRepository
 import kotlinx.coroutines.flow.FlowCollector
 import state.DataState
-import usecase.DataStateUseCase
 import javax.inject.Inject
 
 class SendVerificationCodeUseCaseImpl @Inject constructor(private val repository: AuthRepository) : SendVerificationCodeUseCase() {

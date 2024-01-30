@@ -8,7 +8,7 @@ android {
 
 dependencies {
     addFirebaseDependencies()
-    LIBRARY
+    FRAMEWORK
     RESOURCES
     DOMAIN_API
     ONBOARD_API

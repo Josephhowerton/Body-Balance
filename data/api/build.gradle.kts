@@ -13,5 +13,5 @@ dependencies {
     addNetworkDependencies()
     addFirebaseDependencies()
     AUTHENTICATION_MANAGER
-    LIBRARY
+    FRAMEWORK
 }

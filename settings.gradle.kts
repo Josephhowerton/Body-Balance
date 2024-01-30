@@ -47,4 +47,5 @@ include(":features:user-profile:api")
 include(":features:welcome:impl")
 include(":features:welcome:api")
 
-include(":library")
+include(":library:framework")
+include(":library:analytics")

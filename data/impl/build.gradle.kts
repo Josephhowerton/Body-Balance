@@ -9,7 +9,7 @@ android{
 
 dependencies {
     DATA_API
-    LIBRARY
+    FRAMEWORK
     addRoomLib()
     addHiltDependencies()
     addFirebaseDependencies()

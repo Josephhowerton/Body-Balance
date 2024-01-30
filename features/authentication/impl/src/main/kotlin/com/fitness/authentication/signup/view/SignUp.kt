@@ -16,7 +16,6 @@ import auth.AuthFailure
 import com.fitness.authentication.navigation.AuthEntryImpl.Companion.signInEmail
 import com.fitness.authentication.navigation.AuthEntryImpl.Companion.signUpEmail
 import com.fitness.authentication.navigation.AuthEntryImpl.Companion.signUpPhone
-import com.fitness.authentication.signup.viewmodel.SignUpEvent
 import com.fitness.authentication.signup.viewmodel.SignUpState
 import com.fitness.authentication.util.SignInAnnotatedText
 import com.fitness.component.components.BodyBalanceImageLogo

@@ -5,6 +5,7 @@ import com.fitness.data.model.cache.user.UserBasicInfoCache
 import com.fitness.data.model.cache.user.UserBasicNutritionInfoCache
 import com.fitness.data.model.cache.user.UserCache
 import com.fitness.data.model.cache.user.UserBasicFitnessLevelCache
+import com.fitness.data.model.cache.user.UserPreferencesCache
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.DocumentSnapshot
 import state.DataState
@@ -15,6 +16,8 @@ interface UserRepository {
     suspend fun readUser(id: String): DataState<DocumentSnapshot>
     suspend fun updateUser(id: String, map: Map<String, Any>): DataState<Unit>
     suspend fun deleteUser(id: String): DataState<Unit>
+    suspend fun updateUserPreferences(id: String, preferences: UserPreferencesCache): DataState<Unit>
+
     suspend fun createUserBasicInfo(info: UserBasicInfoCache): DataState<Unit>
     suspend fun readUserBasicInfo(id: String): DataState<DocumentSnapshot>
     suspend fun updateUserBasicInfo(id: String, map: Map<String, Any>): DataState<Unit>

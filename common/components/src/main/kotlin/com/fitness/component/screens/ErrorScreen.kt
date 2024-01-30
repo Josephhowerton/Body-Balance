@@ -93,24 +93,3 @@ fun ErrorScreen(
         ContinueButton(onClick)
     }
 }
-
-@Light
-@Dark
-@Composable
-fun ErrorDialog(
-    title: String = stringResource(id =R.string.title_error),
-    description: String = stringResource(id =R.string.desc_error_min_items_required),
-    onDismiss: () -> Unit =  {}
-) {
-    AlertDialog(
-        onDismissRequest = onDismiss,
-        title = { Text(text = title) },
-        text = { Text(text = description) },
-        confirmButton = {
-            Button(
-                colors = ButtonDefaults.buttonColors(containerColor = Red),
-                onClick = onDismiss
-            ) { Text(stringResource(id = R.string.title_dismiss)) }
-        }
-    )
-}

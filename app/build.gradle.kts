@@ -74,7 +74,7 @@ dependencies {
     addFeatureDependencies()
 
     THEME
-    LIBRARY
+    FRAMEWORK
     NAVIGATION
     RESOURCES
     DATA_IMPL

@@ -3,7 +3,6 @@ package com.fitness.onboard.onboard.nutrition.viewmodel
 import enums.ECuisineType
 import enums.EDietaryRestrictions
 import enums.EHealthLabel
-import enums.ENutritionPreferences
 
 data class NutritionState(
     val step: NutritionStep = NutritionStep.NUTRITION_PREFERENCES,

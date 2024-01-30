@@ -8,7 +8,7 @@ android {
 
 dependencies {
     THEME
-    LIBRARY
+    FRAMEWORK
     RESOURCES
     DOMAIN_API
     ONBOARD_API

@@ -7,7 +7,7 @@ android {
 }
 
 dependencies {
-    LIBRARY
+    FRAMEWORK
     RESOURCES
     WELCOME_API
     DASHBOARD_API

@@ -4,7 +4,6 @@ import com.fitness.onboard.onboard.nutrition.viewmodel.NutritionStep
 import enums.ECuisineType
 import enums.EDietaryRestrictions
 import enums.EHealthLabel
-import enums.ENutritionPreferences
 
 
 object NutritionStateHolder {

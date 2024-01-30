@@ -53,8 +53,8 @@ import com.fitness.onboard.onboard.basic.viewmodel.BasicInformationEvent
 import com.fitness.resources.R
 import com.fitness.theme.ui.BodyBalanceTheme
 import com.fitness.theme.ui.Green
-import enums.LengthUnit
-import enums.MassUnit
+import enums.ELengthUnit
+import enums.EMassUnit
 import enums.formatHeight
 import enums.formatWeight
 import kotlinx.coroutines.delay
@@ -86,7 +86,7 @@ fun WeightMeasurement(onTriggerEvent: (BasicInformationEvent) -> Unit = {}) {
         val bottomGuide = createGuidelineFromBottom(10.dp)
 
         var weightNumber by remember { mutableDoubleStateOf(0.0) }
-        var units by remember { mutableStateOf(MassUnit.POUNDS) }
+        var units by remember { mutableStateOf(EMassUnit.POUNDS) }
 
         StandardTitleText(text = R.string.select_weight,
             modifier = Modifier.constrainAs(title) {
@@ -113,15 +113,6 @@ fun WeightMeasurement(onTriggerEvent: (BasicInformationEvent) -> Unit = {}) {
                 top.linkTo(desc.bottom, 75.dp)
                 start.linkTo(startGuide)
                 end.linkTo(endGuide, 75.dp)
-            }
-        )
-
-        WeightMeasurementOptions(
-            onSelection = { units = it },
-            modifier = Modifier.constrainAs(bottomSheet) {
-                end.linkTo(parent.end)
-                top.linkTo(image.top)
-                bottom.linkTo(image.bottom)
             }
         )
 
@@ -166,7 +157,7 @@ fun HeightMeasurement(onTriggerEvent: (BasicInformationEvent) -> Unit = {}) {
         val endGuide = createGuidelineFromEnd(GuidelineProperties.END)
 
         var heightNumber by remember { mutableDoubleStateOf(0.0) }
-        var units by remember { mutableStateOf(LengthUnit.FEET) }
+        var units by remember { mutableStateOf(ELengthUnit.FEET) }
 
         StandardTitleText(text = R.string.select_height,
             modifier = Modifier.constrainAs(title) {
@@ -268,17 +259,6 @@ fun HeightMeasurement(onTriggerEvent: (BasicInformationEvent) -> Unit = {}) {
                 bottom.linkTo(parent.bottom)
             }
         )
-
-        HeightMeasurementOptions(
-            onSelection = { units = it },
-            modifier = Modifier
-                .constrainAs(bottomSheet) {
-                    bottom.linkTo(parent.bottom)
-                    top.linkTo(heightValue.bottom)
-                    start.linkTo(heightMeasurement.end)
-                    width = Dimension.fillToConstraints
-                }
-        )
     }
 }
 
@@ -304,138 +284,3 @@ private fun HeightMeasurement(modifier: Modifier = Modifier, onMeasurementChange
             modifier = Modifier.padding(bottom = 15.dp)
         )
     }
-
-
-@Preview
-@Composable
-private fun WeightMeasurementOptions(modifier: Modifier = Modifier, onSelection: (MassUnit) -> Unit = {}) {
-    var units by remember { mutableStateOf(MassUnit.POUNDS) }
-
-    Column(
-        horizontalAlignment = Alignment.Start,
-        verticalArrangement = Arrangement.spacedBy(16.dp),
-        modifier = modifier.padding(16.dp)
-    ) {
-
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(5.dp),
-            modifier = Modifier.clickable {
-                if (units != MassUnit.KILOGRAM) {
-                    onSelection(MassUnit.KILOGRAM)
-                    units = MassUnit.KILOGRAM
-                }
-            }
-        ) {
-
-            Icon(
-                modifier = Modifier.size(14.dp),
-                imageVector = Icons.Default.PlayArrow,
-                contentDescription = stringResource(id = R.string.kilograms)
-            )
-
-            StandardTextSmall(text = R.string.kilograms)
-
-        }
-
-
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(5.dp),
-            modifier = Modifier.clickable {
-                if (units != MassUnit.POUNDS) {
-                    onSelection(MassUnit.POUNDS)
-                    units = MassUnit.POUNDS
-                }
-            }
-        ) {
-
-            Icon(
-                modifier = Modifier.size(14.dp),
-                imageVector = Icons.Default.PlayArrow,
-                contentDescription = stringResource(id = R.string.pounds)
-            )
-
-            StandardTextSmall(text = R.string.pounds)
-        }
-    }
-
-
-}
-
-@Preview
-@Composable
-fun HeightMeasurementOptions(
-    modifier: Modifier = Modifier,
-    onSelection: (LengthUnit) -> Unit = {}
-) {
-    var units by remember { mutableStateOf(LengthUnit.FEET) }
-    Column(
-        horizontalAlignment = Alignment.Start,
-        verticalArrangement = Arrangement.spacedBy(16.dp),
-        modifier = modifier
-    ) {
-
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(5.dp),
-            modifier = Modifier.clickable {
-                if (units != LengthUnit.CENTIMETER) {
-                    onSelection(LengthUnit.CENTIMETER)
-                    units = LengthUnit.CENTIMETER
-                }
-            }) {
-
-            Icon(
-                modifier = Modifier.size(14.dp),
-                imageVector = Icons.Default.PlayArrow,
-                contentDescription = stringResource(id = R.string.centimeters)
-            )
-
-            StandardTextSmall(text = R.string.centimeters)
-
-        }
-
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(5.dp),
-            modifier = Modifier.clickable {
-                if (units != LengthUnit.METER) {
-                    onSelection(LengthUnit.METER)
-                    units = LengthUnit.METER
-                }
-            }) {
-
-            Icon(
-                modifier = Modifier.size(14.dp),
-                imageVector = Icons.Default.PlayArrow,
-                contentDescription = stringResource(id = R.string.meters)
-            )
-
-            StandardTextSmall(text = R.string.meters)
-
-        }
-
-
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(5.dp),
-            modifier = Modifier.clickable {
-                if (units != LengthUnit.FEET) {
-                    onSelection(LengthUnit.FEET)
-                    units = LengthUnit.FEET
-                }
-            }) {
-
-            Icon(
-                modifier = Modifier.size(14.dp),
-                imageVector = Icons.Default.PlayArrow,
-                contentDescription = stringResource(id = R.string.feet_inches)
-            )
-
-            StandardTextSmall(text = R.string.feet_inches)
-
-        }
-    }
-}
-

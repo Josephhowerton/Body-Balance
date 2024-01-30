@@ -1,6 +1,5 @@
 package com.fitness.recipebuilder.screens.search
 
-import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.foundation.background
@@ -66,6 +65,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import com.fitness.component.components.CircleProgressWithTextComponent
+import com.fitness.component.components.SquareItem
 import com.fitness.component.properties.GuidelineProperties
 import com.fitness.component.screens.ErrorDialog
 import com.fitness.component.screens.ErrorScreen
@@ -80,7 +80,6 @@ import com.fitness.domain.model.nutrition.Qualifier
 import com.fitness.recipebuilder.util.NutritionItem
 import com.fitness.recipebuilder.util.RecipeBuilderStep
 import com.fitness.recipebuilder.util.SmallNutritionItem
-import com.fitness.recipebuilder.util.SquareNutritionItem
 import com.fitness.resources.R
 import com.fitness.theme.ui.BodyBalanceTheme
 import com.fitness.theme.ui.Red
@@ -685,7 +684,7 @@ fun MetricSelectionDialog(
 
                     itemsIndexed(measures) { indexed, measure ->
                         measure.label?.let {
-                            SquareNutritionItem(
+                            SquareItem(
                                 title = it,
                                 isSelected = selectedMeasureIndexed == indexed,
                                 onClick = {
@@ -731,7 +730,7 @@ fun MetricSelectionDialog(
 
                             itemsIndexed(qualifiers) { indexed, qualifier ->
                                 qualifier.label?.let {
-                                    SquareNutritionItem(
+                                    SquareItem(
                                         title = it,
                                         isSelected = selectedQualifierIndexed == indexed,
                                         onClick = {
@@ -889,7 +888,7 @@ fun ModifyMetricSelectionDialog(
 
                     itemsIndexed(measures) { indexed, measure ->
                         measure.label?.let { name ->
-                            SquareNutritionItem(
+                            SquareItem(
                                 title = name,
                                 isSelected = selectedMeasureIndexed == indexed,
                                 onClick = {
@@ -932,7 +931,7 @@ fun ModifyMetricSelectionDialog(
 
                             itemsIndexed(qualifiers) { indexed, qualifier ->
                                 qualifier.label?.let {
-                                    SquareNutritionItem(
+                                    SquareItem(
                                         title = it,
                                         isSelected = selectedQualifierIndexed == indexed,
                                         onClick = {

@@ -19,10 +19,7 @@ import com.fitness.authentication.signup.view.SignUpScreen
 import com.fitness.authentication.signup.viewmodel.SignUpViewModel
 
 import com.fitness.component.screens.MessageScreen
-import com.fitness.dashboard.DashboardEntry
 import com.fitness.navigation.Destinations
-import com.fitness.navigation.find
-import com.fitness.onboard.OnboardEntry
 import com.fitness.resources.R
 import extensions.cast
 import javax.inject.Inject

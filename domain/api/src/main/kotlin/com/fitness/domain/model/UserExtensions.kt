@@ -11,12 +11,14 @@ import com.fitness.data.model.cache.user.UserBasicGoalsInfoCache
 import com.fitness.data.model.cache.user.UserBasicInfoCache
 import com.fitness.data.model.cache.user.UserBasicNutritionInfoCache
 import com.fitness.data.model.cache.user.UserCache
+import com.fitness.data.model.cache.user.UserPreferencesCache
 import com.google.firebase.auth.FirebaseUser
 import com.fitness.domain.model.user.UserBasicGoalsInfo
 import com.fitness.domain.model.user.UserBasicInfo
 import com.fitness.domain.model.user.UserBasicNutritionInfo
 import com.fitness.domain.model.user.User
 import com.fitness.domain.model.user.UserFitnessLevel
+import com.fitness.domain.model.user.UserPreferences
 
 
 // Extension function to convert FirebaseUser to UserDomain
@@ -28,7 +30,8 @@ fun FirebaseUser.toUserDomain(): User {
         phoneNumber = this.phoneNumber,
         isTermAndPrivacyAccepted = false,
         profilePictureUrl = this.photoUrl?.toString(),
-        isNewUser = false
+        isNewUser = false,
+        userPreferences = UserPreferences()
     )
 }
 
@@ -41,7 +44,8 @@ fun UserCache.toUser(): User {
         phoneNumber = this.phoneNumber,
         isTermAndPrivacyAccepted = this.isTermAndPrivacyAccepted,
         profilePictureUrl = this.profilePictureUrl,
-        isNewUser = isNewUser
+        isNewUser = isNewUser,
+        userPreferences = userPreferences.toUserPreferences()
     )
 }
 
@@ -55,10 +59,20 @@ fun User.toUserCache(lastUpdated: Long = System.currentTimeMillis()): UserCache 
         profilePictureUrl = this.profilePictureUrl,
         isTermAndPrivacyAccepted = this.isTermAndPrivacyAccepted,
         lastUpdated = lastUpdated,
-        isNewUser = isNewUser ?: false
+        isNewUser = isNewUser ?: false,
+        userPreferences = userPreferences.toUserPreferencesCache()
     )
 }
 
+fun UserPreferences.toUserPreferencesCache(): UserPreferencesCache =
+    UserPreferencesCache(
+        systemOfMeasurement = this.systemOfMeasurement
+    )
+
+fun UserPreferencesCache.toUserPreferences(): UserPreferences =
+    UserPreferences(
+        systemOfMeasurement = this.systemOfMeasurement
+    )
 
 // Extension function to convert UserBasicInfo to UserBasicInfoCache
 fun UserBasicInfo.toUserBasicInfoCache(lastUpdated: Long = System.currentTimeMillis()): UserBasicInfoCache {
@@ -68,6 +82,8 @@ fun UserBasicInfo.toUserBasicInfoCache(lastUpdated: Long = System.currentTimeMil
         gender = this.gender,
         height = this.height,
         weight = this.weight,
+        waist = this.waist,
+        bmi = this.bmi,
         lastUpdated = lastUpdated
     )
 }
@@ -79,7 +95,9 @@ fun UserBasicInfoCache.toUserBasicInfo(): UserBasicInfo {
         age = this.age,
         gender = this.gender,
         height = this.height,
-        weight = this.weight
+        weight = this.weight,
+        waist = this.waist,
+        bmi = this.bmi
     )
 }
 

@@ -1,10 +1,10 @@
 package com.fitness.data.model.cache.user
 
-import enums.EFitnessHabits
-import enums.EFitnessLevel
+import enums.EFitnessInterest
+import enums.EPhysicalActivityLevel
 data class UserBasicFitnessLevelCache(
     val userId: String,
-    val level: EFitnessLevel,
-    val habits: List<EFitnessHabits>,
+    val level: EPhysicalActivityLevel,
+    val habits: List<EFitnessInterest>,
     val lastUpdated: Long,
 )

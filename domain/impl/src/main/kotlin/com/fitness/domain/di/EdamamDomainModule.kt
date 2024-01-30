@@ -18,7 +18,6 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import util.RecipeFetchUseCase
 import util.RecipeSearchUseCase
-import javax.inject.Inject
 import javax.inject.Singleton
 
 @Module

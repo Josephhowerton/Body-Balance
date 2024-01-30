@@ -23,7 +23,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
-import auth.AuthFailure
 import com.fitness.authentication.navigation.AuthEntryImpl
 import com.fitness.authentication.navigation.AuthEntryImpl.Companion.signInPhone
 import com.fitness.authentication.navigation.AuthEntryImpl.Companion.signUp

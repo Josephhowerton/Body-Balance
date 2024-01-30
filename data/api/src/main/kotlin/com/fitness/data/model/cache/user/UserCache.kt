@@ -9,6 +9,6 @@ data class UserCache(
     val isTermAndPrivacyAccepted: Boolean,
     val lastUpdated: Long,
     val isNewUser: Boolean,
-
+    val userPreferences:UserPreferencesCache
 )
 

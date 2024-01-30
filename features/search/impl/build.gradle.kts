@@ -8,7 +8,7 @@ android {
 
 dependencies {
     COIL
-    LIBRARY
+    FRAMEWORK
     RESOURCES
     DOMAIN_API
     SEARCH_API

@@ -17,7 +17,6 @@ import com.fitness.onboard.onboard.fitness.view.Habits
 import com.fitness.onboard.onboard.fitness.viewmodel.FitnessEvent
 import com.fitness.onboard.onboard.fitness.viewmodel.FitnessState
 import com.fitness.onboard.onboard.fitness.viewmodel.FitnessStep
-import com.fitness.onboard.onboard.goal.viewmodel.GoalEvent
 import com.fitness.resources.R
 import com.fitness.theme.ui.BodyBalanceTheme
 import extensions.cast

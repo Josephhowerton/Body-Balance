@@ -175,7 +175,9 @@
     <string name="login_status_changed">Login Status Changed</string>
     <string name="desc_login_status_changed">Your authentication status has changed unexpectedly. We need to log you out for security purposes. Please sign in again.</string>
     <string name="title_select_fitness_level">Select Fitness Level</string>
-    <string name="desc_select_fitness_level">Select your fitness journey: <b>Starting Strong</b> for beginners, <b>Momentum Builder</b> for intermediates, or <b>Peak Performer</b> for advanced enthusiasts.</string>
+    <string name="desc_current_activity_level">Select your current activity level. Your choice here helps us accurately calculate a personalized diet plan based on your daily energy expenditure and fitness goals. Providing accurate information ensures the most effective and tailored nutritional recommendations.</string>
+    <string name="title_select_fitness_frequency">Select Fitness Frequency</string>
+    <string name="desc_select_fitness_frequency">Select your fitness journey: beginners, for intermediates, or advanced.</string>
     <string name="title_beginner">Beginner</string>
     <string name="title_intermediate">Intermediate</string>
     <string name="title_advance">Advance</string>
@@ -575,6 +577,7 @@
     <string name="error_message_incomplete_data">The ingredient you\'re trying to add is missing some crucial measurement details. Without these, we can\'t quite calculate your user metrics accurately. Please choose a different item!</string>
     <string name="select_qualified_measure">Select a qualified measure.</string>
     <string name="select_base_measure">Select a base measure.</string>
+    <string name="select_a_unit_of_measure">Select a Unit of Measurement</string>
     <string name="enter_base_measure_amount">Enter %1$s Amount.</string>
     <string name="please_enter_a_name">Please enter a name for your recipe.</string>
     <string name="error_measure_not_selected">Measure not selected. Please select a measure.</string>
@@ -582,4 +585,19 @@
     <string name="error_invalid_quantity">Invalid quantity. Please enter a valid number.</string>
     <string name="error_unknown">Unknown error. Please double-check the information entered.</string>
     <string name="title_remove">Remove</string>
+    <string name="title_activity_level">Select Your Activity Level</string>
+    <string name="title_fitness_frequency_sedentary">Sedentary</string>
+    <string name="title_fitness_frequency_lightly">Lightly Active</string>
+    <string name="title_fitness_frequency_moderately_active">Moderately Active</string>
+    <string name="title_fitness_frequency_very_active">Very Active</string>
+    <string name="title_fitness_frequency_extra_active">Extra Active</string>
+    <string name="desc_fitness_frequency_sedentary">Little or no exercise.</string>
+    <string name="desc_fitness_frequency_lightly">Light exercise or sports 1 to 3 days a week.</string>
+    <string name="desc_fitness_frequency_moderately_active">Moderate exercise or sports 3 to 5 days a week.</string>
+    <string name="desc_fitness_frequency_very_active">Hard exercise or sports 6 to 7 days a week.</string>
+    <string name="desc_fitness_frequency_extra_active">Very hard exercise, physical job, or training twice a day.</string>
+    <string name="metric_system_title">Metric System</string>
+    <string name="metric_system_description">A system of measurement based on meters, liters, and grams.</string>
+    <string name="customary_system_title">Customary System</string>
+    <string name="customary_system_description">A system of measurement commonly used in the United States, based on inches, feet, pounds, etc.</string>
 </resources>

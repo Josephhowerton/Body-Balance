@@ -50,6 +50,8 @@
             <option value="$PROJECT_DIR$/features/welcome/api" />
             <option value="$PROJECT_DIR$/features/welcome/impl" />
             <option value="$PROJECT_DIR$/library" />
+            <option value="$PROJECT_DIR$/library/analytics" />
+            <option value="$PROJECT_DIR$/library/framework" />
           </set>
         </option>
         <option name="resolveExternalAnnotations" value="false" />

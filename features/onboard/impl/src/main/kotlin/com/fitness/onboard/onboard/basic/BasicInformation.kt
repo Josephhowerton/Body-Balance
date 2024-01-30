@@ -9,6 +9,7 @@ import androidx.compose.runtime.getValue
 import com.fitness.component.screens.ErrorScreen
 import com.fitness.component.screens.LoadingScreen
 import com.fitness.component.screens.MessageScreen
+import com.fitness.component.screens.SystemOfMeasurementDialog
 import com.fitness.onboard.onboard.basic.view.GenderAge
 import com.fitness.onboard.onboard.basic.view.HeightMeasurement
 import com.fitness.onboard.onboard.basic.view.WeightMeasurement
@@ -92,6 +93,7 @@ private fun BasicInformationContent(
         label = "BasicInformationContent"
     ) { step ->
         when (step) {
+            BasicInformationStep.SYSTEM_OF_MEASUREMENTS -> SystemOfMeasurementDialog(onClick = { onTriggerEvent(BasicInformationEvent.SystemOfMeasurement(it)) })
             BasicInformationStep.GENDER_AGE -> GenderAge(onTriggerEvent = onTriggerEvent)
             BasicInformationStep.WEIGHT -> WeightMeasurement(onTriggerEvent = onTriggerEvent)
             BasicInformationStep.HEIGHT -> HeightMeasurement(onTriggerEvent = onTriggerEvent)

@@ -6,6 +6,7 @@ import com.fitness.data.model.cache.user.UserBasicInfoCache
 import com.fitness.data.model.cache.user.UserBasicNutritionInfoCache
 import com.fitness.data.model.cache.user.UserCache
 import com.fitness.data.model.cache.user.UserBasicFitnessLevelCache
+import com.fitness.data.model.cache.user.UserPreferencesCache
 import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.Tasks
 import com.google.firebase.auth.FirebaseAuth
@@ -25,6 +26,10 @@ class UserRepositoryImpl @Inject constructor(
         const val USER_BASIC_FITNESS_INFO: String = "USER_BASIC_FITNESS_INFO"
         const val USER_NUTRITIONAL_INFO: String = "USER_NUTRITIONAL_INFO"
         const val USER_GOALS_INFO: String = "USER_GOALS_INFO"
+
+
+
+        const val USER_PREFERENCES_FIELD: String = "USER_GOALS_INFO"
     }
 
     override suspend fun getCurrentUserId(): Task<String?> = Tasks.forResult(firebaseAuth.currentUser?.uid)
@@ -58,6 +63,14 @@ class UserRepositoryImpl @Inject constructor(
             firestore.collection(USER)
                 .document(id)
                 .delete()
+                .onSuccessTask { Tasks.forResult(Unit) }
+        }
+
+    override suspend fun updateUserPreferences(id: String, preferences: UserPreferencesCache): DataState<Unit> =
+        firestore {
+            firestore.collection(USER)
+                .document(id)
+                .update(mapOf(USER_PREFERENCES_FIELD to preferences))
                 .onSuccessTask { Tasks.forResult(Unit) }
         }
 

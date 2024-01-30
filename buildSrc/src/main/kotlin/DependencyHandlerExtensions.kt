@@ -96,7 +96,8 @@ val DependencyHandler.WELCOME get() = implementation(project(":features:welcome:
 val DependencyHandler.WELCOME_API get() = api(project(":features:welcome:api"))
 
 //Library
-val DependencyHandler.LIBRARY get() = implementation(project(":library"))
+val DependencyHandler.FRAMEWORK get() = implementation(project(":library:framework"))
+val DependencyHandler.ANALYTICS get() = implementation(project(":library:analytics"))
 
 val DependencyHandler.COIL get() = implementation(CoilLibs.COIL)
 

@@ -9,7 +9,7 @@ android {
 }
 
 dependencies {
-    LIBRARY
+    FRAMEWORK
     DATA_API
     AUTHENTICATION_MANAGER
     addRoomLib()

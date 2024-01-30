@@ -7,7 +7,7 @@ android{
 }
 
 dependencies {
-    LIBRARY
+    FRAMEWORK
     DOMAIN_API
     addHiltDependencies()
     addCoroutineDependencies()

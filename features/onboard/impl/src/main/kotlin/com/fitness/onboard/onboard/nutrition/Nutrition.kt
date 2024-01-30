@@ -10,7 +10,6 @@ import com.fitness.component.screens.ErrorDialog
 import com.fitness.component.screens.ErrorScreen
 import com.fitness.component.screens.LoadingScreen
 import com.fitness.component.screens.MessageScreen
-import com.fitness.onboard.onboard.goal.viewmodel.GoalEvent
 import com.fitness.onboard.onboard.nutrition.view.CuisineType
 import com.fitness.onboard.onboard.nutrition.view.DietaryRestrictions
 import com.fitness.onboard.onboard.nutrition.view.HealthLabels

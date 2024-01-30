@@ -2,8 +2,6 @@ package com.fitness.domain.usecase.user
 
 import cache.Fields
 import com.fitness.data.repository.user.UserRepository
-import enums.EFitnessHabits
-import enums.EFitnessLevel
 import kotlinx.coroutines.flow.FlowCollector
 import state.DataState
 import javax.inject.Inject

@@ -1,0 +1,40 @@
+package enums
+
+import com.fitness.resources.R
+enum class ENutrient(val ntrCodeResId: Int, val nameResId: Int, val unit: Units) {
+    ADDED_SUGAR(R.string.ntr_added_sugar_code, R.string.ntr_added_sugar, EMassUnit.GRAM),
+    CALCIUM(R.string.ntr_calcium_code, R.string.ntr_calcium, EMassUnit.MILLIGRAM),
+    NET_CARBOHYDRATE(R.string.ntr_net_carbohydrate_code, R.string.ntr_net_carbohydrate, EMassUnit.GRAM),
+    CARBOHYDRATE(R.string.ntr_carbohydrate_code, R.string.ntr_carbohydrate, EMassUnit.GRAM),
+    CHOLESTEROL(R.string.ntr_cholesterol_code, R.string.ntr_cholesterol, EMassUnit.MILLIGRAM),
+    ENERGY(R.string.ntr_energy_code, R.string.ntr_energy, EMassUnit.KILOGRAM), // Adjust as needed for ENERGY unit
+    FATTY_ACIDS_MONO(R.string.ntr_fatty_acids_mono_code, R.string.ntr_fatty_acids_mono, EMassUnit.GRAM),
+    FATTY_ACIDS_POLY(R.string.ntr_fatty_acids_poly_code, R.string.ntr_fatty_acids_poly, EMassUnit.GRAM),
+    FATTY_ACIDS_SAT(R.string.ntr_fatty_acids_sat_code, R.string.ntr_fatty_acids_sat, EMassUnit.GRAM),
+    TRANS_FAT(R.string.ntr_trans_fat_code, R.string.ntr_trans_fat, EMassUnit.GRAM),
+    DIETARY_FIBER(R.string.ntr_fiber_code, R.string.ntr_fiber, EMassUnit.GRAM),
+    FOLATE_DFE(R.string.ntr_folate_dfe_code, R.string.ntr_folate_dfe, EMassUnit.MICROGRAM),
+    FOLATE_FOOD(R.string.ntr_folate_food_code, R.string.ntr_folate_food, EMassUnit.MICROGRAM),
+    FOLIC_ACID(R.string.ntr_folic_acid_code, R.string.ntr_folic_acid, EMassUnit.MICROGRAM),
+    IRON(R.string.ntr_iron_code, R.string.ntr_iron, EMassUnit.MILLIGRAM),
+    MAGNESIUM(R.string.ntr_magnesium_code, R.string.ntr_magnesium, EMassUnit.MILLIGRAM),
+    NIACIN(R.string.ntr_niacin_code, R.string.ntr_niacin, EMassUnit.MILLIGRAM),
+    PHOSPHORUS(R.string.ntr_phosphorus_code, R.string.ntr_phosphorus, EMassUnit.MILLIGRAM),
+    POTASSIUM(R.string.ntr_potassium_code, R.string.ntr_potassium, EMassUnit.MILLIGRAM),
+    PROTEIN(R.string.ntr_protein_code, R.string.ntr_protein, EMassUnit.GRAM),
+    RIBOFLAVIN(R.string.ntr_riboflavin_code, R.string.ntr_riboflavin, EMassUnit.MILLIGRAM),
+    SODIUM(R.string.ntr_sodium_code, R.string.ntr_sodium, EMassUnit.MILLIGRAM),
+    SUGAR_ALCOHOL(R.string.ntr_sugar_alcohol_code, R.string.ntr_sugar_alcohol, EMassUnit.GRAM),
+    TOTAL_SUGARS(R.string.ntr_sugars_total_code, R.string.ntr_sugars_total, EMassUnit.GRAM),
+    THIAMIN(R.string.ntr_thiamin_code, R.string.ntr_thiamin, EMassUnit.MILLIGRAM),
+    TOTAL_FAT(R.string.ntr_total_fat_code, R.string.ntr_total_fat, EMassUnit.GRAM),
+    VITAMIN_A(R.string.ntr_vitamin_a_code, R.string.ntr_vitamin_a, EMassUnit.MICROGRAM),
+    VITAMIN_B12(R.string.ntr_vitamin_b12_code, R.string.ntr_vitamin_b12, EMassUnit.MICROGRAM),
+    VITAMIN_B6(R.string.ntr_vitamin_b6_code, R.string.ntr_vitamin_b6, EMassUnit.MILLIGRAM),
+    VITAMIN_C(R.string.ntr_vitamin_c_code, R.string.ntr_vitamin_c, EMassUnit.MILLIGRAM),
+    VITAMIN_D(R.string.ntr_vitamin_d_code, R.string.ntr_vitamin_d, EMassUnit.MICROGRAM),
+    VITAMIN_E(R.string.ntr_vitamin_e_code, R.string.ntr_vitamin_e, EMassUnit.MILLIGRAM),
+    VITAMIN_K(R.string.ntr_vitamin_k_code, R.string.ntr_vitamin_k, EMassUnit.MICROGRAM),
+    WATER(R.string.ntr_water_code, R.string.ntr_water, EVolumeUnit.LITER),
+    ZINC(R.string.ntr_zinc_code, R.string.ntr_zinc, EMassUnit.MILLIGRAM)
+}

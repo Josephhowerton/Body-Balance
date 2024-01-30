@@ -1,6 +1,5 @@
 package com.fitness.domain.usecase.user
 
-import com.fitness.domain.model.user.User
 import com.fitness.domain.model.user.UserFitnessLevel
 import usecase.DataStateUseCase
 
