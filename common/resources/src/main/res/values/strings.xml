@@ -600,4 +600,6 @@
     <string name="metric_system_description">A system of measurement based on meters, liters, and grams.</string>
     <string name="customary_system_title">Customary System</string>
     <string name="customary_system_description">A system of measurement commonly used in the United States, based on inches, feet, pounds, etc.</string>
+    <string name="title_waist_size">Enter Your Waist Size</string>
+    <string name="description_waist_size">Please measure your waist circumference for accurate health tracking. Use a flexible measuring tape and measure around your waist at the narrowest part, typically just above the belly button. Ensure the tape is snug but not compressing your skin. Note: This is not the same as your pant size.</string>
 </resources>

@@ -12,6 +12,7 @@ import com.fitness.component.screens.MessageScreen
 import com.fitness.component.screens.SystemOfMeasurementDialog
 import com.fitness.onboard.onboard.basic.view.GenderAge
 import com.fitness.onboard.onboard.basic.view.HeightMeasurement
+import com.fitness.onboard.onboard.basic.view.WaistMeasurement
 import com.fitness.onboard.onboard.basic.view.WeightMeasurement
 import com.fitness.onboard.onboard.basic.viewmodel.BasicInformationEvent
 import com.fitness.onboard.onboard.basic.viewmodel.BasicInformationState
@@ -97,6 +98,7 @@ private fun BasicInformationContent(
             BasicInformationStep.GENDER_AGE -> GenderAge(onTriggerEvent = onTriggerEvent)
             BasicInformationStep.WEIGHT -> WeightMeasurement(onTriggerEvent = onTriggerEvent)
             BasicInformationStep.HEIGHT -> HeightMeasurement(onTriggerEvent = onTriggerEvent)
+            BasicInformationStep.WAIST -> WaistMeasurement(onTriggerEvent = onTriggerEvent)
             BasicInformationStep.SAVE_BASIC_INFORMATION -> onTriggerEvent(BasicInformationEvent.SaveBasicInformation)
             BasicInformationStep.COMPLETE -> onComplete()
         }

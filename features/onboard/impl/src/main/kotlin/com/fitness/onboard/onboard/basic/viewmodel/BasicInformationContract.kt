@@ -13,6 +13,7 @@ sealed class BasicInformationEvent{
     data class GenderAge(val gender: EGender, val age: Int): BasicInformationEvent()
     data class Height(val height: Double): BasicInformationEvent()
     data class Weight(val weight: Double): BasicInformationEvent()
+    data class Waist(val waist: Double): BasicInformationEvent()
     object SaveBasicInformation: BasicInformationEvent()
 }
 
@@ -21,6 +22,7 @@ enum class BasicInformationStep {
     GENDER_AGE,
     HEIGHT,
     WEIGHT,
+    WAIST,
     SAVE_BASIC_INFORMATION,
     COMPLETE
 }

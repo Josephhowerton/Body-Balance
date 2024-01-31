@@ -78,7 +78,7 @@ private fun HeightPreview() = BodyBalanceTheme {
 @Composable
 fun WeightMeasurement(onTriggerEvent: (BasicInformationEvent) -> Unit = {}) {
     ConstraintLayout(modifier = Modifier.fillMaxSize()) {
-        val (title, desc, image, weightMeasurement, weightValue, continueButton, bottomSheet) = createRefs()
+        val (title, desc, image, weightMeasurement, weightValue, continueButton) = createRefs()
 
         val topGuide = createGuidelineFromTop(50.dp)
         val startGuide = createGuidelineFromStart(GuidelineProperties.START)
@@ -149,7 +149,7 @@ fun WeightMeasurement(onTriggerEvent: (BasicInformationEvent) -> Unit = {}) {
 @Composable
 fun HeightMeasurement(onTriggerEvent: (BasicInformationEvent) -> Unit = {}) {
     ConstraintLayout(modifier = Modifier.fillMaxSize()) {
-        val (title, desc, image, weightLocked, heightMeasurement, heightValue, continueButton, bottomSheet) = createRefs()
+        val (title, desc, image, weightLocked, heightMeasurement, heightValue, continueButton) = createRefs()
 
         val topGuide = createGuidelineFromTop(50.dp)
         val bottomGuide = createGuidelineFromBottom(GuidelineProperties.BOTTOM_100)

@@ -31,6 +31,7 @@ class BasicInformationViewModel @Inject constructor(
             is BasicInformationEvent.GenderAge -> onGenderAge(event)
             is BasicInformationEvent.Weight -> onWeight(event)
             is BasicInformationEvent.Height -> onHeight(event)
+            is BasicInformationEvent.Waist -> onWaist(event)
             is BasicInformationEvent.SaveBasicInformation -> getCurrentUserId(event)
         }
     }
@@ -71,6 +72,12 @@ class BasicInformationViewModel @Inject constructor(
         stateHolder.updateState(stateHolder.getState().copy(height = event.height))
         setState(BaseViewState.Data(BasicInformationState(units = stateHolder.getState().preferredMeasurement, step = BasicInformationStep.SAVE_BASIC_INFORMATION)))
     }
+
+    private fun onWaist(event: BasicInformationEvent.Waist) {
+        stateHolder.updateState(stateHolder.getState().copy(waist = event.waist))
+        setState(BaseViewState.Data(BasicInformationState(units = stateHolder.getState().preferredMeasurement, step = BasicInformationStep.SAVE_BASIC_INFORMATION)))
+    }
+
 
     private fun onVerify(id: String) {
         val basicInformation = stateHolder.getState()

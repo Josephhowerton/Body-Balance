@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.nativeCanvas
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
@@ -177,6 +178,89 @@ fun VerticalRuler(
 
             // Update the current number based on stepAtCenter
             currentNumber(step)
+        }
+    }
+}
+
+
+@Composable
+fun HorizontalRulerCorrected(
+    currentNumber: (Double) -> Unit,
+    modifier: Modifier = Modifier,
+    height: Dp = 100.dp,
+    steps: Int = 700,
+    stepWidth: Dp = 20.dp
+) {
+    val scrollState = rememberScrollState()
+
+    BoxWithConstraints(
+        contentAlignment = Alignment.TopCenter,
+        modifier = modifier
+            .height(height)
+            .horizontalScroll(scrollState)
+    ) {
+        val density = LocalDensity.current
+        val canvasWidth = stepWidth * steps
+
+        Canvas(
+            modifier = Modifier
+                .height(height)
+                .width(canvasWidth)
+        ) {
+            val canvasHeight = size.height
+
+            for (i in 0 until steps) {
+                val xPosition = i * stepWidth.toPx()
+                val yStart = (canvasHeight / 2)
+                var yEndUp = (yStart * .85f)
+                var yEndDown = (yStart * 1.15f)
+
+
+                if(i % 5 == 0){
+                    yEndUp = (yStart * .75f)
+                    yEndDown = (yStart * 1.25f)
+                }
+
+                drawLine(
+                    color = Color.Black,
+                    start = Offset(xPosition, yStart),
+                    end = Offset(xPosition, yEndUp),
+                    strokeWidth = 3f
+                )
+
+                drawLine(
+                    color = Color.Black,
+                    start = Offset(xPosition, yStart),
+                    end = Offset(xPosition, yEndDown),
+                    strokeWidth = 3f
+                )
+
+                val measurement = i + 80
+                if (measurement % 5 == 0) {
+                    drawContext.canvas.nativeCanvas.drawText(
+                        measurement.toString(),
+                        xPosition,
+                        (yStart * .50f), // Adjust label position
+                        Paint().apply {
+                            color = android.graphics.Color.BLACK
+                            textSize = 40f // Size of the label
+                            textAlign = Paint.Align.CENTER
+                            typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
+                        }
+                    )
+                }
+            }
+        }
+
+        LaunchedEffect(scrollState.value) {
+            val stepWidthPx = with(density){ stepWidth.toPx() }
+            val centerOfScreen = constraints.maxWidth / 2.0
+            val stepAtCenter = (scrollState.value + centerOfScreen) / stepWidthPx
+
+            // Adjust the stepAtCenter based on your ruler's starting point
+            val adjustedStepAtCenter = stepAtCenter + 80 // or any other adjustment you need
+
+            currentNumber(adjustedStepAtCenter)
         }
     }
 }
