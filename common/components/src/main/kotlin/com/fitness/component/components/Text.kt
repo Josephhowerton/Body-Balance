@@ -44,12 +44,13 @@ private fun StandardTextSmallPreview() = Surface {
 @Composable
 fun StandardTitleText(
     modifier: Modifier = Modifier,
+    textAlign: TextAlign = TextAlign.Center,
     fontSize: TextUnit = TITLE_TEXT_SIZE,
     text: Int = R.string.create_account_message
 ){
     Text(
         text = stringResource(text),
-        textAlign = TextAlign.Center,
+        textAlign = textAlign,
         fontSize = fontSize,
         fontWeight = FontWeight.SemiBold,
         modifier = modifier

@@ -57,9 +57,12 @@ import enums.ELengthUnit
 import enums.EMassUnit
 import enums.formatHeight
 import enums.formatWeight
+import extensions.Dark
+import extensions.Light
 import kotlinx.coroutines.delay
 
-@Preview(showBackground = true)
+@Light
+@Dark
 @Composable
 private fun WeightPreview() = BodyBalanceTheme {
     Surface {
@@ -67,7 +70,8 @@ private fun WeightPreview() = BodyBalanceTheme {
     }
 }
 
-@Preview(showBackground = true)
+@Light
+@Dark
 @Composable
 private fun HeightPreview() = BodyBalanceTheme {
     Surface {
@@ -239,7 +243,8 @@ fun HeightMeasurement(onTriggerEvent: (BasicInformationEvent) -> Unit = {}) {
                 bottom.linkTo(continueButton.top)
                 start.linkTo(startGuide, 75.dp)
                 end.linkTo(endGuide)
-            })
+            }
+        )
 
         Button(
             onClick = { onTriggerEvent(BasicInformationEvent.Height(height = heightNumber)) },

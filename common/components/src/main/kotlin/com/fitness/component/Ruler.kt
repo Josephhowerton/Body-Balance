@@ -5,11 +5,21 @@ import android.graphics.Typeface
 import android.util.Log
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
@@ -20,6 +30,37 @@ import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.constraintlayout.compose.ConstraintLayout
+import com.fitness.theme.ui.BodyBalanceTheme
+import extensions.Dark
+import extensions.Light
+
+@Light
+@Dark
+@Composable
+private fun HorizontalRulerPreview() = BodyBalanceTheme {
+    Surface {
+        HorizontalRuler(currentNumber = {})
+    }
+}
+
+@Light
+@Dark
+@Composable
+private fun VerticalRulerPreview() = BodyBalanceTheme {
+    Surface {
+        VerticalRuler(currentNumber = {})
+    }
+}
+
+@Light
+@Dark
+@Composable
+private fun HorizontalRulerFinalPreview() = BodyBalanceTheme {
+    Surface {
+        HorizontalRulerFinal(currentNumber = 10.0)
+    }
+}
 
 @Composable
 fun HorizontalRuler(
@@ -53,7 +94,7 @@ fun HorizontalRuler(
                 var yEndDown = (yStart * 1.15f)
 
 
-                if(i % 5 == 0){
+                if (i % 5 == 0) {
                     yEndUp = (yStart * .75f)
                     yEndDown = (yStart * 1.25f)
                 }
@@ -91,8 +132,8 @@ fun HorizontalRuler(
 
         LaunchedEffect(scrollState.value) {
 
-            val centerOfScreen = (constraints.minHeight/2)
-            val step = (((scrollState.value*stepWidth.value)/centerOfScreen)/8) + 90.0
+            val centerOfScreen = (constraints.minHeight / 2)
+            val step = (((scrollState.value * stepWidth.value) / centerOfScreen) / 8) + 90.0
 
             Log.e("CenterOfScreen", centerOfScreen.toString())
 
@@ -133,7 +174,7 @@ fun VerticalRuler(
                 var xEndUp = (xStart * .85f)
                 var xEndDown = (xStart * 1.15f)
 
-                if(i % 5 == 0){
+                if (i % 5 == 0) {
                     xEndUp = (xStart * .75f)
                     xEndDown = (xStart * 1.25f)
                 }
@@ -171,8 +212,8 @@ fun VerticalRuler(
 
         LaunchedEffect(scrollState.value) {
 
-            val centerOfScreen = (constraints.maxWidth/2)
-            val step = (((scrollState.value*stepWidth.value)/centerOfScreen)/8) + 20.5
+            val centerOfScreen = (constraints.maxWidth / 2)
+            val step = (((scrollState.value * stepWidth.value) / centerOfScreen) / 8) + 20.5
 
             Log.e("CenterOfScreen", centerOfScreen.toString())
 
@@ -182,16 +223,44 @@ fun VerticalRuler(
     }
 }
 
+@Composable
+fun HorizontalRulerFinal(
+    currentNumber: Double,
+    modifier: Modifier = Modifier,
+) {
+    BoxWithConstraints(
+        contentAlignment = Alignment.BottomCenter,
+        modifier = modifier
+            .fillMaxWidth()
+            .wrapContentHeight()) {
+
+        val centerOfScreen = constraints.maxWidth / 2.0
+
+        HorizontalRulerCorrected(
+            current = currentNumber,
+            currentNumber = {},
+            centerOfScreen = centerOfScreen
+        )
+
+        Icon(
+            imageVector = Icons.Filled.KeyboardArrowUp,
+            contentDescription = "",
+        )
+    }
+}
 
 @Composable
 fun HorizontalRulerCorrected(
+    current: Double,
     currentNumber: (Double) -> Unit,
     modifier: Modifier = Modifier,
+    centerOfScreen: Double,
     height: Dp = 100.dp,
     steps: Int = 700,
     stepWidth: Dp = 20.dp
 ) {
     val scrollState = rememberScrollState()
+
 
     BoxWithConstraints(
         contentAlignment = Alignment.TopCenter,
@@ -207,6 +276,7 @@ fun HorizontalRulerCorrected(
                 .height(height)
                 .width(canvasWidth)
         ) {
+
             val canvasHeight = size.height
 
             for (i in 0 until steps) {
@@ -216,7 +286,7 @@ fun HorizontalRulerCorrected(
                 var yEndDown = (yStart * 1.15f)
 
 
-                if(i % 5 == 0){
+                if (i % 5 == 0) {
                     yEndUp = (yStart * .75f)
                     yEndDown = (yStart * 1.25f)
                 }
@@ -235,10 +305,9 @@ fun HorizontalRulerCorrected(
                     strokeWidth = 3f
                 )
 
-                val measurement = i + 80
-                if (measurement % 5 == 0) {
+                if (i % 5 == 0) {
                     drawContext.canvas.nativeCanvas.drawText(
-                        measurement.toString(),
+                        i.toString(),
                         xPosition,
                         (yStart * .50f), // Adjust label position
                         Paint().apply {
@@ -251,16 +320,17 @@ fun HorizontalRulerCorrected(
                 }
             }
         }
+        LaunchedEffect(Unit){
+            val startPosition = stepWidth * current.toInt()
 
+            scrollState.scrollTo(startPosition.value.toInt())
+        }
         LaunchedEffect(scrollState.value) {
-            val stepWidthPx = with(density){ stepWidth.toPx() }
-            val centerOfScreen = constraints.maxWidth / 2.0
+            val stepWidthPx = with(density) { stepWidth.toPx() }
             val stepAtCenter = (scrollState.value + centerOfScreen) / stepWidthPx
 
-            // Adjust the stepAtCenter based on your ruler's starting point
-            val adjustedStepAtCenter = stepAtCenter + 80 // or any other adjustment you need
-
-            currentNumber(adjustedStepAtCenter)
+            currentNumber(stepAtCenter)
+            Log.e("Current Number", stepAtCenter.toString())
         }
     }
 }

@@ -42,6 +42,8 @@ import com.fitness.component.screens.LoadingScreen
 import com.fitness.component.screens.MessageScreen
 import com.fitness.resources.R
 import com.fitness.theme.ui.BodyBalanceTheme
+import extensions.Dark
+import extensions.Light
 import extensions.TextFieldState
 import extensions.cast
 import failure.Failure
@@ -50,8 +52,8 @@ import kotlinx.coroutines.flow.StateFlow
 import state.BaseViewState
 
 
-@Preview(name = "Light", showBackground = true)
-@Preview(name = "Dark", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Light
+@Dark
 @Composable
 private fun SignInEmailPreview() = BodyBalanceTheme {
     Surface {
