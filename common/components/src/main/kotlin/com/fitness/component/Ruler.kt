@@ -5,13 +5,9 @@ import android.graphics.Typeface
 import android.util.Log
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.horizontalScroll
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
@@ -27,10 +23,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.nativeCanvas
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.constraintlayout.compose.ConstraintLayout
 import com.fitness.theme.ui.BodyBalanceTheme
 import extensions.Dark
 import extensions.Light
@@ -58,7 +52,7 @@ private fun VerticalRulerPreview() = BodyBalanceTheme {
 @Composable
 private fun HorizontalRulerFinalPreview() = BodyBalanceTheme {
     Surface {
-        HorizontalRulerFinal(currentNumber = 10.0)
+        HorizontalRulerFinal(currentNumber = 20.0)
     }
 }
 
@@ -236,11 +230,7 @@ fun HorizontalRulerFinal(
 
         val centerOfScreen = constraints.maxWidth / 2.0
 
-        HorizontalRulerCorrected(
-            current = currentNumber,
-            currentNumber = {},
-            centerOfScreen = centerOfScreen
-        )
+        HorizontalRulerCorrected(steps = 100, centerOfScreen = centerOfScreen)
 
         Icon(
             imageVector = Icons.Filled.KeyboardArrowUp,
@@ -251,36 +241,33 @@ fun HorizontalRulerFinal(
 
 @Composable
 fun HorizontalRulerCorrected(
-    current: Double,
-    currentNumber: (Double) -> Unit,
-    modifier: Modifier = Modifier,
+    steps: Int,
     centerOfScreen: Double,
-    height: Dp = 100.dp,
-    steps: Int = 700,
-    stepWidth: Dp = 20.dp
+    modifier: Modifier = Modifier,
 ) {
     val scrollState = rememberScrollState()
 
+    val stepWidth = 20.dp
+    val height = 100.dp
+    val canvasWidth = stepWidth * steps
 
-    BoxWithConstraints(
-        contentAlignment = Alignment.TopCenter,
+    BoxWithConstraints(contentAlignment = Alignment.TopCenter,
         modifier = modifier
             .height(height)
             .horizontalScroll(scrollState)
     ) {
-        val density = LocalDensity.current
-        val canvasWidth = stepWidth * steps
-
         Canvas(
             modifier = Modifier
                 .height(height)
                 .width(canvasWidth)
+
         ) {
 
             val canvasHeight = size.height
 
             for (i in 0 until steps) {
-                val xPosition = i * stepWidth.toPx()
+                val xPosition = stepWidth.times(i).plus(centerOfScreen.dp).value
+
                 val yStart = (canvasHeight / 2)
                 var yEndUp = (yStart * .85f)
                 var yEndDown = (yStart * 1.15f)
@@ -319,18 +306,6 @@ fun HorizontalRulerCorrected(
                     )
                 }
             }
-        }
-        LaunchedEffect(Unit){
-            val startPosition = stepWidth * current.toInt()
-
-            scrollState.scrollTo(startPosition.value.toInt())
-        }
-        LaunchedEffect(scrollState.value) {
-            val stepWidthPx = with(density) { stepWidth.toPx() }
-            val stepAtCenter = (scrollState.value + centerOfScreen) / stepWidthPx
-
-            currentNumber(stepAtCenter)
-            Log.e("Current Number", stepAtCenter.toString())
         }
     }
 }

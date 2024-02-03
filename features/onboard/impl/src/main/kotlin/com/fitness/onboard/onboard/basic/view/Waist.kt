@@ -20,15 +20,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
-import com.fitness.component.HorizontalRuler
-import com.fitness.component.HorizontalRulerCorrected
+import com.fitness.component.HorizontalRulerFinal
 import com.fitness.component.components.StandardTextSmall
 import com.fitness.component.components.StandardTitleText
 import com.fitness.onboard.onboard.basic.viewmodel.BasicInformationEvent
+import com.fitness.resources.R
 import com.fitness.theme.ui.BodyBalanceTheme
 import extensions.Dark
 import extensions.Light
-import com.fitness.resources.R
 
 @Light
 @Dark
@@ -83,18 +82,9 @@ fun WaistMeasurement(onTriggerEvent: (BasicInformationEvent) -> Unit = {}) {
             }
         )
 
-        Icon(
-            imageVector = Icons.Filled.KeyboardArrowUp,
-            contentDescription = "",
-            modifier = Modifier.padding(bottom = 15.dp).constrainAs(measurementIconRef){
-                start.linkTo(horizontalRulerRef.start)
-                end.linkTo(horizontalRulerRef.end)
-                bottom.linkTo(parent.bottom)
-            }
-        )
 
-        HorizontalRulerCorrected(
-            currentNumber = { waistSize = it },
+        HorizontalRulerFinal(
+            currentNumber = waistSize,
             modifier = Modifier.constrainAs(horizontalRulerRef) {
                 start.linkTo(parent.start)
                 end.linkTo(parent.end)
