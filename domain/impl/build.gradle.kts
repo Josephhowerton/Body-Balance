@@ -7,6 +7,7 @@ android{
 }
 
 dependencies {
+    ANALYTICS
     FRAMEWORK
     DOMAIN_API
     addHiltDependencies()

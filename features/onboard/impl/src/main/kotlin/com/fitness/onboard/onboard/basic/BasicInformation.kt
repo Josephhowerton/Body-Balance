@@ -96,9 +96,9 @@ private fun BasicInformationContent(
         when (step) {
             BasicInformationStep.SYSTEM_OF_MEASUREMENTS -> SystemOfMeasurementDialog(onClick = { onTriggerEvent(BasicInformationEvent.SystemOfMeasurement(it)) })
             BasicInformationStep.GENDER_AGE -> GenderAge(onTriggerEvent = onTriggerEvent)
-            BasicInformationStep.WEIGHT -> WeightMeasurement(onTriggerEvent = onTriggerEvent)
-            BasicInformationStep.HEIGHT -> HeightMeasurement(onTriggerEvent = onTriggerEvent)
-            BasicInformationStep.WAIST -> WaistMeasurement(onTriggerEvent = onTriggerEvent)
+            BasicInformationStep.WEIGHT -> WeightMeasurement(state.units, onTriggerEvent = onTriggerEvent)
+            BasicInformationStep.HEIGHT -> HeightMeasurement(state.units, onTriggerEvent = onTriggerEvent)
+            BasicInformationStep.WAIST -> WaistMeasurement(state.units, onTriggerEvent = onTriggerEvent)
             BasicInformationStep.SAVE_BASIC_INFORMATION -> onTriggerEvent(BasicInformationEvent.SaveBasicInformation)
             BasicInformationStep.COMPLETE -> onComplete()
         }

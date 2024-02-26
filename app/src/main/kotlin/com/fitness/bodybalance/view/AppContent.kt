@@ -90,7 +90,7 @@ fun AppHub(
     Crossfade(targetState = authState, label = "") {
         when(it){
             is AuthenticationState.Authenticated -> {
-                MainHub(showMainHubAnimation = showWelcomeAnimation, destinations = appProvider.destinations,)
+                MainHub(showMainHubAnimation = showWelcomeAnimation, destinations = appProvider.destinations)
             }
             is AuthenticationState.UnAuthenticated -> {
                 AuthenticationHub(destinations = appProvider.destinations)

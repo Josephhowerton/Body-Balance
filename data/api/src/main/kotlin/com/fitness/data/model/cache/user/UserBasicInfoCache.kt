@@ -3,6 +3,7 @@ package com.fitness.data.model.cache.user
 import enums.EGender
 import enums.ELengthUnit
 import enums.EMassUnit
+import enums.SystemOfMeasurement
 
 data class UserBasicInfoCache(
     val userId: String,
@@ -11,9 +12,6 @@ data class UserBasicInfoCache(
     val height: Double,
     val weight: Double,
     val waist: Double,
-    val bmi: Double,
-    val heightUnit: ELengthUnit = ELengthUnit.METER,
-    val weightUnit: EMassUnit = EMassUnit.GRAM,
-    val waistUnit: ELengthUnit = ELengthUnit.METER,
+    val systemOfMeasurement: SystemOfMeasurement,
     val lastUpdated: Long,
 )

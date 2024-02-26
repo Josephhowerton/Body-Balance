@@ -1,4 +1,4 @@
-package com.fitness.domain.model.nutrition
+ package com.fitness.domain.model.nutrition
 
 
 data class Nutrient(

@@ -6,12 +6,16 @@ import com.fitness.data.extensions.toCuisineType
 import com.fitness.data.extensions.toDietaryRestrictions
 import com.fitness.data.extensions.toEnumName
 import com.fitness.data.extensions.toHealthLabel
+import com.fitness.data.model.cache.metrics.UserBodyMetricsCache
+import com.fitness.data.model.cache.metrics.UserRecommendedMacrosCache
 import com.fitness.data.model.cache.user.UserBasicFitnessLevelCache
 import com.fitness.data.model.cache.user.UserBasicGoalsInfoCache
 import com.fitness.data.model.cache.user.UserBasicInfoCache
 import com.fitness.data.model.cache.user.UserBasicNutritionInfoCache
 import com.fitness.data.model.cache.user.UserCache
 import com.fitness.data.model.cache.user.UserPreferencesCache
+import com.fitness.domain.model.metrics.UserBodyMetrics
+import com.fitness.domain.model.metrics.UserRecommendedMacros
 import com.google.firebase.auth.FirebaseUser
 import com.fitness.domain.model.user.UserBasicGoalsInfo
 import com.fitness.domain.model.user.UserBasicInfo
@@ -83,7 +87,7 @@ fun UserBasicInfo.toUserBasicInfoCache(lastUpdated: Long = System.currentTimeMil
         height = this.height,
         weight = this.weight,
         waist = this.waist,
-        bmi = this.bmi,
+        systemOfMeasurement = systemOfMeasurement,
         lastUpdated = lastUpdated
     )
 }
@@ -97,7 +101,7 @@ fun UserBasicInfoCache.toUserBasicInfo(): UserBasicInfo {
         height = this.height,
         weight = this.weight,
         waist = this.waist,
-        bmi = this.bmi
+        systemOfMeasurement = systemOfMeasurement,
     )
 }
 
@@ -156,3 +160,50 @@ fun UserBasicGoalsInfoCache.toUserBasicGoalsInfo(): UserBasicGoalsInfo {
         goals = goals
     )
 }
+
+fun UserBodyMetricsCache.toUserBodyMetrics(): UserBodyMetrics {
+    return UserBodyMetrics(
+        userId = userId,
+        bodyMassIndex = bodyMassIndex,
+        bodyFatPercentage = bodyFatPercentage,
+        basalMetabolicRate = basalMetabolicRate
+    )
+}
+
+
+fun UserBodyMetrics.toUserBodyMetricsCache(): UserBodyMetricsCache {
+    return UserBodyMetricsCache(
+        userId = userId,
+        bodyMassIndex = bodyMassIndex,
+        bodyFatPercentage = bodyFatPercentage,
+        basalMetabolicRate = basalMetabolicRate
+    )
+}
+
+fun UserRecommendedMacrosCache.toUserRecommendedMacros(): UserRecommendedMacros {
+    return UserRecommendedMacros(
+        userId = userId,
+        fat = fat,
+        protein = protein,
+        calories = calories,
+        totalDailyEnergyExpenditure = totalDailyEnergyExpenditure,
+        carbohydrates = carbohydrates,
+        fiber = fiber,
+    )
+}
+
+
+fun UserRecommendedMacros.toUserRecommendedMacrosCache(): UserRecommendedMacrosCache {
+    return UserRecommendedMacrosCache(
+        userId = userId,
+        fat = fat,
+        protein = protein,
+        calories = calories,
+        totalDailyEnergyExpenditure = totalDailyEnergyExpenditure,
+        carbohydrates = carbohydrates,
+        fiber = fiber,
+    )
+}
+
+
+

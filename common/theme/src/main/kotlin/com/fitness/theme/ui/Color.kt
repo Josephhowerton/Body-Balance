@@ -10,9 +10,9 @@ val primaryBaseColor = Color(0xFF007BFF) // Vivid Sky Blue
 val secondaryBaseColor = Color(0xFF48C9B0) // Mint Green
 val tertiaryBaseColor = Color(0xFFE91E63) // Vivid Bright Pink
 val neutralBackgroundColor = Color(0xFFFFFFFF) // White
-val neutralSurfaceColor = Color(0xFFF5F5F5) // Light Grey
+val OffWhite = Color(0xFFF5F5F5) // Light Grey
 val textOnDarkColor = Color(0xFFFFFFFF) // White
-val textOnLightColor = Color(0xFF212121) // Dark Grey
+val OffBlack = Color(0xFF212121) // Dark Grey
 
 /**
  *

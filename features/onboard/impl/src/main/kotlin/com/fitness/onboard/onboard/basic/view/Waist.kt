@@ -1,11 +1,7 @@
 package com.fitness.onboard.onboard.basic.view
 
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.Button
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -20,12 +16,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
-import com.fitness.component.HorizontalRulerFinal
+import com.fitness.component.HorizontalRuler
 import com.fitness.component.components.StandardTextSmall
 import com.fitness.component.components.StandardTitleText
 import com.fitness.onboard.onboard.basic.viewmodel.BasicInformationEvent
 import com.fitness.resources.R
 import com.fitness.theme.ui.BodyBalanceTheme
+import enums.ELengthUnit
+import enums.SystemOfMeasurement
+import enums.formatLength
 import extensions.Dark
 import extensions.Light
 
@@ -34,16 +33,16 @@ import extensions.Light
 @Composable
 private fun PreviewWaistSize() = BodyBalanceTheme {
     Surface {
-        WaistMeasurement()
+        WaistMeasurement(SystemOfMeasurement.METRIC)
     }
 }
 
 @Composable
-fun WaistMeasurement(onTriggerEvent: (BasicInformationEvent) -> Unit = {}) {
+fun WaistMeasurement(units: SystemOfMeasurement, onTriggerEvent: (BasicInformationEvent) -> Unit = {}) {
     ConstraintLayout(modifier = Modifier.fillMaxSize()) {
         val (titleRef, descriptionRef, waistSizeRef, horizontalRulerRef, measurementIconRef, continueRef) = createRefs()
 
-        val topGuideline = createGuidelineFromTop(.1f)
+        val topGuide = createGuidelineFromTop(50.dp)
         val startGuideline = createGuidelineFromStart(.05f)
         val endGuideline = createGuidelineFromEnd(.05f)
 
@@ -53,7 +52,7 @@ fun WaistMeasurement(onTriggerEvent: (BasicInformationEvent) -> Unit = {}) {
             text = R.string.title_waist_size,
             textAlign = TextAlign.Start,
             modifier = Modifier.constrainAs(titleRef) {
-                top.linkTo(topGuideline)
+                top.linkTo(topGuide)
                 start.linkTo(startGuideline)
                 end.linkTo(endGuideline)
                 width = Dimension.fillToConstraints
@@ -71,8 +70,10 @@ fun WaistMeasurement(onTriggerEvent: (BasicInformationEvent) -> Unit = {}) {
             }
         )
 
+        val lengthUnits = if(units == SystemOfMeasurement.METRIC) ELengthUnit.CENTIMETER else ELengthUnit.INCHES
+
         Text(
-            text = waistSize.toString(),
+            text = formatLength(waistSize, lengthUnits),
             fontSize = 24.sp,
             modifier = Modifier.constrainAs(waistSizeRef) {
                 top.linkTo(descriptionRef.bottom, 20.dp)
@@ -83,8 +84,9 @@ fun WaistMeasurement(onTriggerEvent: (BasicInformationEvent) -> Unit = {}) {
         )
 
 
-        HorizontalRulerFinal(
-            currentNumber = waistSize,
+        HorizontalRuler(
+            steps = 200,
+            onValueChanged = {waistSize = it.toDouble() },
             modifier = Modifier.constrainAs(horizontalRulerRef) {
                 start.linkTo(parent.start)
                 end.linkTo(parent.end)

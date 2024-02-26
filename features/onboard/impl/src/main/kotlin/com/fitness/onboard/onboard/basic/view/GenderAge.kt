@@ -61,6 +61,7 @@ import enums.EGender
 import extensions.Dark
 import extensions.Light
 import kotlin.math.abs
+import kotlin.math.round
 
 
 @Light
@@ -102,10 +103,8 @@ fun GenderAge(onTriggerEvent: (BasicInformationEvent) -> Unit = {}) {
 
         var isMale by remember { mutableStateOf(true) }
 
-        val maleColor =
-            if (!isMale) Color.Transparent else MaterialTheme.colorScheme.secondaryContainer
-        val femaleColor =
-            if (isMale) Color.Transparent else MaterialTheme.colorScheme.secondaryContainer
+        val maleColor = if (!isMale) Color.Transparent else MaterialTheme.colorScheme.secondaryContainer
+        val femaleColor = if (isMale) Color.Transparent else MaterialTheme.colorScheme.secondaryContainer
 
         val gender by remember { mutableStateOf(if (isMale) EGender.MALE else EGender.FEMALE) }
         var age by remember { mutableIntStateOf(18) }
@@ -378,3 +377,5 @@ private fun AgePickerLazyRow(modifier: Modifier = Modifier, onAgeChanged: (Int) 
             }
     }
 }
+
+

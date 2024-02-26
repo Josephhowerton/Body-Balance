@@ -1,6 +1,8 @@
 package com.fitness.data.repository.user
 
 import cache.firestore
+import com.fitness.data.model.cache.metrics.UserBodyMetricsCache
+import com.fitness.data.model.cache.metrics.UserRecommendedMacrosCache
 import com.fitness.data.model.cache.user.UserBasicGoalsInfoCache
 import com.fitness.data.model.cache.user.UserBasicInfoCache
 import com.fitness.data.model.cache.user.UserBasicNutritionInfoCache
@@ -26,8 +28,8 @@ class UserRepositoryImpl @Inject constructor(
         const val USER_BASIC_FITNESS_INFO: String = "USER_BASIC_FITNESS_INFO"
         const val USER_NUTRITIONAL_INFO: String = "USER_NUTRITIONAL_INFO"
         const val USER_GOALS_INFO: String = "USER_GOALS_INFO"
-
-
+        const val USER_BODY_METRICS: String = "USER_BODY_METRICS"
+        const val USER_RECOMMENDED_MACROS: String = "USER_RECOMMENDED_MACROS"
 
         const val USER_PREFERENCES_FIELD: String = "USER_GOALS_INFO"
     }
@@ -74,6 +76,22 @@ class UserRepositoryImpl @Inject constructor(
                 .onSuccessTask { Tasks.forResult(Unit) }
         }
 
+
+    override suspend fun updateUserBodyMetrics(id: String, metrics: UserBodyMetricsCache): DataState<Unit>  =
+        firestore {
+            firestore.collection(USER)
+                .document(id)
+                .update(mapOf(USER_BODY_METRICS to metrics))
+                .onSuccessTask { Tasks.forResult(Unit) }
+        }
+
+    override suspend fun updateUserRecommendedMetrics(id: String, macros: UserRecommendedMacrosCache): DataState<Unit> =
+        firestore {
+            firestore.collection(USER)
+                .document(id)
+                .update(mapOf(USER_RECOMMENDED_MACROS to macros))
+                .onSuccessTask { Tasks.forResult(Unit) }
+        }
 
     override suspend fun createUserBasicInfo(info: UserBasicInfoCache): DataState<Unit> =
         firestore {

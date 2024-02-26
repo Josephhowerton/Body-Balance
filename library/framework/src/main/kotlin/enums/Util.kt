@@ -1,5 +1,7 @@
 package enums
 
+import com.fitness.resources.R
+
 inline fun <reified T : Enum<T>> safeEnumValueOf(type: String): T? {
     return try {
         enumValueOf<T>(type)
@@ -56,10 +58,24 @@ fun formatHeight(value: Double, toUnit: ELengthUnit): String {
             val (feet, inches) = value.toFeetAndInchesFromCm()
             "$feet' $inches\""
         }
+
         ELengthUnit.METER -> {
             val meters = value / 100.0 // Convert centimeters to meters
             "${String.format("%.2f", meters)} m"
         }
+
         else -> "${value.toInt()} cm" // Centimeters
+    }
+}
+fun formatLength(value: Double, unit: ELengthUnit): String {
+    return when (unit) {
+        ELengthUnit.METER -> "${String.format("%.1f", value)} m"
+        ELengthUnit.KILOMETER -> "${String.format("%.1f", value)} km"
+        ELengthUnit.CENTIMETER -> "${String.format("%.1f", value)} cm"
+        ELengthUnit.MILLIMETER -> "${String.format("%.1f", value)} mm"
+        ELengthUnit.INCHES -> "${String.format("%.1f", value)} in"
+        ELengthUnit.FEET -> "${String.format("%.1f", value)} ft"
+        ELengthUnit.YARDS -> "${String.format("%.1f", value)} yd"
+        ELengthUnit.MILES -> "${String.format("%.1f", value)} mi"
     }
 }

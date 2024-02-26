@@ -24,8 +24,5 @@ data class BasicInformationState(
     val height: Double? = null,
     val weight: Double? = null,
     val waist: Double? = null,
-    val heightUnit: ELengthUnit? = null,
-    val weightUnit: EMassUnit? = null,
-    val waistUnit: ELengthUnit? = null,
     val preferredMeasurement: SystemOfMeasurement = SystemOfMeasurement.METRIC
 )

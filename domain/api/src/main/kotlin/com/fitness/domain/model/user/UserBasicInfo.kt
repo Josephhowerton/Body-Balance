@@ -3,6 +3,7 @@ package com.fitness.domain.model.user
 import enums.EGender
 import enums.ELengthUnit
 import enums.EMassUnit
+import enums.SystemOfMeasurement
 
 data class UserBasicInfo(
     val userId: String,
@@ -10,9 +11,5 @@ data class UserBasicInfo(
     val gender: EGender,
     val height: Double,
     val weight: Double,
-    val waist: Double,
-    val bmi: Double,
-    val heightUnit: ELengthUnit = ELengthUnit.METER,
-    val weightUnit: EMassUnit = EMassUnit.GRAM,
-    val waistUnit: ELengthUnit = ELengthUnit.METER,
+    val waist: Double
 )

@@ -22,7 +22,7 @@ class BasicInformationViewModel @Inject constructor(
 ) : IntentViewModel<BaseViewState<BasicInformationState>, BasicInformationEvent>() {
 
     init {
-        setState(BaseViewState.Data(BasicInformationState(step = BasicInformationStep.GENDER_AGE)))
+        setState(BaseViewState.Data(BasicInformationState(step = BasicInformationStep.SYSTEM_OF_MEASUREMENTS)))
     }
 
     override fun onTriggerEvent(event: BasicInformationEvent) {
@@ -49,33 +49,77 @@ class BasicInformationViewModel @Inject constructor(
         }
     }
 
-    private fun onGenderAge(event: BasicInformationEvent.GenderAge) {
-        stateHolder.updateState(stateHolder.getState().copy(age = event.age, gender = event.gender))
-        setState(BaseViewState.Data(BasicInformationState(units = stateHolder.getState().preferredMeasurement, step = BasicInformationStep.SYSTEM_OF_MEASUREMENTS)))
-    }
-
-    private fun onSystemOfMeasurement(id: String, event: BasicInformationEvent.SystemOfMeasurement) = safeLaunch {
-        stateHolder.updateState(stateHolder.getState().copy(preferredMeasurement = event.systemOfMeasurement))
-        val params = UpdateUserPreferencesUseCase.Params(id = id, userPreferences = UserPreferences(systemOfMeasurement = event.systemOfMeasurement))
+    private fun onSystemOfMeasurement(
+        id: String,
+        event: BasicInformationEvent.SystemOfMeasurement
+    ) = safeLaunch {
+        stateHolder.updateState(
+            stateHolder.getState().copy(preferredMeasurement = event.systemOfMeasurement)
+        )
+        val params = UpdateUserPreferencesUseCase.Params(
+            id = id,
+            userPreferences = UserPreferences(systemOfMeasurement = event.systemOfMeasurement)
+        )
 
         execute(updateUserPreferencesUseCase(params = params)) {
-            setState(BaseViewState.Data(BasicInformationState(units = stateHolder.getState().preferredMeasurement, step = BasicInformationStep.WEIGHT)))
+            stateHolder.updateState(stateHolder.getState().copy())
+            setState(
+                BaseViewState.Data(
+                    BasicInformationState(
+                        units = stateHolder.getState().preferredMeasurement,
+                        step = BasicInformationStep.GENDER_AGE
+                    )
+                )
+            )
         }
+    }
+
+    private fun onGenderAge(event: BasicInformationEvent.GenderAge) {
+        stateHolder.updateState(stateHolder.getState().copy(age = event.age, gender = event.gender))
+        setState(
+            BaseViewState.Data(
+                BasicInformationState(
+                    units = stateHolder.getState().preferredMeasurement,
+                    step = BasicInformationStep.WEIGHT
+                )
+            )
+        )
     }
 
     private fun onWeight(event: BasicInformationEvent.Weight) {
         stateHolder.updateState(stateHolder.getState().copy(weight = event.weight))
-        setState(BaseViewState.Data(BasicInformationState(units = stateHolder.getState().preferredMeasurement, step = BasicInformationStep.HEIGHT)))
+        setState(
+            BaseViewState.Data(
+                BasicInformationState(
+                    units = stateHolder.getState().preferredMeasurement,
+                    step = BasicInformationStep.HEIGHT
+                )
+            )
+        )
     }
 
     private fun onHeight(event: BasicInformationEvent.Height) {
         stateHolder.updateState(stateHolder.getState().copy(height = event.height))
-        setState(BaseViewState.Data(BasicInformationState(units = stateHolder.getState().preferredMeasurement, step = BasicInformationStep.SAVE_BASIC_INFORMATION)))
+        setState(
+            BaseViewState.Data(
+                BasicInformationState(
+                    units = stateHolder.getState().preferredMeasurement,
+                    step = BasicInformationStep.WAIST
+                )
+            )
+        )
     }
 
     private fun onWaist(event: BasicInformationEvent.Waist) {
         stateHolder.updateState(stateHolder.getState().copy(waist = event.waist))
-        setState(BaseViewState.Data(BasicInformationState(units = stateHolder.getState().preferredMeasurement, step = BasicInformationStep.SAVE_BASIC_INFORMATION)))
+        setState(
+            BaseViewState.Data(
+                BasicInformationState(
+                    units = stateHolder.getState().preferredMeasurement,
+                    step = BasicInformationStep.SAVE_BASIC_INFORMATION
+                )
+            )
+        )
     }
 
 
@@ -86,18 +130,12 @@ class BasicInformationViewModel @Inject constructor(
         val height = basicInformation.height
         val weight = basicInformation.weight
         val waist = basicInformation.waist
-        val heightUnit = basicInformation.heightUnit
-        val weightUnit = basicInformation.weightUnit
-        val waistUnit = basicInformation.waistUnit
-
+        val system = basicInformation.preferredMeasurement
         if (age != null &&
             gender != null &&
             height != null &&
             weight != null &&
-            waist != null &&
-            heightUnit != null &&
-            weightUnit != null &&
-            waistUnit != null
+            waist != null
         ) {
             val userBasicInfo = UserBasicInfo(
                 userId = id,
@@ -106,10 +144,8 @@ class BasicInformationViewModel @Inject constructor(
                 height = height,
                 weight = weight,
                 waist = waist,
-                bmi = 0.0,
-                heightUnit = heightUnit,
-                weightUnit = weightUnit,
-                waistUnit = waistUnit
+                systemOfMeasurement = system
+
             )
             onSaveBasicInformation(userBasicInfo)
         } else {
@@ -117,8 +153,8 @@ class BasicInformationViewModel @Inject constructor(
         }
     }
 
-    private fun onSaveBasicInformation(userBasicInfoDomain: UserBasicInfo) = safeLaunch {
-        val param = CreateBasicUserInfoUseCase.Params(userBasicInfoDomain)
+    private fun onSaveBasicInformation(info: UserBasicInfo) = safeLaunch {
+        val param = CreateBasicUserInfoUseCase.Params(info)
         execute(createBasicUserInfoUseCase(param)) {
             setState(BaseViewState.Data(BasicInformationState(step = BasicInformationStep.COMPLETE)))
         }

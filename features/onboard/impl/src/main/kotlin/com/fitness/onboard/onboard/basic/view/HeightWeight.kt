@@ -7,20 +7,12 @@ import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.KeyboardArrowLeft
-import androidx.compose.material.icons.filled.KeyboardArrowUp
-import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
@@ -39,7 +31,6 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -55,6 +46,7 @@ import com.fitness.theme.ui.BodyBalanceTheme
 import com.fitness.theme.ui.Green
 import enums.ELengthUnit
 import enums.EMassUnit
+import enums.SystemOfMeasurement
 import enums.formatHeight
 import enums.formatWeight
 import extensions.Dark
@@ -66,7 +58,7 @@ import kotlinx.coroutines.delay
 @Composable
 private fun WeightPreview() = BodyBalanceTheme {
     Surface {
-        WeightMeasurement()
+        WeightMeasurement(SystemOfMeasurement.METRIC)
     }
 }
 
@@ -75,12 +67,12 @@ private fun WeightPreview() = BodyBalanceTheme {
 @Composable
 private fun HeightPreview() = BodyBalanceTheme {
     Surface {
-        HeightMeasurement()
+        HeightMeasurement(SystemOfMeasurement.METRIC)
     }
 }
 
 @Composable
-fun WeightMeasurement(onTriggerEvent: (BasicInformationEvent) -> Unit = {}) {
+fun WeightMeasurement(units: SystemOfMeasurement, onTriggerEvent: (BasicInformationEvent) -> Unit = {}) {
     ConstraintLayout(modifier = Modifier.fillMaxSize()) {
         val (title, desc, image, weightMeasurement, weightValue, continueButton) = createRefs()
 
@@ -90,7 +82,6 @@ fun WeightMeasurement(onTriggerEvent: (BasicInformationEvent) -> Unit = {}) {
         val bottomGuide = createGuidelineFromBottom(10.dp)
 
         var weightNumber by remember { mutableDoubleStateOf(0.0) }
-        var units by remember { mutableStateOf(EMassUnit.POUNDS) }
 
         StandardTitleText(text = R.string.select_weight,
             modifier = Modifier.constrainAs(title) {
@@ -120,7 +111,9 @@ fun WeightMeasurement(onTriggerEvent: (BasicInformationEvent) -> Unit = {}) {
             }
         )
 
-        Text(text = formatWeight(weightNumber, units),
+        val massUnits = if(units == SystemOfMeasurement.METRIC) EMassUnit.KILOGRAM else EMassUnit.POUNDS
+
+        Text(text = formatWeight(weightNumber, massUnits),
             fontSize = 24.sp,
             modifier = Modifier.constrainAs(weightValue) {
                 top.linkTo(image.bottom)
@@ -130,7 +123,7 @@ fun WeightMeasurement(onTriggerEvent: (BasicInformationEvent) -> Unit = {}) {
             })
 
         Button(
-            onClick = { onTriggerEvent(BasicInformationEvent.Weight(weight = weightNumber.toDouble())) },
+            onClick = { onTriggerEvent(BasicInformationEvent.Weight(weight = weightNumber)) },
             modifier = Modifier.constrainAs(continueButton) {
                 end.linkTo(endGuide)
                 bottom.linkTo(weightMeasurement.top, 20.dp)
@@ -139,8 +132,9 @@ fun WeightMeasurement(onTriggerEvent: (BasicInformationEvent) -> Unit = {}) {
             Text(text = stringResource(id = R.string.title_continue))
         }
 
-        WeightMeasurement(
-            onMeasurementChanged = { weightNumber = it },
+        HorizontalRuler(
+            steps = 700,
+            onValueChanged = { weightNumber = it.toDouble() },
             modifier = Modifier.constrainAs(weightMeasurement) {
                 start.linkTo(parent.start)
                 end.linkTo(parent.end)
@@ -151,7 +145,7 @@ fun WeightMeasurement(onTriggerEvent: (BasicInformationEvent) -> Unit = {}) {
 }
 
 @Composable
-fun HeightMeasurement(onTriggerEvent: (BasicInformationEvent) -> Unit = {}) {
+fun HeightMeasurement(units: SystemOfMeasurement, onTriggerEvent: (BasicInformationEvent) -> Unit = {}) {
     ConstraintLayout(modifier = Modifier.fillMaxSize()) {
         val (title, desc, image, weightLocked, heightMeasurement, heightValue, continueButton) = createRefs()
 
@@ -161,7 +155,6 @@ fun HeightMeasurement(onTriggerEvent: (BasicInformationEvent) -> Unit = {}) {
         val endGuide = createGuidelineFromEnd(GuidelineProperties.END)
 
         var heightNumber by remember { mutableDoubleStateOf(0.0) }
-        var units by remember { mutableStateOf(ELengthUnit.FEET) }
 
         StandardTitleText(text = R.string.select_height,
             modifier = Modifier.constrainAs(title) {
@@ -236,7 +229,9 @@ fun HeightMeasurement(onTriggerEvent: (BasicInformationEvent) -> Unit = {}) {
             }
         )
 
-        Text(text = formatHeight(heightNumber, units),
+        val lengthUnits = if(units == SystemOfMeasurement.METRIC) ELengthUnit.CENTIMETER else ELengthUnit.FEET
+
+        Text(text = formatHeight(heightNumber, lengthUnits),
             fontSize = 24.sp,
             modifier = Modifier.constrainAs(heightValue) {
                 top.linkTo(image.bottom)
@@ -256,8 +251,9 @@ fun HeightMeasurement(onTriggerEvent: (BasicInformationEvent) -> Unit = {}) {
             Text(text = stringResource(id = R.string.title_continue))
         }
 
-        HeightMeasurement(
-            onMeasurementChanged = { heightNumber = it },
+        VerticalRuler(
+            steps = 200,
+            onValueChanged = { heightNumber = it.toDouble() },
             modifier = Modifier.constrainAs(heightMeasurement) {
                 start.linkTo(parent.start)
                 top.linkTo(parent.top)
@@ -266,26 +262,3 @@ fun HeightMeasurement(onTriggerEvent: (BasicInformationEvent) -> Unit = {}) {
         )
     }
 }
-
-@Composable
-private fun WeightMeasurement(modifier: Modifier = Modifier, onMeasurementChanged: (Double) -> Unit = {}) =
-    Box(contentAlignment = Alignment.BottomCenter, modifier = modifier) {
-        HorizontalRuler(onMeasurementChanged)
-        Icon(
-            imageVector = Icons.Filled.KeyboardArrowUp,
-            contentDescription = "",
-            modifier = Modifier.padding(bottom = 15.dp)
-        )
-    }
-
-
-@Composable
-private fun HeightMeasurement(modifier: Modifier = Modifier, onMeasurementChanged: (Double) -> Unit = {}) =
-    Box(contentAlignment = Alignment.CenterEnd, modifier = modifier) {
-        VerticalRuler(onMeasurementChanged)
-        Icon(
-            imageVector = Icons.Filled.KeyboardArrowLeft,
-            contentDescription = "",
-            modifier = Modifier.padding(bottom = 15.dp)
-        )
-    }

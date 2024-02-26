@@ -41,6 +41,8 @@ import com.fitness.domain.usecase.user.UpdateBasicNutritionInfoUseCase
 import com.fitness.domain.usecase.user.UpdateBasicNutritionInfoUseCaseImpl
 import com.fitness.domain.usecase.user.UpdateBasicUserInfoUseCase
 import com.fitness.domain.usecase.user.UpdateBasicUserInfoUseCaseImpl
+import com.fitness.domain.usecase.user.UpdateUserPreferencesUseCase
+import com.fitness.domain.usecase.user.UpdateUserPreferencesUseCaseImpl
 import com.fitness.domain.usecase.user.UpdateUserUseCase
 import com.fitness.domain.usecase.user.UpdateUserUseCaseImpl
 import dagger.Module
@@ -157,4 +159,9 @@ class UserDomainModule {
     @Singleton
     fun provideUpdateUserUseCase(userRepository: UserRepository): UpdateUserUseCase =
         UpdateUserUseCaseImpl(userRepository)
+
+    @Provides
+    @Singleton
+    fun provideUpdateUserPreferencesUseCase(userRepository: UserRepository): UpdateUserPreferencesUseCase =
+        UpdateUserPreferencesUseCaseImpl(userRepository)
 }

@@ -1,5 +1,7 @@
 package com.fitness.data.repository.user
 
+import com.fitness.data.model.cache.metrics.UserBodyMetricsCache
+import com.fitness.data.model.cache.metrics.UserRecommendedMacrosCache
 import com.fitness.data.model.cache.user.UserBasicGoalsInfoCache
 import com.fitness.data.model.cache.user.UserBasicInfoCache
 import com.fitness.data.model.cache.user.UserBasicNutritionInfoCache
@@ -17,6 +19,8 @@ interface UserRepository {
     suspend fun updateUser(id: String, map: Map<String, Any>): DataState<Unit>
     suspend fun deleteUser(id: String): DataState<Unit>
     suspend fun updateUserPreferences(id: String, preferences: UserPreferencesCache): DataState<Unit>
+    suspend fun updateUserBodyMetrics(id: String, metrics: UserBodyMetricsCache): DataState<Unit>
+    suspend fun updateUserRecommendedMetrics(id: String, macros: UserRecommendedMacrosCache): DataState<Unit>
 
     suspend fun createUserBasicInfo(info: UserBasicInfoCache): DataState<Unit>
     suspend fun readUserBasicInfo(id: String): DataState<DocumentSnapshot>

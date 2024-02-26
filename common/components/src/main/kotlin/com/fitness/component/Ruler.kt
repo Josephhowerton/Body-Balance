@@ -2,17 +2,20 @@ package com.fitness.component
 
 import android.graphics.Paint
 import android.graphics.Typeface
-import android.util.Log
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
@@ -23,9 +26,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.nativeCanvas
+import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.fitness.theme.ui.BodyBalanceTheme
+import com.fitness.theme.ui.OffBlack
+import com.fitness.theme.ui.OffWhite
 import extensions.Dark
 import extensions.Light
 
@@ -34,7 +41,7 @@ import extensions.Light
 @Composable
 private fun HorizontalRulerPreview() = BodyBalanceTheme {
     Surface {
-        HorizontalRuler(currentNumber = {})
+        HorizontalRuler(steps = 1000, onValueChanged = {})
     }
 }
 
@@ -43,128 +50,69 @@ private fun HorizontalRulerPreview() = BodyBalanceTheme {
 @Composable
 private fun VerticalRulerPreview() = BodyBalanceTheme {
     Surface {
-        VerticalRuler(currentNumber = {})
-    }
-}
-
-@Light
-@Dark
-@Composable
-private fun HorizontalRulerFinalPreview() = BodyBalanceTheme {
-    Surface {
-        HorizontalRulerFinal(currentNumber = 20.0)
-    }
-}
-
-@Composable
-fun HorizontalRuler(
-    currentNumber: (Double) -> Unit,
-    modifier: Modifier = Modifier,
-    height: Dp = 100.dp,
-    steps: Int = 700,  // Number of steps in the ruler
-    stepWidth: Dp = 20.dp  // Width of each step
-) {
-    val scrollState = rememberScrollState()
-
-    BoxWithConstraints(
-        contentAlignment = Alignment.TopCenter,
-        modifier = modifier
-            .height(height)
-            .horizontalScroll(scrollState)
-    ) {
-        val canvasWidth = stepWidth * steps
-
-        Canvas(
-            modifier = Modifier
-                .height(height)
-                .width(canvasWidth)
-        ) {
-            val canvasHeight = size.height
-
-            for (i in 0 until steps) {
-                val xPosition = i * stepWidth.toPx()
-                val yStart = (canvasHeight / 2)
-                var yEndUp = (yStart * .85f)
-                var yEndDown = (yStart * 1.15f)
-
-
-                if (i % 5 == 0) {
-                    yEndUp = (yStart * .75f)
-                    yEndDown = (yStart * 1.25f)
-                }
-
-                drawLine(
-                    color = Color.Black,
-                    start = Offset(xPosition, yStart),
-                    end = Offset(xPosition, yEndUp),
-                    strokeWidth = 3f
-                )
-
-                drawLine(
-                    color = Color.Black,
-                    start = Offset(xPosition, yStart),
-                    end = Offset(xPosition, yEndDown),
-                    strokeWidth = 3f
-                )
-
-                val measurement = i + 80
-                if (measurement % 5 == 0) {
-                    drawContext.canvas.nativeCanvas.drawText(
-                        measurement.toString(),
-                        xPosition,
-                        (yStart * .50f), // Adjust label position
-                        Paint().apply {
-                            color = android.graphics.Color.BLACK
-                            textSize = 40f // Size of the label
-                            textAlign = Paint.Align.CENTER
-                            typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
-                        }
-                    )
-                }
-            }
-        }
-
-        LaunchedEffect(scrollState.value) {
-
-            val centerOfScreen = (constraints.minHeight / 2)
-            val step = (((scrollState.value * stepWidth.value) / centerOfScreen) / 8) + 90.0
-
-            Log.e("CenterOfScreen", centerOfScreen.toString())
-
-            // Update the current number based on stepAtCenter
-            currentNumber(step)
-        }
+        VerticalRuler(steps = 1000, onValueChanged = {})
     }
 }
 
 @Composable
 fun VerticalRuler(
-    currentNumber: (Double) -> Unit,
+    steps: Int,
     modifier: Modifier = Modifier,
-    width: Dp = 100.dp,
-    steps: Int = 275,
-    stepWidth: Dp = 20.dp
+    onValueChanged: (Float) -> Unit
+) {
+    BoxWithConstraints(
+        contentAlignment = Alignment.CenterEnd,
+        modifier = modifier.fillMaxHeight()
+    ) {
+        val contentColor: Color = if(isSystemInDarkTheme()) OffWhite else OffBlack
+        val centerOfScreen = constraints.maxHeight / 2.0
+
+        VerticalRuler(
+            steps = steps,
+            centerOfScreen = centerOfScreen,
+            contentColor = contentColor,
+            onValueChanged = onValueChanged
+        )
+
+        Icon(
+            imageVector = Icons.Filled.KeyboardArrowLeft,
+            contentDescription = "",
+        )
+    }
+}
+
+@Composable
+private fun VerticalRuler(
+    steps: Int,
+    centerOfScreen: Double,
+    contentColor: Color,
+    onValueChanged: (Float) -> Unit,
 ) {
     val scrollState = rememberScrollState()
 
     BoxWithConstraints(
         contentAlignment = Alignment.TopCenter,
-        modifier = modifier
-            .width(width)
+        modifier = Modifier
+            .wrapContentWidth()
+            .fillMaxHeight()
             .verticalScroll(scrollState)
     ) {
-        val canvasWidth = stepWidth * steps
+
+        val width = 100.dp
+        val stepHeight = 20.dp
+        val canvasHeight = stepHeight * steps + ( Dp(centerOfScreen.toFloat()) / 2 )
 
         Canvas(
             modifier = Modifier
                 .width(width)
-                .height(canvasWidth)
+                .height(canvasHeight)
         ) {
-            val canvasHeight = size.width
 
-            for (i in 0 until steps) {
-                val yPosition = i * stepWidth.toPx()
-                val xStart = (canvasHeight / 2)
+            val canvasWidth = size.width
+
+            for (i in 0 until steps + 1) {
+                val yPosition = i * stepHeight.toPx() + centerOfScreen.toFloat()
+                val xStart = (canvasWidth / 2)
                 var xEndUp = (xStart * .85f)
                 var xEndDown = (xStart * 1.15f)
 
@@ -174,27 +122,28 @@ fun VerticalRuler(
                 }
 
                 drawLine(
-                    color = Color.Black,
+                    color = contentColor,
                     start = Offset(xStart, yPosition),
                     end = Offset(xEndUp, yPosition),
                     strokeWidth = 3f
                 )
 
                 drawLine(
-                    color = Color.Black,
+                    color = contentColor,
                     start = Offset(xStart, yPosition),
                     end = Offset(xEndDown, yPosition),
                     strokeWidth = 3f
                 )
+
 
                 val measurement = i + 20
                 if (measurement % 5 == 0) {
                     drawContext.canvas.nativeCanvas.drawText(
                         i.toString(),
                         (xStart * .50f),
-                        yPosition, // Adjust label position
+                        yPosition+15,
                         Paint().apply {
-                            color = android.graphics.Color.BLACK
+                            color = contentColor.toArgb()
                             textSize = 40f // Size of the label
                             textAlign = Paint.Align.CENTER
                             typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
@@ -204,46 +153,51 @@ fun VerticalRuler(
             }
         }
 
+        val density = LocalDensity.current
         LaunchedEffect(scrollState.value) {
-
-            val centerOfScreen = (constraints.maxWidth / 2)
-            val step = (((scrollState.value * stepWidth.value) / centerOfScreen) / 8) + 20.5
-
-            Log.e("CenterOfScreen", centerOfScreen.toString())
-
-            // Update the current number based on stepAtCenter
-            currentNumber(step)
+            val measurement = (scrollState.value).div(density.density).div(stepHeight.value)
+            onValueChanged(measurement)
         }
     }
 }
 
 @Composable
-fun HorizontalRulerFinal(
-    currentNumber: Double,
+fun HorizontalRuler(
+    steps: Int,
     modifier: Modifier = Modifier,
+    onValueChanged: (Float) -> Unit
 ) {
+    val contentColor: Color = if(isSystemInDarkTheme()) OffWhite else OffBlack
     BoxWithConstraints(
         contentAlignment = Alignment.BottomCenter,
         modifier = modifier
             .fillMaxWidth()
-            .wrapContentHeight()) {
+            .wrapContentHeight()
+    ) {
 
         val centerOfScreen = constraints.maxWidth / 2.0
 
-        HorizontalRulerCorrected(steps = 100, centerOfScreen = centerOfScreen)
+        HorizontalRuler(
+            steps = steps,
+            centerOfScreen = centerOfScreen,
+            contentColor = contentColor,
+            onValueChanged = onValueChanged
+        )
 
         Icon(
             imageVector = Icons.Filled.KeyboardArrowUp,
             contentDescription = "",
+            tint = contentColor
         )
     }
 }
 
 @Composable
-fun HorizontalRulerCorrected(
+private fun HorizontalRuler(
     steps: Int,
     centerOfScreen: Double,
-    modifier: Modifier = Modifier,
+    contentColor: Color,
+    onValueChanged: (Float) -> Unit,
 ) {
     val scrollState = rememberScrollState()
 
@@ -251,8 +205,9 @@ fun HorizontalRulerCorrected(
     val height = 100.dp
     val canvasWidth = stepWidth * steps
 
-    BoxWithConstraints(contentAlignment = Alignment.TopCenter,
-        modifier = modifier
+    BoxWithConstraints(
+        contentAlignment = Alignment.TopCenter,
+        modifier = Modifier
             .height(height)
             .horizontalScroll(scrollState)
     ) {
@@ -265,8 +220,9 @@ fun HorizontalRulerCorrected(
 
             val canvasHeight = size.height
 
+
             for (i in 0 until steps) {
-                val xPosition = stepWidth.times(i).plus(centerOfScreen.dp).value
+                val xPosition = stepWidth.times(i).toPx() + centerOfScreen.toFloat()
 
                 val yStart = (canvasHeight / 2)
                 var yEndUp = (yStart * .85f)
@@ -279,14 +235,14 @@ fun HorizontalRulerCorrected(
                 }
 
                 drawLine(
-                    color = Color.Black,
+                    color = contentColor,
                     start = Offset(xPosition, yStart),
                     end = Offset(xPosition, yEndUp),
                     strokeWidth = 3f
                 )
 
                 drawLine(
-                    color = Color.Black,
+                    color = contentColor,
                     start = Offset(xPosition, yStart),
                     end = Offset(xPosition, yEndDown),
                     strokeWidth = 3f
@@ -298,7 +254,7 @@ fun HorizontalRulerCorrected(
                         xPosition,
                         (yStart * .50f), // Adjust label position
                         Paint().apply {
-                            color = android.graphics.Color.BLACK
+                            color = contentColor.toArgb()
                             textSize = 40f // Size of the label
                             textAlign = Paint.Align.CENTER
                             typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
@@ -306,6 +262,12 @@ fun HorizontalRulerCorrected(
                     )
                 }
             }
+        }
+
+        val density = LocalDensity.current
+        LaunchedEffect(scrollState.value) {
+            val measurement = (scrollState.value).div(density.density).div(stepWidth.value)
+            onValueChanged(measurement)
         }
     }
 }
