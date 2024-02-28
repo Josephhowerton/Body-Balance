@@ -17,8 +17,7 @@ class CreateUserBodyMetricsFromUserInfoUseCaseImpl  @Inject constructor(private 
 
     override suspend fun FlowCollector<DataState<Unit>>.execute(params: Params) {
         val basicInfo = params.info
-
-        val unitSystem = params.info.systemOfMeasurement
+        val unitSystem = params.unitSystem
 
         val massUnit = if(unitSystem == SystemOfMeasurement.METRIC) EMassUnit.KILOGRAM else EMassUnit.POUNDS
         val lengthUnit = if(unitSystem == SystemOfMeasurement.METRIC) ELengthUnit.CENTIMETER else ELengthUnit.INCHES

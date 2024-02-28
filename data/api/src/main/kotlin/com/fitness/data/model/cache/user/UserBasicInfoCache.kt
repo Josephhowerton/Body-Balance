@@ -12,6 +12,5 @@ data class UserBasicInfoCache(
     val height: Double,
     val weight: Double,
     val waist: Double,
-    val systemOfMeasurement: SystemOfMeasurement,
     val lastUpdated: Long,
 )

@@ -144,8 +144,6 @@ class BasicInformationViewModel @Inject constructor(
                 height = height,
                 weight = weight,
                 waist = waist,
-                systemOfMeasurement = system
-
             )
             onSaveBasicInformation(userBasicInfo)
         } else {

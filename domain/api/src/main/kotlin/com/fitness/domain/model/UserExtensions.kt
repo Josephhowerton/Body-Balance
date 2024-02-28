@@ -87,7 +87,6 @@ fun UserBasicInfo.toUserBasicInfoCache(lastUpdated: Long = System.currentTimeMil
         height = this.height,
         weight = this.weight,
         waist = this.waist,
-        systemOfMeasurement = systemOfMeasurement,
         lastUpdated = lastUpdated
     )
 }
@@ -101,7 +100,6 @@ fun UserBasicInfoCache.toUserBasicInfo(): UserBasicInfo {
         height = this.height,
         weight = this.weight,
         waist = this.waist,
-        systemOfMeasurement = systemOfMeasurement,
     )
 }
 
