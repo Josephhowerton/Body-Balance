@@ -25,8 +25,8 @@ import javax.inject.Inject
 class RecipeBuilderEntryImpl @Inject constructor(): RecipeBuilderEntry {
     override val featureRoute: String get() = "recipe-builder"
     companion object{
-        const val MY_RECIPES: String = "recipes"
-        const val RECIPE_BUILDER: String = "builder"
+        const val MY_RECIPES: String = "my-recipes"
+        const val RECIPE_BUILDER: String = "recipe-build"
         const val INGREDIENTS: String = "search-ingredients"
         const val DATE: String = "pick-date"
         const val TIME: String = "pick-time"
@@ -36,7 +36,7 @@ class RecipeBuilderEntryImpl @Inject constructor(): RecipeBuilderEntry {
     }
 
     override fun NavGraphBuilder.navigation(navController: NavHostController, destinations: Destinations) {
-        navigation(startDestination = INGREDIENTS, route = featureRoute) {
+        navigation(startDestination = MY_RECIPES, route = featureRoute) {
 
             composable(MY_RECIPES){
                 val viewModel: RecipeSelectionViewModel = hiltViewModel()

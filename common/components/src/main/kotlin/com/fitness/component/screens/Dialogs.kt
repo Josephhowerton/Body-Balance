@@ -46,73 +46,89 @@ private fun PreviewSystemOfMeasurementDialog() = BodyBalanceTheme {
 @Composable
 fun SystemOfMeasurementDialog(
     onClick: (SystemOfMeasurement) -> Unit = {}
-){
-    Dialog(onDismissRequest = { onClick(SystemOfMeasurement.METRIC) }) {
-        Card {
-            Column(Modifier.padding(20.dp)) {
-                var measurement by remember{ mutableStateOf(SystemOfMeasurement.METRIC) }
+) {
+    var showDialog by remember { mutableStateOf(true) }
 
-                Text(text = stringResource(id = R.string.select_a_unit_of_measure))
+    if (showDialog) {
+        Dialog(onDismissRequest = {
+            showDialog = false
+            onClick(SystemOfMeasurement.METRIC)
+        })
+        {
+            Card {
+                Column(Modifier.padding(20.dp)) {
+                    var measurement by remember { mutableStateOf(SystemOfMeasurement.METRIC) }
 
-                Spacer(modifier = Modifier.size(25.dp))
+                    Text(text = stringResource(id = R.string.select_a_unit_of_measure))
 
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceEvenly,
-                    modifier = Modifier.fillMaxWidth()
-                ) {
+                    Spacer(modifier = Modifier.size(25.dp))
 
-                    SquareItem(
-                        title = stringResource(id = SystemOfMeasurement.METRIC.title),
-                        isSelected = measurement == SystemOfMeasurement.METRIC,
-                        onClick = {
-                            if(measurement != SystemOfMeasurement.METRIC) {
-                                measurement = SystemOfMeasurement.METRIC
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceEvenly,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
 
+                        SquareItem(
+                            title = stringResource(id = SystemOfMeasurement.METRIC.title),
+                            isSelected = measurement == SystemOfMeasurement.METRIC,
+                            onClick = {
+                                if (measurement != SystemOfMeasurement.METRIC) {
+                                    measurement = SystemOfMeasurement.METRIC
+
+                                }
                             }
-                        }
-                    )
+                        )
 
-                    SquareItem(
-                        title = stringResource(id = SystemOfMeasurement.CUSTOMARY.title),
-                        isSelected = measurement == SystemOfMeasurement.CUSTOMARY,
-                        onClick = {
-                            if(measurement != SystemOfMeasurement.CUSTOMARY) {
-                                measurement = SystemOfMeasurement.CUSTOMARY
+                        SquareItem(
+                            title = stringResource(id = SystemOfMeasurement.CUSTOMARY.title),
+                            isSelected = measurement == SystemOfMeasurement.CUSTOMARY,
+                            onClick = {
+                                if (measurement != SystemOfMeasurement.CUSTOMARY) {
+                                    measurement = SystemOfMeasurement.CUSTOMARY
+                                }
                             }
-                        }
-                    )
-                }
-
-                Spacer(modifier = Modifier.size(25.dp))
-
-                Text(text = stringResource(id = measurement.description))
-
-                Spacer(modifier = Modifier.size(25.dp))
-
-                Row(horizontalArrangement = Arrangement.End, modifier = Modifier.fillMaxWidth()) {
-                    Button(onClick = {onClick(SystemOfMeasurement.METRIC) }) {
-                        Text(text = stringResource(id = R.string.title_dismiss))
+                        )
                     }
 
-                    Spacer(modifier = Modifier.size(20.dp))
+                    Spacer(modifier = Modifier.size(25.dp))
 
-                    Button(onClick = {onClick(measurement) }) {
-                        Text(text = stringResource(id = R.string.title_continue))
+                    Text(text = stringResource(id = measurement.description))
+
+                    Spacer(modifier = Modifier.size(25.dp))
+
+                    Row(
+                        horizontalArrangement = Arrangement.End,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Button(onClick = { onClick(SystemOfMeasurement.METRIC) }) {
+                            Text(text = stringResource(id = R.string.title_dismiss))
+                        }
+
+                        Spacer(modifier = Modifier.size(20.dp))
+
+                        Button(onClick = {
+                            onClick(measurement)
+                            showDialog = false
+                        })
+                        {
+                            Text(text = stringResource(id = R.string.title_continue))
+                        }
                     }
                 }
             }
         }
     }
+
 }
 
 @Light
 @Dark
 @Composable
 fun ErrorDialog(
-    title: String = stringResource(id =R.string.title_error),
-    description: String = stringResource(id =R.string.desc_error_min_items_required),
-    onDismiss: () -> Unit =  {}
+    title: String = stringResource(id = R.string.title_error),
+    description: String = stringResource(id = R.string.desc_error_min_items_required),
+    onDismiss: () -> Unit = {}
 ) {
     AlertDialog(
         onDismissRequest = onDismiss,

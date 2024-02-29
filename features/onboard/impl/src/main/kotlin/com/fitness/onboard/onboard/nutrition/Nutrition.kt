@@ -56,7 +56,7 @@ fun NutritionScreen(
         }
 
         is BaseViewState.Error -> {
-            val failure = uiState.cast<BaseViewState.Error>().throwable as Failure
+            val failure = uiState.cast<BaseViewState.Error>().failure as Failure
 
             if(failure is MinimumNumberOfSelectionFailure){
                 ErrorDialog(

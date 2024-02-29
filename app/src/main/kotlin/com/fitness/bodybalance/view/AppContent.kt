@@ -83,14 +83,14 @@ fun AppContent(
 fun AppHub(
     authStateFlow: StateFlow<AuthenticationState>,
     appProvider: AppProvider,
-    showWelcomeAnimation: Boolean
+    showMainHubAnimation: Boolean
 ) {
     val authState by authStateFlow.collectAsState()
 
     Crossfade(targetState = authState, label = "") {
         when(it){
             is AuthenticationState.Authenticated -> {
-                MainHub(showMainHubAnimation = showWelcomeAnimation, destinations = appProvider.destinations)
+                MainHub(showMainHubAnimation = showMainHubAnimation, destinations = appProvider.destinations)
             }
             is AuthenticationState.UnAuthenticated -> {
                 AuthenticationHub(destinations = appProvider.destinations)
@@ -152,10 +152,13 @@ fun MainHubNavigation(
 
         val welcome = destinations.find<WelcomeEntry>()
         val dashboard = destinations.find<DashboardEntry>()
-        val signout = destinations.find<SignOutEntry>()
+        val signOut = destinations.find<SignOutEntry>()
         val recipeSearch = destinations.find<RecipeSearchEntry>()
         val recipeBuilder = destinations.find<RecipeBuilderEntry>()
         val startDestination = if(showMainHubAnimation) welcome else dashboard
+
+        val temp = destinations.find<OnboardEntry>()
+
         NavHost(navController = navController, startDestination = recipeBuilder.featureRoute, modifier = Modifier.padding(innerPadding)) {
             with(welcome){
                 composable(navController, destinations)
@@ -165,7 +168,7 @@ fun MainHubNavigation(
                 composable(navController, destinations)
             }
 
-            with(signout){
+            with(signOut){
                 composable(navController, destinations)
             }
 
@@ -174,6 +177,10 @@ fun MainHubNavigation(
             }
 
             with(recipeBuilder){
+                navigation(navController, destinations)
+            }
+
+            with(temp){
                 navigation(navController, destinations)
             }
         }

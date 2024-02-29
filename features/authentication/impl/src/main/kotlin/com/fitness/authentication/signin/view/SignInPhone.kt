@@ -78,7 +78,7 @@ fun SignInPhoneScreen(
             }
         }
         is BaseViewState.Error -> {
-            val failure = uiState.cast<BaseViewState.Error>().throwable as Failure
+            val failure = uiState.cast<BaseViewState.Error>().failure as Failure
 
             ErrorScreen(title = failure.title, description = failure.description) {
                 onPopBack()

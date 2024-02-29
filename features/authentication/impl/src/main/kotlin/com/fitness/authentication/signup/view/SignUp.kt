@@ -62,7 +62,7 @@ fun SignUpScreen(
         }
 
         is BaseViewState.Error -> {
-            val failure = uiState.cast<BaseViewState.Error>().throwable as AuthFailure
+            val failure = uiState.cast<BaseViewState.Error>().failure as AuthFailure
 
             ErrorScreen(title = failure.title, description = failure.description) {
                 onPopBack()

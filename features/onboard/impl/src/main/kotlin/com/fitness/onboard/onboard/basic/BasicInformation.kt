@@ -60,7 +60,7 @@ fun BasicInformationScreen(
             }
 
             is BaseViewState.Error -> {
-                val failure = state.cast<BaseViewState.Error>().throwable as Failure
+                val failure = state.cast<BaseViewState.Error>().failure as Failure
                 ErrorScreen(title = failure.title, description = failure.description) {
                     if(failure is AuthStateFailure){
                         onForceSignOut()

@@ -53,16 +53,11 @@ class BasicInformationViewModel @Inject constructor(
         id: String,
         event: BasicInformationEvent.SystemOfMeasurement
     ) = safeLaunch {
-        stateHolder.updateState(
-            stateHolder.getState().copy(preferredMeasurement = event.systemOfMeasurement)
-        )
-        val params = UpdateUserPreferencesUseCase.Params(
-            id = id,
-            userPreferences = UserPreferences(systemOfMeasurement = event.systemOfMeasurement)
-        )
+
+        stateHolder.updateState(stateHolder.getState().copy(preferredMeasurement = event.systemOfMeasurement))
+        val params = UpdateUserPreferencesUseCase.Params(id = id, userPreferences = UserPreferences(systemOfMeasurement = event.systemOfMeasurement))
 
         execute(updateUserPreferencesUseCase(params = params)) {
-            stateHolder.updateState(stateHolder.getState().copy())
             setState(
                 BaseViewState.Data(
                     BasicInformationState(

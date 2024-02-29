@@ -1,6 +1,5 @@
 package com.fitness.authentication.signin.view
 
-import android.content.res.Configuration
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -19,7 +18,6 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
@@ -87,7 +85,7 @@ fun SignInEmailScreen(
         }
 
         is BaseViewState.Error -> {
-            val failure = uiState.cast<BaseViewState.Error>().throwable as Failure
+            val failure = uiState.cast<BaseViewState.Error>().failure as Failure
 
             ErrorScreen(title = failure.title, description = failure.description) {
                 onPopBack()
