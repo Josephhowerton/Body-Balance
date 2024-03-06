@@ -1,7 +1,5 @@
 package com.fitness.onboard.onboard.goal.viewmodel
 
-import com.fitness.authentication.manager.AuthenticationManager
-import com.fitness.authentication.manager.AuthenticationState
 import com.fitness.domain.model.user.UserBasicGoalsInfo
 import com.fitness.domain.usecase.user.CreateUserBasicGoalsInfoUseCase
 import com.fitness.domain.usecase.user.GetCurrentUserIdUseCase
@@ -19,7 +17,6 @@ import javax.inject.Inject
 @HiltViewModel
 class GoalViewModel @Inject constructor(
     private val stateHolder: GoalStateHolder,
-    private val authenticationManager: AuthenticationManager,
     private val currentUserIdUseCase: GetCurrentUserIdUseCase,
     private val createUserBasicNutritionInfoUseCase: CreateUserBasicGoalsInfoUseCase
 ): IntentViewModel<BaseViewState<GoalState>, GoalEvent>(){

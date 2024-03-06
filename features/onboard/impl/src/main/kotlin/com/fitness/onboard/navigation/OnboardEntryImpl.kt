@@ -87,7 +87,7 @@ class OnboardEntryImpl @Inject constructor() : OnboardEntry() {
                     state = viewmodel.uiState.cast(),
                     onTriggerEvent = { viewmodel.onTriggerEvent(it) },
                     onForceSignOut = { navController.navigate(signOut.featureRoute) },
-                    onComplete = {viewmodel.onTriggerEvent(FinalizeEvent.Complete)}
+                    onComplete = { viewmodel.onTriggerEvent(FinalizeEvent.Complete) }
                 )
             }
         }

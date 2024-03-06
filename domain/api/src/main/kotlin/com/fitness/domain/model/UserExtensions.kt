@@ -49,7 +49,7 @@ fun UserCache.toUser(): User {
         isTermAndPrivacyAccepted = this.isTermAndPrivacyAccepted,
         profilePictureUrl = this.profilePictureUrl,
         isNewUser = isNewUser,
-        userPreferences = userPreferences.toUserPreferences()
+        userPreferences = userPreferences?.toUserPreferences()  ?: UserPreferences()
     )
 }
 

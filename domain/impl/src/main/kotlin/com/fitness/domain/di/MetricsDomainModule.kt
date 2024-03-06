@@ -3,6 +3,8 @@ package com.fitness.domain.di
 import com.fitness.data.repository.user.UserRepository
 import com.fitness.domain.usecase.metrics.CreateUserBodyMetricsFromUserInfoUseCaseImpl
 import com.fitness.domain.usecase.metrics.CreateUserBodyMetricsFromUserInfoUseCase
+import com.fitness.domain.usecase.metrics.CreateUserRecommendedMacrosUseCase
+import com.fitness.domain.usecase.metrics.CreateUserRecommendedMacrosUseCaseImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -21,7 +23,7 @@ class MetricsDomainModule {
 
     @Provides
     @Singleton
-    fun provideCreateUserBodyMetricsFromUserInfoUseCase(userRepository: UserRepository): CreateUserBodyMetricsFromUserInfoUseCase =
-        CreateUserBodyMetricsFromUserInfoUseCaseImpl(userRepository)
+    fun provideCreateUserBodyMetricsFromUserInfoUseCase(userRepository: UserRepository): CreateUserRecommendedMacrosUseCase =
+        CreateUserRecommendedMacrosUseCaseImpl(userRepository)
 
 }

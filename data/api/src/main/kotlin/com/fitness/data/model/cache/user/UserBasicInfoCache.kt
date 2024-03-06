@@ -6,11 +6,11 @@ import enums.EMassUnit
 import enums.SystemOfMeasurement
 
 data class UserBasicInfoCache(
-    val userId: String,
-    val age: Int,
-    val gender: EGender,
-    val height: Double,
-    val weight: Double,
-    val waist: Double,
-    val lastUpdated: Long,
+    val userId: String = "",
+    val age: Int = 0,
+    val gender: EGender = EGender.MALE,
+    val height: Double = 0.0,
+    val weight: Double = 0.0,
+    val waist: Double = 0.0,
+    val lastUpdated: Long = 1L,
 )

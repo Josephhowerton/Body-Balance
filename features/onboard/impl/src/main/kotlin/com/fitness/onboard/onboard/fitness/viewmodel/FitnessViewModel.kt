@@ -25,11 +25,8 @@ class FitnessViewModel @Inject constructor(
     override fun onTriggerEvent(event: FitnessEvent) {
         when(event){
             is FitnessEvent.FitnessLevel -> onFitnessLevels(event)
-
             is FitnessEvent.Habits -> onHabits(event)
-
             is FitnessEvent.SaveFitnessInfo -> getCurrentUserId()
-
             is FitnessEvent.DismissDialog -> onDismissDialog()
         }
     }

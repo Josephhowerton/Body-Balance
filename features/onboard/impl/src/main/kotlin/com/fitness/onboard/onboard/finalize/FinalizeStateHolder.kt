@@ -5,19 +5,19 @@ import com.fitness.onboard.onboard.finalize.viewmodel.FinalizeStep
 import enums.SystemOfMeasurement
 
 object FinalizeStateHolder {
-    private var finalizeState: FinalizeState = FinalizeState()
+    private var finalizeHolderState: FinalizeHolderState = FinalizeHolderState()
 
-    fun getState() = finalizeState
-    fun updateState(newState: FinalizeState) {
-        finalizeState = newState
+    fun getState() = finalizeHolderState
+    fun updateState(newState: FinalizeHolderState) {
+        finalizeHolderState = newState
     }
 
     fun clearState() {
-        finalizeState = FinalizeState()
+        finalizeHolderState = FinalizeHolderState()
     }
 }
 
-data class FinalizeState(
+data class FinalizeHolderState(
     val currentStep: FinalizeStep = FinalizeStep.INITIALIZE,
     val unitSystem: SystemOfMeasurement? = null,
     val userBasicInfo: UserBasicInfo? = null

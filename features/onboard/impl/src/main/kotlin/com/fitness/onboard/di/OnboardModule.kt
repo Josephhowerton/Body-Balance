@@ -1,6 +1,7 @@
 package com.fitness.onboard.di
 
 import com.fitness.onboard.onboard.basic.BasicInformationStateHolder
+import com.fitness.onboard.onboard.finalize.FinalizeStateHolder
 import com.fitness.onboard.onboard.fitness.FitnessStateHolder
 import com.fitness.onboard.onboard.goal.GoalStateHolder
 import com.fitness.onboard.onboard.nutrition.NutritionStateHolder
@@ -29,4 +30,8 @@ class OnboardModule {
     @Provides
     @Singleton
     fun provideGoalStateHolder(): GoalStateHolder = GoalStateHolder
+
+    @Provides
+    @Singleton
+    fun provideFinalizeStateHolder(): FinalizeStateHolder = FinalizeStateHolder
 }

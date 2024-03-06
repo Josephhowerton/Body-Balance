@@ -41,6 +41,9 @@ class CreateUserBodyMetricsFromUserInfoUseCaseImpl  @Inject constructor(private 
 
         val bodyMetrics = UserBodyMetrics(userId = basicInfo.userId, bodyMassIndex = bmi, bodyFatPercentage = 0.0, basalMetabolicRate = basal)
 
-        emit(repository.updateUserBodyMetrics(id = basicInfo.userId, metrics = bodyMetrics.toUserBodyMetricsCache()))
+        when(val result = repository.updateUserBodyMetrics(id = basicInfo.userId, metrics = bodyMetrics.toUserBodyMetricsCache())){
+            is DataState.Success -> emit(result)
+            is DataState.Error -> emit(result)
+        }
     }
 }

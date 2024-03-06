@@ -10,6 +10,7 @@ import com.fitness.component.screens.ErrorScreen
 import com.fitness.component.screens.LoadingScreen
 import com.fitness.component.screens.MessageScreen
 import com.fitness.onboard.onboard.finalize.viewmodel.FinalizeEvent
+import com.fitness.onboard.onboard.finalize.viewmodel.FinalizeState
 import com.fitness.onboard.onboard.finalize.viewmodel.FinalizeStep
 import com.fitness.onboard.onboard.fitness.view.FitnessLevels
 import com.fitness.resources.R
@@ -41,7 +42,7 @@ fun FinalizeOnboardingScreen(
     when (uiState) {
         is BaseViewState.Data -> {
             FinalizeOnboardingScreen(
-                state = uiState.cast(),
+                state = uiState.cast<BaseViewState.Data<FinalizeState>>().value,
                 onTriggerEvent = onTriggerEvent,
                 onComplete = onComplete
             )
@@ -75,7 +76,7 @@ private fun FinalizeOnboardingScreen(
     onTriggerEvent: (FinalizeEvent) -> Unit = {},
     onComplete: () ->  Unit = {}
 ){
-    when(state.currentStep){
+    when(state.step){
         FinalizeStep.INITIALIZE -> onTriggerEvent(FinalizeEvent.Initialize)
         FinalizeStep.SAVE_RECOMMENDED -> onTriggerEvent(FinalizeEvent.SaveRecommendedMetrics)
         FinalizeStep.COMPLETE -> onComplete()

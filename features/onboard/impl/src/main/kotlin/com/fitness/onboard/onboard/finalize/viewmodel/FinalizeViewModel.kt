@@ -1,5 +1,7 @@
 package com.fitness.onboard.onboard.finalize.viewmodel
 
+import com.fitness.authentication.manager.AuthenticationManager
+import com.fitness.authentication.manager.AuthenticationState
 import com.fitness.domain.model.user.UserBasicInfo
 import com.fitness.domain.usecase.metrics.CreateUserBodyMetricsFromUserInfoUseCase
 import com.fitness.domain.usecase.user.GetBasicUserInfoUseCase
@@ -19,12 +21,14 @@ class FinalizeViewModel @Inject constructor(
     private val currentUserUseCase: GetCurrentUserUseCase,
     private val basicUserInfoUseCase: GetBasicUserInfoUseCase,
     private val createRecommendedMetricsUseCase: CreateUserBodyMetricsFromUserInfoUseCase,
-    private val stateHolder: FinalizeStateHolder
+    private val stateHolder: FinalizeStateHolder,
+    private val authenticationManager: AuthenticationManager
 ): IntentViewModel<BaseViewState<FinalizeState>, FinalizeEvent>() {
 
     init {
         setState(BaseViewState.Data(FinalizeState()))
     }
+
     override fun onTriggerEvent(event: FinalizeEvent) {
         when(event){
             FinalizeEvent.Initialize -> onGetCurrentUserId()
@@ -52,7 +56,7 @@ class FinalizeViewModel @Inject constructor(
         execute(basicUserInfoUseCase(params = GetBasicUserInfoUseCase.Params(id))){
             val state = stateHolder.getState().copy(userBasicInfo = it, currentStep = FinalizeStep.SAVE_RECOMMENDED)
             stateHolder.updateState(newState = state)
-            setState(BaseViewState.Data(FinalizeState(finalizeStep = FinalizeStep.SAVE_RECOMMENDED)))
+            setState(BaseViewState.Data(FinalizeState(step = FinalizeStep.SAVE_RECOMMENDED)))
         }
     }
 
@@ -71,10 +75,9 @@ class FinalizeViewModel @Inject constructor(
         execute(createRecommendedMetricsUseCase(params = CreateUserBodyMetricsFromUserInfoUseCase.Params(info = basicInfo, unitSystem = unitSystem))){
             val state = stateHolder.getState().copy(currentStep = FinalizeStep.COMPLETE)
             stateHolder.updateState(newState = state)
-            setState(BaseViewState.Data(FinalizeState(finalizeStep = FinalizeStep.COMPLETE)))
+            setState(BaseViewState.Data(FinalizeState(step = FinalizeStep.COMPLETE)))
         }
     }
 
-    private fun onComplete(){
-    }
+    private fun onComplete() = authenticationManager.update(AuthenticationState.Authenticated)
 }
