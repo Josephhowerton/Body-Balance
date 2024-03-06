@@ -40,6 +40,7 @@ private fun GoalsPreview() = BodyBalanceTheme {
 fun GoalsScreen(
     state: StateFlow<BaseViewState<GoalState>> = MutableStateFlow(BaseViewState.Data(GoalState())),
     onTriggerEvent: (GoalEvent) -> Unit,
+    onComplete: () -> Unit,
     onForceSignOut: () -> Unit
 ) {
     val uiState by state.collectAsState()
@@ -67,7 +68,7 @@ fun GoalsScreen(
                     if (failure is AuthStateFailure) {
                         onForceSignOut()
                     } else {
-                        onTriggerEvent(GoalEvent.ForceComplete)
+                        onComplete()
                     }
                 }
             }
@@ -80,7 +81,8 @@ fun GoalsScreen(
         else -> {
             MessageScreen(
                 message = R.string.unknown,
-                onClick = { onTriggerEvent(GoalEvent.ForceComplete) })
+                onClick = onComplete
+            )
         }
     }
 }
@@ -89,11 +91,13 @@ fun GoalsScreen(
 private fun Goals(
     state: GoalState,
     onTriggerEvent: (GoalEvent) -> Unit = {},
+    onComplete:() -> Unit = {}
 ) {
     Crossfade(targetState = state.step, label = "Fitness") {
         when (it) {
             GoalStep.GOALS -> GoalsContent(state, onTriggerEvent = onTriggerEvent)
             GoalStep.SAVE_INFO -> onTriggerEvent(GoalEvent.SaveInfo)
+            GoalStep.COMPLETE -> onComplete()
         }
     }
 }

@@ -27,8 +27,9 @@ class FinalizeViewModel @Inject constructor(
     }
     override fun onTriggerEvent(event: FinalizeEvent) {
         when(event){
-            FinalizeEvent.Initialized -> onGetCurrentUserId()
+            FinalizeEvent.Initialize -> onGetCurrentUserId()
             FinalizeEvent.SaveRecommendedMetrics -> onSaveRecommended()
+            FinalizeEvent.Complete -> onComplete()
         }
     }
 
@@ -72,5 +73,8 @@ class FinalizeViewModel @Inject constructor(
             stateHolder.updateState(newState = state)
             setState(BaseViewState.Data(FinalizeState(finalizeStep = FinalizeStep.COMPLETE)))
         }
+    }
+
+    private fun onComplete(){
     }
 }

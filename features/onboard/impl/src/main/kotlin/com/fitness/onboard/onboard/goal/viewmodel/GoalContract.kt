@@ -9,10 +9,10 @@ sealed class GoalEvent{
     data class Goals(val goals: List<EGoals>): GoalEvent()
     object SaveInfo: GoalEvent()
     object DismissDialog: GoalEvent()
-    object ForceComplete: GoalEvent()
 }
 
 enum class GoalStep {
     GOALS,
-    SAVE_INFO
+    SAVE_INFO,
+    COMPLETE,
 }

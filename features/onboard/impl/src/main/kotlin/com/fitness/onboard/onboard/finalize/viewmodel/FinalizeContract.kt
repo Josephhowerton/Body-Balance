@@ -3,8 +3,9 @@ package com.fitness.onboard.onboard.finalize.viewmodel
 
 data class FinalizeState(val finalizeStep: FinalizeStep = FinalizeStep.INITIALIZE)
 sealed class FinalizeEvent{
-    object Initialized: FinalizeEvent()
+    object Initialize: FinalizeEvent()
     object SaveRecommendedMetrics: FinalizeEvent()
+    object Complete: FinalizeEvent()
 }
 
 enum class FinalizeStep {

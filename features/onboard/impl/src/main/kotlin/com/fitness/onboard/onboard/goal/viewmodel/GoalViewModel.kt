@@ -30,7 +30,6 @@ class GoalViewModel @Inject constructor(
         when(event){
             is GoalEvent.Goals -> onGoals (event)
             is GoalEvent.SaveInfo -> onGetCurrentUserID()
-            is GoalEvent.ForceComplete -> onForceComplete()
             is GoalEvent.DismissDialog -> onDismissDialog()
         }
     }
@@ -75,9 +74,7 @@ class GoalViewModel @Inject constructor(
     private fun onSaveFitnessLevelsInfo(userGoalsInfo: UserBasicGoalsInfo) = safeLaunch {
         val param = CreateUserBasicGoalsInfoUseCase.Params(userGoalsInfo)
         execute(createUserBasicNutritionInfoUseCase(param)){
-            authenticationManager.update(AuthenticationState.Authenticated)
+            setState(BaseViewState.Data(GoalState(GoalStep.COMPLETE)))
         }
     }
-
-    private fun onForceComplete() = authenticationManager.update(AuthenticationState.Authenticated)
 }

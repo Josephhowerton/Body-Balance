@@ -10,6 +10,9 @@ import com.fitness.navigation.find
 import com.fitness.onboard.OnboardEntry
 import com.fitness.onboard.onboard.basic.BasicInformationScreen
 import com.fitness.onboard.onboard.basic.viewmodel.BasicInformationViewModel
+import com.fitness.onboard.onboard.finalize.FinalizeOnboardingScreen
+import com.fitness.onboard.onboard.finalize.viewmodel.FinalizeEvent
+import com.fitness.onboard.onboard.finalize.viewmodel.FinalizeViewModel
 import com.fitness.onboard.onboard.fitness.FitnessScreen
 import com.fitness.onboard.onboard.fitness.viewmodel.FitnessViewModel
 import com.fitness.onboard.onboard.goal.view.GoalsScreen
@@ -29,6 +32,7 @@ class OnboardEntryImpl @Inject constructor() : OnboardEntry() {
         const val FITNESS_LEVEL_ASSESSMENT = "fitness_level_assessment"
         const val NUTRITION_PREFERENCES = "nutritional_preferences"
         const val INITIAL_GOALS = "goals"
+        const val FINALIZE = "finalize"
     }
     override fun NavGraphBuilder.navigation(navController: NavHostController, destinations: Destinations) {
         val signOut = destinations.find<SignOutEntry>()
@@ -72,7 +76,18 @@ class OnboardEntryImpl @Inject constructor() : OnboardEntry() {
                 GoalsScreen(
                     state = viewmodel.uiState.cast(),
                     onTriggerEvent = { viewmodel.onTriggerEvent(it) },
+                    onComplete = { navController.navigate(FINALIZE) },
                     onForceSignOut = { navController.navigate(signOut.featureRoute) }
+                )
+            }
+
+            composable(FINALIZE){
+                val viewmodel: FinalizeViewModel = hiltViewModel()
+                FinalizeOnboardingScreen(
+                    state = viewmodel.uiState.cast(),
+                    onTriggerEvent = { viewmodel.onTriggerEvent(it) },
+                    onForceSignOut = { navController.navigate(signOut.featureRoute) },
+                    onComplete = {viewmodel.onTriggerEvent(FinalizeEvent.Complete)}
                 )
             }
         }
